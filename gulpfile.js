@@ -2,7 +2,8 @@ const gulp = require("gulp");
 const minifyHTML = require('gulp-htmlmin');
 const minifyJS = require('gulp-uglify');
 const minifyCSS = require("gulp-clean-css")
-// const minifyImages = require("gulp-imagemin");
+/* See https://github.com/sindresorhus/gulp-imagemin/issues/372 */
+const minifyImages = require("gulp-imagemin"); /* Downgrade to version 7.1.0 */
 // import imagemin from 'gulp-imagemin';
 const logger = require('gulp-logger');
 const log = require("fancy-log");
@@ -63,11 +64,14 @@ function buildImages() {
   .pipe(gulp.dest(pathToDestination));
 }
 
-// function minImages() {
-//   return gulp.src(["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif", ...ignorePaths])
-//   .pipe(imagemin())
-//   .pipe(gulp.dest(pathToDestination));
-// }
+function minImages() {
+  return gulp.src(["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif", ...ignorePaths],
+    { encoding: false }
+  )
+  .pipe(logger())
+  .pipe(minifyImages())
+  .pipe(gulp.dest(pathToDestination));
+}
 
 function buildFonts() {
   return gulp.src(["**/*.woff2", "**/*.woff", "**/*.ttf", "**/*.otf", ...ignorePaths],
@@ -95,10 +99,10 @@ gulp.task("build-js", buildJS);
 gulp.task("minify-js", minJS);
 gulp.task("build-json", buildJSON);
 gulp.task("build-images", buildImages);
-// gulp.task("minify-images", minImages);
+gulp.task("minify-images", minImages);
 gulp.task("build-fonts", buildFonts);
 
 gulp.task("other", gulp.series(buildJSON, buildImages, buildFonts));
 
 gulp.task("default", gulp.series(startMessage, buildHTML, minCSS, minJS, buildJSON,
-  buildImages, buildFonts, endMessage));
+  minImages, buildFonts, endMessage));
