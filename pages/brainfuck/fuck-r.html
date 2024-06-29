@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+<script>
+function e(str) {
+//  var str = document.f.string.value;
+  var out = "";
+  var ltr = 0;
+  var prev_ltr = 0;
+  var delta = 0;
+  var sign = "+";
+  var factor = 1;
+  var remainder = 0;
+
+  if (str.indexOf(" ") >= 0)  { out += "++++[>>++++++++<<-]"; }
+  out += ">";
+
+  for (i = 0; i < str.length; i++)  {
+    // We assume that the pointer is at 1 at the beginning of this loop.
+    // 0 is the loop watch variable, 1 is the character to be printed, and 2 is special storage for the space character.
+
+    ltr = str.charCodeAt(i);
+
+    if (ltr == 32)  {  // a space
+      out += ">.<";
+
+    }  else  {  // any non-space character
+      delta = ltr - prev_ltr;
+
+      if (delta < 0)  { sign = "-"; }
+      else  { sign = "+"; }
+
+      delta = Math.abs(delta);  // from here until the end of this loop iteration, delta is positive no matter what
+
+      remainder = 0;
+      while (isPrime(delta) && delta > 4)  {  // decrement delta until it's not prime, storing the rest in "remainder".  without this, we'd miss some opportunities to reduce the space taken up by large prime deltas.
+        delta--;
+        remainder++;
+      }
+
+      factor = getBestFactor(delta);
+
+      if (factor == 1)  {  // if there is no pair of factors we can use that saves space over just printing a string of + or - commands
+        for (j = 0; j < delta; j++)  {
+          out += sign;
+        }
+
+      }  else  {
+        out += "<";
+        for (j = 0; j < factor; j++)  {
+          out += "+";
+        }
+        out += "[>";
+        for (j = 0; j < (delta/factor); j++)  {
+          out += sign;
+        }
+        out += "<-]>";
+      }
+
+      for (j = 0; j < remainder; j++)  {
+        out += sign;
+      }
+
+      out += "."
+
+      prev_ltr = ltr;
+    }
+  }
+
+  out = out.replace(/><|<>|\+\-|\-\+/g, "");  // remove any sequences that cancel themselves out (should only happen at the beginning, really)
+//  document.f.code.value = out;
+  return out;
+}
+
+function getBestFactor(d) {
+  var f = 1;
+  var i = 0;
+
+  for (i = 2; i < (d/2); i++)  {
+    if (   (d % i == 0)             // i is a factor of d, that is, it divides it cleanly
+        && (i + (d/i) + 7 <= d)     // d is at least as long as: i plus the corresponding factor of d, plus these 7 characters: < [> <-]>
+        && (i + (d/i) < f + (d/f))  // i is a better factor than the one we were using previously
+       )
+    {
+      f = i;  // this is the new best factor
+    }
+  }
+
+  return f;
+}
+
+function isPrime(n)  {
+  // Note: don't copy this function and use it elsewhere; it's not complete.
+  // Specifically, it assumes all arguments will be positive integers greater than 4.
+
+  var i = 0;
+
+  for (i = 2; i <= (n/2); i++)  {
+    if (n % i == 0)  { return false; }
+  }
+
+  return true;
+}
+
+function suggest() {
+  var suggestions = new Array();
+  suggestions[0] = "Go stick your head in a pig";
+  suggestions[1] = "http://www.triskaideka.net/";
+  suggestions[2] = "The quick brown fox jumps over the lazy dog.";
+  suggestions[3] = "The Moving Finger writes; and, having writ,\nMoves on: nor all thy Piety nor Wit\nShall lure it back to cancel half a Line,\nNor all thy Tears wash out a Word of it.";
+
+  document.f.string.value = suggestions[Math.floor(Math.random()*suggestions.length)];
+}
+
+document.body.innerHTML = e("Developer Master Miles Player ML Belrose Harry & Jhon. Yehey !!! 4/4/2019")
+</script>
+</body>
+</html>

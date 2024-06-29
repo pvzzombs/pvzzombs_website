@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <title> Eval calculator</title>
+       <script src="https://cdn.jsdelivr.net/gh/pvzzombs/arb@master/src/index.js"></script>
+       <script src="src/calc.js"></script>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+       <script src="src/jquery.js"></script>
+       <script src="https://cdn.jsdelivr.net/gh/pvzzombs/mJS/m.js"></script>
+       <script src="index.js"></script>
+       <style type="text/css">
+       	#history{
+       		border : 1px solid black;
+       		max-width : 100%;
+       		min-width : 100%;
+       		word-break: break-all;
+       	}
+       </style>
+   </head>
+   <body class="container">
+      <br />
+      <br />
+      <div id="loading">
+        <div class="row progress">
+          <div class="col s12 indeterminate"></div>
+        </div>
+      </div>
+      <form name="calculator" id="app" style="display: none;">
+            <div class="row">
+               <div class="input-field col s10">
+                  <textarea class="materialize-textarea" height="100" id="display" name="display"></textarea>
+                  <label for="display"><i class="material-icons">keyboard</i></label>
+               </div>
+               <a class="waves-effect waves-light btn col s2" class="operator" onclick="backspace()"><i class="material-icons">backspace</i></a>
+            </div>
+            <div class="row">
+               <a class="waves-effect waves-light btn col s2 deep-purple accent-2" onclick="calcBt('1')">1</a>
+               <a class="waves-effect waves-light btn col s2 cyan lighten-1" onclick="calcBt('2')">2</a>
+               <a class="waves-effect waves-light btn col s2 green lighten-2" onclick="calcBt('3')">3</a>
+               <a class="waves-effect waves-light btn col s2 teal darken-1" class="operator" onclick="calcBt('+')">+</a>
+               <a class="waves-effect waves-light btn col s2" class="operator" onclick="calcBt('(')">(</a>
+
+            </div>
+            <div class="row">
+               <a class="waves-effect waves-light btn col s2 cyan darken-4" onclick="calcBt('4')">4</a>
+               <a class="waves-effect waves-light btn col s2 blue accent-4" onclick="calcBt('5')">5</a>
+               <a class="waves-effect waves-light btn col s2 indigo darken-1" onclick="calcBt('6')">6</a>
+               <a class="waves-effect waves-light btn col s2 purple accent-1" class="operator" onclick="calcBt('-')">-</a>
+               <a class="waves-effect waves-light btn col s2" class="operator" onclick="calcBt(')')">)</a>
+            </div>
+            <div class="row">
+                <a class="waves-effect waves-light btn col s2 light-blue accent-3" onclick="calcBt('7')">7</a>
+                <a class="waves-effect waves-light btn col s2 green accent-3" onclick="calcBt('8')">8</a>
+                <a class="waves-effect waves-light btn col s2 yellow lighten-1" onclick="calcBt('9')">9</a>
+                <a class="waves-effect waves-light btn col s2 deep-orange" class="operator" onclick="calcBt('*')">*</a>
+                <a class="waves-effect waves-light btn col s2" class="operator" onclick="calcBt('^')">^</a>
+            </div>
+            <div class="row">
+               <a class="waves-effect waves-light btn col s2 brown" onclick="calcBt('C')">C</a>
+               <a class="waves-effect waves-light btn col s2 cyan darken-2" onclick="calcBt('.')">.</a>
+               <a class="waves-effect waves-light btn col s2 lime darken-4" onclick="calcBt('0')">0</a>
+               <a class="waves-effect waves-light btn col s2 light-green accent-4" onclick="computeAnswer()">=</a>
+               <a class="waves-effect waves-light btn col s2 indigo accent-4" class="operator" onclick="calcBt('/')">/</a>
+            </div>
+        </div>
+      </form>
+        <a class="right btn btn-floating waves-effect waves-light red modal-trigger" id="add" href="#modal1"><i class="material-icons">help</i></a>
+        <div id="modal1" class="modal">
+          <div class="modal-content">
+            <h4>Help</h4>
+            <p>The Eval Calculator calculates numbers up to 200 digits. If you have found a bug, please contact me :</p>
+            <p class="col s12"><i class="material-icons left">email</i>Gmail: pvzzombs at gmail dot com</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ok</a>
+          </div>
+        </div>
+        <div class="row">
+        	<p id="history" style="white-space: pre-line;"> History will go here: </p>
+        </div>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+   <!-- End of body -->
+   </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Space Invader</title>
+<script src="p5.min.js"></script>
+<script src="p5.collide2d.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+
+//basically load all sprites using objects
+var back = {
+  img : "galaxy.jpeg",
+  loaded : null,
+  x: 0,
+  y: 0,
+  width: 300,
+  height: 400
+}
+var player = {
+  img : "player.gif",
+  loaded : null,
+  x: 150,
+  y: 350,
+  width: 32,
+  height: 32,
+  life: 3
+}
+var enemy = {
+  img : "enemy.gif",
+  loaded : false,
+  x: 0,
+  y: 10,
+  width: 128,
+  height: 128,
+  life: 10000
+}
+var bullet = {
+  img : "bullet.png",
+  loaded : false,
+  x: player.x + 8,
+  y: 345 - player.height,
+  width: 16,
+  height: 16
+}
+var bomb = {
+  img : "bomb.png",
+  loaded : false,
+  x: enemy.x + 8,
+  y: 15 + enemy.height,
+  width: 16,
+  height: 16
+}
+var score = 0;
+var temp = 5;
+var wait = 0;
+var missile = [];
+function setup(){
+  createCanvas(300 ,400);
+  back.loaded = loadImage(back.img)
+  player.loaded = loadImage(player.img);
+  enemy.loaded = loadImage(enemy.img);
+  bullet.loaded = loadImage(bullet.img);
+  bomb.loaded = loadImage(bomb.img);
+  
+}
+function draw(){
+  //load images
+  image(back.loaded, back.x, back.y, back.width, back.height, 0, 0, 183, 275);
+  image(player.loaded, player.x, player.y, player.width, player.height, 0, 0, 264, 270);
+  image(enemy.loaded, enemy.x, enemy.y, enemy.width, enemy.height, 0, 0, 400, 400);
+  image(bomb.loaded, bomb.x, bomb.y);
+  
+  //start the funny game
+  //check if firecharges goes off the screen!!!
+  for(var j = 0; j < missile.length; j++){
+    image(bullet.loaded, missile[j].x, missile[j].y);
+    missile[j].y-=20;
+    if(missile[j].y<0){
+      missile.pop();
+    }
+    if(collideRectRect(missile[j].x, missile[j].y, bullet.width, bullet.height, enemy.x, enemy.y, enemy.width, enemy.height)){
+      if(enemy.life){
+        enemy.life-=0.1;
+      }else{
+        fill("green");
+        textSize(20);
+        text("You Win", 60, 250);
+        noLoop();
+      }
+    }
+  }
+  missile.push({x: player.x + 8, y: 345 - player.height});
+  wait++;
+  
+  if(bomb.y > 400){
+    bomb.x = enemy.x + 8;
+    bomb.y = 15 + enemy.height;
+  }
+  
+  //check the enemy moves
+  /*if(enemy.x > back.width - enemy.width){
+    enemy.x = 0;
+  }
+  enemy.x++;
+  */
+  if(enemy.x <= 0){
+    temp = 5;
+  }
+  if(enemy.x >= back.width-enemy.width){
+    temp = -5;
+  }
+  enemy.x += temp;
+  //movement of firecharges!!!!!!
+  bomb.y +=10;
+  
+  //detect collisions
+  var hitPlayer = collideRectRect(bomb.x, bomb.y, bomb.width, bomb.height, player.x, player.y, player.width, player.height);
+  if(hitPlayer){
+    bomb.x = enemy.x + 8;
+    bomb.y = 15 + enemy.height;
+    if(player.life){
+      player.life--;
+    }else{
+      fill("red");
+      textSize(20);
+      text("Game Over", 60, 250);
+      noLoop();
+    }
+  }
+  //display lives using text
+  fill(255);
+  textSize(16);
+  text("Enemy: " + enemy.life, 0,12);
+  text("Player: " + player.life,0, 24);
+}
+
+function mouseClicked(){
+
+  if(mouseX < player.x){
+    if(player.x > 0) player.x -= 20
+  }
+  if(mouseX > player.x){
+    if((back.width - player.width) > player.x) player.x += 20
+  }
+}
+</script>
+</body>
+</html>

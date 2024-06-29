@@ -1,0 +1,13 @@
+{
+  "pages": [
+  {
+    "link": "pages/creating-flappy-bird-in-js.html",
+    "image": "pages/img/flappybird.jpg",
+    "text": "Creating games in javascript is easy. Now in my first gamelesson, i'll teach you how to create a flappy bird clone in javascript."
+  },
+  {
+    "link": "pages/creating-perlin-noise-in-js.html",
+    "image": "pages/img/jsnoise.jpg",
+    "text": "Hi there! Do you want to create a perlin noise? Then read this tutorial to learn it."
+  }]
+}

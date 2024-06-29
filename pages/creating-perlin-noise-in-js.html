@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en-ph">
+  <head>
+    <meta charset="UTF-8">
+    <title>Perlin Noise In Javascript</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../css/cayman.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="js/p5.min.js"></script>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Creating Codes with Javascript</h1>
+      <h2 class="project-tagline">Creating Perlin Noise in Pure Javascript</h2>
+      <p> Created June 5, 2019</p>
+      <a href="../index.html" class="btn">Main Menu</a>
+    </section>
+
+    <section class="main-content">
+      <img src="img/noise.png" alt="noise" style="max-width: 100%" />
+      <p> Hi there! Do you want to create a <b>perlin noise</b>? Then read this tutorial to learn it.</p>
+
+      <p> Start by creating a new javascript file. I will be using p5.js library for rendering the noise texture.</p>
+
+      <h2> Steps: </h2>
+      <p>Start by creating a new array <code>permutation</code> that contains random numbers from 0 to 255. We will use this as a hashing table.</p>
+
+      <pre><code>  var permutation = [];
+  for(var i=0; i<256; i++){
+    permutation[i] = i;
+  }
+  var j, temp;
+  var m = permutation.length;
+  while(m){
+    j = Math.floor(Math.random() * m--);
+    temp = permutation[m];
+    permutation[m] = permutation[j];
+    permutation[j] = temp;
+  }</code></pre>
+
+      <p> Create an empty array, then fill it witth numbers from 0 to 255; Shuffle all the numbers inside that array.</p>
+
+      <p> After that part create an empty array called <code>p</code> This would serve as a hash table later.</p>
+
+      <pre><code>  var p = [];
+  for(var x=0; x<512; x++){
+    p[x] = permutation[x % 256];
+  }</code></pre>
+
+      <p> Now after that create the main <code>perlin</code> function. The function would accept <i>x, y and z</i> and returns a float between 0 and 1.</p>
+
+      <pre><code>  function perlin(x, y, z){
+
+  }</code></pre>
+
+      <p> Inside the perlin function create <code>xi, yi, and zi</code>. Normalize the <code>x, y and z</code> using the <i>binary &amp; operator</i> and a number 255.</p>
+
+      <pre><code>  var xi = Math.floor(x) & 255;
+  var yi = Math.floor(y) & 255;
+  var zi = Math.floor(z) & 255;</code></pre>
+
+      <p> Continuing with that create <code>xf, yf and zf</code>. Get the difference between the coordinates and the floored coordinates</p>
+
+      <pre><code>  var xf = x - Math.floor(x);
+  var yf = y - Math.floor(y);
+  var zf = z - Math.floor(z);</code></pre>
+
+      <p>Outside the perlin function, create a new function called <code>fade</code>. It uses a polynomial <code>6t^5 - 15t^4 + 10t^3</code> to evaluate a given float.</p>
+
+      <pre><code>  function fade(t){
+    return t * t * t *( t * ( t * 6 - 15) + 10);
+  }</code></pre>
+
+      <p>Continuing inside perlin function, create <code>u, v and w</code>. Use the newly created <code>hash</code> function for <code>xf, yf and zf</code>. </p>
+
+      <pre><code>  var u = fade(xf);
+  var v = fade(yf);
+  var w = fade(zf);
+</code></pre>
+
+      <p>Now create <code>aaa, aba, aab, abb, baa, bba, bab, bbb</code> This represent the 8 corners off the cube. This is where we will use are <code>p</code> hash table</p>
+
+      <pre><code>  var aaa, aba, aab, abb, baa, bba, bab, bbb;
+
+  aaa = p[p[p[  xi]+  yi]+  zi];
+  aba = p[p[p[  xi]+yi+1]+  zi];
+  aab = p[p[p[  xi]+  yi]+zi+1];
+  abb = p[p[p[  xi]+yi+1]+zi+1];
+  baa = p[p[p[xi+1]+  yi]+  zi];
+  bba = p[p[p[xi+1]+yi+1]+  zi];
+  bab = p[p[p[xi+1]+  yi]+zi+1];
+  bbb = p[p[p[xi+1]+yi+1]+zi+1];
+</code></pre>
+
+      <p>Outside the <code>perlin</code> function, create a new function called <code>grad</code> and <code>hash</code>. You will use <code>grad</code> for returning values from one of the corners of the cube and <code>lerp</code> for linear interpolation.</p>
+
+      <pre><code>function lerp(a, b, x){
+  return (b - a) * x + a
+}
+function grad(hash, x, y, z){
+  switch(hash & 0xF){
+    case 0x0 : return x + y; break;
+    case 0x1 : return -x + y; break;
+    case 0x2 : return x - y; break;
+    case 0x3 : return -x - y; break;
+    case 0x4 : return x + z; break;
+    case 0x5 : return -x + z; break;
+    case 0x6 : return x - z; break;
+    case 0x7 : return -x - z; break;
+    case 0x8 : return y + z; break;
+    case 0x9 : return -y + z; break;
+    case 0xA : return y - z; break;
+    case 0xB : return -y - z; break;
+    case 0xC : return y + x; break;
+    case 0xD : return -y + z; break;
+    case 0xE : return y - x; break;
+    case 0xF : return -y - z; break;
+    default: return 0;
+  }
+}</code></pre>
+
+      <p>Finally, inside the <code>perlin</code> function, create <code>x1, x2, and y1, and y2</code>. You will linear interpolate the floats. Lastly the <code>perlin</code> function will return a float between 0 and 1!</p>
+
+      <pre><code>  var x1, x2, y1, y2;
+
+  x1 = lerp(grad(aaa, xf, yf, zf),grad(baa, xf-1, yf, zf),u);
+  x2 = lerp(grad(aba, xf, yf-1, zf),grad(bba, xf-1, yf-1, zf),u);
+  y1 = lerp(x1, x2, u);
+  x1 = lerp(grad(aab, xf, yf, zf-1),grad(bab, xf-1, yf, zf-1),u);
+  x2 = lerp(grad(abb, xf, yf-1, zf-1),grad(bbb, xf-1, yf-1, zf-1),u);
+  y2 = lerp(x1, x2, v);
+  return ( lerp(y1, y2, w) + 1)/2</code></pre>
+
+      <p>Create a new function <code>pNoise</code> if you want to get a better noise results. I know you'll copy this. Copy it all!</p>
+
+      <pre><code>function pNoise(x,y,z,o,p){
+  y = y || 0.99;
+  z = z || 0.99;
+  o = o || 6;
+  p = p || 0.35;
+  var total = 0;
+  var frequency = 2;
+  var amplitude = 5;
+  var maxValue = 0;
+
+  for(var i = 0; i < o; i++){
+    total += perlin(x*frequency, y*frequency, z*frequency) * amplitude;
+
+    maxValue += amplitude;
+
+    amplitude *= p;
+    frequency *= 2;
+  }
+
+  return (total / maxValue);
+}</code></pre>
+
+      <p>Note: <code>o</code> is the octave and <code>p</code> is the persistence.</p>
+
+      <p> Here's a real demo: I hope you like it! </p>
+
+      <div id="cv-holder"></div>
+
+      <script type="text/javascript">
+var permutation = [];
+var p = [];
+function perlin(x,y,z){
+  y = y || 0.05;
+  z = z || 0.05;
+
+  var xi = Math.floor(x) & 255;
+  var yi = Math.floor(y) & 255;
+  var zi = Math.floor(z) & 255;
+
+  var xf = x - Math.floor(x);
+  var yf = y - Math.floor(y);
+  var zf = z - Math.floor(z);
+
+  var u = fade(xf);
+  var v = fade(yf);
+  var w = fade(zf);
+
+  var aaa, aba, aab, abb, baa, bba, bab, bbb;
+
+  aaa = p[p[p[  xi]+  yi]+  zi];
+  aba = p[p[p[  xi]+yi+1]+  zi];
+  aab = p[p[p[  xi]+  yi]+zi+1];
+  abb = p[p[p[  xi]+yi+1]+zi+1];
+  baa = p[p[p[xi+1]+  yi]+  zi];
+  bba = p[p[p[xi+1]+yi+1]+  zi];
+  bab = p[p[p[xi+1]+  yi]+zi+1];
+  bbb = p[p[p[xi+1]+yi+1]+zi+1];
+
+  var x1, x2, y1, y2;
+
+  x1 = lerp(grad(aaa, xf, yf, zf),grad(baa, xf-1, yf, zf),u);
+  x2 = lerp(grad(aba, xf, yf-1, zf),grad(bba, xf-1, yf-1, zf),u);
+  y1 = lerp(x1, x2, u);
+  x1 = lerp(grad(aab, xf, yf, zf-1),grad(bab, xf-1, yf, zf-1),u);
+  x2 = lerp(grad(abb, xf, yf-1, zf-1),grad(bbb, xf-1, yf-1, zf-1),u);
+  y2 = lerp(x1, x2, v);
+  return ( lerp(y1, y2, w) + 1)/2
+}
+function lerp(a, b, x){
+  return (b - a) * x + a
+}
+function grad(hash, x, y, z){
+  switch(hash & 0xF){
+    case 0x0 : return x + y; break;
+    case 0x1 : return -x + y; break;
+    case 0x2 : return x - y; break;
+    case 0x3 : return -x - y; break;
+    case 0x4 : return x + z; break;
+    case 0x5 : return -x + z; break;
+    case 0x6 : return x - z; break;
+    case 0x7 : return -x - z; break;
+    case 0x8 : return y + z; break;
+    case 0x9 : return -y + z; break;
+    case 0xA : return y - z; break;
+    case 0xB : return -y - z; break;
+    case 0xC : return y + x; break;
+    case 0xD : return -y + z; break;
+    case 0xE : return y - x; break;
+    case 0xF : return -y - z; break;
+    default: return 0;
+  }
+}
+
+function fade(t){
+  return t * t * t *( t * ( t * 6 - 15) + 10);
+}
+
+function pNoise(x,y,z,o,p){
+  y = y || 0.99;
+  z = z || 0.99;
+  o = o || 6;
+  p = p || 0.35;
+  var total = 0;
+  var frequency = 2;
+  var amplitude = 5;
+  var maxValue = 0;
+
+  for(var i = 0; i < o; i++){
+    total += perlin(x*frequency, y*frequency, z*frequency) * amplitude;
+
+    maxValue += amplitude;
+
+    amplitude *= p;
+    frequency *= 2;
+  }
+
+  return (total / maxValue);
+}
+
+function setup(argument) {
+  // body...
+  var cv = createCanvas(300, 300);
+  cv.parent('cv-holder');
+  //noLoop();
+  //noStroke();
+  for(var i=0; i<256; i++){
+    permutation[i] = i;
+  }
+  var j, temp;
+  var m = permutation.length;
+  while(m){
+    j = Math.floor(Math.random() * m--);
+    temp = permutation[m];
+    permutation[m] = permutation[j];
+    permutation[j] = temp;
+  }
+  for(var x=0; x<512; x++){
+    p[x] = permutation[x % 256];
+  }
+
+}
+
+var g = 0;
+
+function draw(){
+    line(g, pNoise(g/100) * (150 + 1), g+1, pNoise((g+1)/100 ) * (150 + 1));
+    line(g, noise(g/100) * (300 - 160 + 1) + 160, g+1, noise((g+1)/100 ) * (300 - 160 + 1) + 160);
+    ++g;
+
+    /*for(var ab = 0; ab < 300; ab+=2){
+      for(var bb = 0; bb < 300; bb+=2){
+        fill(Math.floor(pNoise(ab/100, bb/100) * 255));
+        rect(ab, bb, 2, 2);
+      }
+    }*/
+
+}
+      </script>
+      <footer class="site-footer">
+        <span class="site-footer-owner">Miles Jamon (c) 2019 - <span id="yearToday"></span></span>
+        <script>document.getElementById("yearToday").innerText = (new Date()).getFullYear();</script>
+        <span class="site-footer-credits">This uses the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a></span>
+        <span class="site-footer-credits">and this page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+
+    </section>
+
+  </body>
+</html>
