@@ -1,5 +1,5 @@
 const gulp = require("gulp");
-const minifyHTML = require('gulp-htmlmin');
+const minifyHTML = require("gulp-minify-html-2");
 const minifyJS = require('gulp-uglify');
 const minifyCSS = require("gulp-clean-css")
 /* See https://github.com/sindresorhus/gulp-imagemin/issues/372 */
@@ -7,9 +7,18 @@ const minifyImages = require("gulp-imagemin"); /* Downgrade to version 7.1.0 */
 // import imagemin from 'gulp-imagemin';
 const logger = require('gulp-logger');
 const log = require("fancy-log");
+const liveServer = require("live-server");
 
 const pathToDestination = "../pvzzombs_github_io/";
 const ignorePaths = ["!./node_modules/**", "!./gulpfile.js", "!./package.json"];
+
+const htmlOptions = {};
+const serverParams = {
+  port: 8000,
+  root: ".",
+  open: false,
+  logLevel: 2
+};
 
 function buildHTML() {
   return gulp.src(["**/*.html", ...ignorePaths])
@@ -20,7 +29,7 @@ function buildHTML() {
 function minHTML() {
   return gulp.src(["**/*.html", ...ignorePaths])
   .pipe(logger())
-  .pipe(minifyHTML({ collapseWhitespace: true, removeComments: true }))
+  .pipe(minifyHTML())
   .pipe(gulp.dest(pathToDestination));
 }
 
@@ -91,6 +100,16 @@ function endMessage(done) {
   done();
 }
 
+function startServer() {
+  liveServer.start(serverParams);
+  // gulp.watch(["**/*.html", "**/*.css", "**/*.js"], function(d) {
+  //   log("watch");
+  //   d(); 
+  // }); 
+  // log("server stop");
+  // done();
+}
+
 gulp.task("build-html", buildHTML);
 gulp.task("minify-html", minHTML);
 gulp.task("build-css", buildCSS);
@@ -101,8 +120,9 @@ gulp.task("build-json", buildJSON);
 gulp.task("build-images", buildImages);
 gulp.task("minify-images", minImages);
 gulp.task("build-fonts", buildFonts);
+gulp.task("other", gulp.parallel(buildJSON, buildImages, buildFonts));
 
-gulp.task("other", gulp.series(buildJSON, buildImages, buildFonts));
+gulp.task("default", gulp.series(startMessage, gulp.parallel(buildHTML, minCSS, minJS, buildJSON,
+  minImages, buildFonts), endMessage));
 
-gulp.task("default", gulp.series(startMessage, buildHTML, minCSS, minJS, buildJSON,
-  minImages, buildFonts, endMessage));
+gulp.task("server", startServer);
