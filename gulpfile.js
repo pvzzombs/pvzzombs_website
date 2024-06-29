@@ -122,7 +122,7 @@ gulp.task("minify-images", minImages);
 gulp.task("build-fonts", buildFonts);
 gulp.task("other", gulp.parallel(buildJSON, buildImages, buildFonts));
 
-gulp.task("default", gulp.series(startMessage, gulp.parallel(buildHTML, minCSS, minJS, buildJSON,
+gulp.task("default", gulp.series(startMessage, gulp.parallel(minHTML, minCSS, minJS, buildJSON,
   minImages, buildFonts), endMessage));
 
 gulp.task("server", startServer);
