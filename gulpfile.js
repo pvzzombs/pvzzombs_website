@@ -17,6 +17,7 @@ const serverParams = {
   port: 8000,
   root: ".",
   open: false,
+  ignore: "node_modules",
   logLevel: 2
 };
 
@@ -100,14 +101,14 @@ function endMessage(done) {
   done();
 }
 
-function startServer() {
+function startServer(done) {
   liveServer.start(serverParams);
   // gulp.watch(["**/*.html", "**/*.css", "**/*.js"], function(d) {
   //   log("watch");
   //   d(); 
   // }); 
   // log("server stop");
-  // done();
+  done();
 }
 
 gulp.task("build-html", buildHTML);

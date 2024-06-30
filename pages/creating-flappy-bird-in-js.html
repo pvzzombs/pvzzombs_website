@@ -80,10 +80,10 @@ function Bird(){
     bird.dy += gravity;
     bird.dy *= friction;
     bird.y += bird.dy;
-    if(this.y + this.height >= 400){
+    if(this.y + this.height &gt;= 400){
       restartGame();
     }
-    if(this.y + this.height <= 0){
+    if(this.y + this.height &lt;= 0){
       restartGame();
     }
   }
@@ -108,7 +108,7 @@ function Pipe(){
     if(isUpperCollided || isLowerCollided){
       restartGame();
     }
-    if(bird.x &gt; this.x + this.width && !this.scored){
+    if(bird.x &gt; this.x + this.width &amp;&amp; !this.scored){
       score++;
       this.scored = true;
     }
@@ -142,7 +142,7 @@ function draw(){
     pipes[i].update();
   }
   bird.update()
-  if(score % 10 === 0 && score !== 0 && !speedUp){
+  if(score % 10 === 0 &amp;&amp; score !== 0 &amp;&amp; !speedUp){
     speed += 0.5;
     speedUp = true;
   }
@@ -162,7 +162,7 @@ function keyTyped() {
   return false;
 }
 function restartGame(){
-  highScore = (highScore < score) ? score : highScore;
+  highScore = (highScore &lt; score) ? score : highScore;
   score = 0;
   speed = 2;
   bird = new Bird();
