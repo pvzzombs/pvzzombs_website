@@ -46,6 +46,7 @@ var bomb = {
 var score = 0;
 var temp = 2;
 var wait = 0;
+var dt, now, last, pft;
 
 function preload() {
   back.loaded = loadImage(back.img)
@@ -58,9 +59,15 @@ function preload() {
 function setup() {
   var cv = createCanvas(300, 400);
   cv.parent("canvas");
+  last = (new Date()).getTime(); // milliseconds
 }
 
 function draw() {
+  pft = 1000 / frameRate(); // frames per second, perfect frame time
+  now = (new Date()).getTime(); // milliseconds
+  dt = now - last;
+  dt /= pft;
+  last = now;
 
   //load images
   image(back.loaded, back.x, back.y, back.width, back.height, 0, 0, 183, 275);
@@ -87,10 +94,12 @@ function draw() {
   if (enemy.x > back.width - enemy.width) {
     temp = -2;
   }
-  enemy.x += temp;
+
+  // movement
+  enemy.x += dt * temp;
   //movement of firecharges!!!!!!
-  bullet.y -= 30;
-  bomb.y += 4;
+  bullet.y -= dt * 30;
+  bomb.y += dt * 4;
 
   //detect collisions
   var hitEnemy = collideRectRect(bullet.x, bullet.y, bullet.width, bullet.height, enemy.x, enemy.y, enemy.width, enemy.height);
@@ -148,3 +157,12 @@ function keyPressed() {
     if ((back.width - player.width) > player.x) player.x += 30
   }
 }
+
+/*
+
+Some links: 
+https://erraticgenerator.com/blog/p5js-animate-with-deltatime/
+https://stackoverflow.com/questions/13996267/loop-forever-and-provide-delta-time
+https://stackoverflow.com/a/55028818
+
+*/
