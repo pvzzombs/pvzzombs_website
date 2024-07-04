@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tailwind": "tailwindcss -o ./css/main.css --watch"
+    "tailwind": "tailwindcss -o ./css/main.css --minify --watch"
   },
   "author": "pvzzombs",
   "license": "MIT",

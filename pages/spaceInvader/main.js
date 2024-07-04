@@ -14,7 +14,8 @@ var player = {
   y: 350,
   width: 32,
   height: 32,
-  life: 3
+  life: 3,
+  maxLife: 3
 }
 var enemy = {
   img: "img/enemy.gif",
@@ -23,7 +24,8 @@ var enemy = {
   y: 25,
   width: 90,
   height: 90,
-  life: 1000
+  life: 1000,
+  maxLife: 1000
 }
 var bullet = {
   img: "img/bullet.png",
@@ -98,7 +100,7 @@ function draw() {
     bullet.x = player.x + 8;
     bullet.y = 345 - player.height;
     if (enemy.life > 0) {
-      enemy.life -= 3;
+      enemy.life -= 5;
     } else {
       fill("green");
       textSize(25);
@@ -124,10 +126,10 @@ function draw() {
   text("Enemy: " + enemy.life, 0, 12);
   text("Player: " + player.life, 0, 24);
 
-  fill("green");
-  rect(150, 0, enemy.life * 0.2, 10);
   fill("red");
-  rect(150, 11, player.life * 2, 10);
+  rect(150, 0, enemy.life / enemy.maxLife * 100, 10);
+  fill("green");
+  rect(150, 11, player.life / player.maxLife * 100, 10);
 }
 
 function mouseClicked() {
