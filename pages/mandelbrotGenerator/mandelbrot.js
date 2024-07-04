@@ -414,6 +414,13 @@ function show() {
 */
 //about function
 function about() {
-  alert("A mandelbrot set generator in javascript created by pvzzombs")
-  console.log("A mandelbrot set generator in javascript created by pvzzombs");
+  // alert("A mandelbrot set generator in javascript created by pvzzombs")
+  // console.log("A mandelbrot set generator in javascript created by pvzzombs");
+  Swal.fire({
+    type: "info",
+    title: "About",
+    text: "A mandelbrot set generator in javascript created by pvzzombs. "
+  });
 }
+
+work();

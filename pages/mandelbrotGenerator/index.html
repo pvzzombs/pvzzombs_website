@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Mandelbrot in HTML5 Javascript</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
-    <link rel="stylesheet" href="../../css/normalize.css">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="../../css/cayman.css">
-    <script src="rainbowvis.js"></script>
-    <!-- script src="../js/eruda.js"></script>
+
+<head>
+  <title>Mandelbrot in HTML5 Javascript</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="../../css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="../../css/cayman.css">
+  <script src="rainbowvis.js"></script>
+  <!-- script src="../js/eruda.js"></script>
       <script>eruda.init();</script -->
-    <style type="text/css">
-      #trigger, #xp, #yp, #xz, #xm, #ym, #yz, #zfb{
+  <style type="text/css">
+    /* #trigger, #xp, #yp, #xz, #xm, #ym, #yz, #zfb{
       height: 50px;
-      /*width: 60px;*/
       }
       #xa, #ya, #za, #zf, #mi{
       height: 50px;
@@ -22,123 +22,137 @@
       #dtls{
       border: 1px solid black;
       width: 100%;
-      /*height: 150px;*/
       }
       #clrt, #lrg{
       border: 1px solid black;
-      /*width:125px;*/
       height: 50px;
       }
       #plt, #crd{
       border: 1px solid black;
       width: 100%;
       height: 50px;
-      }
-      #canvasWrapper{
-      width: 100%;
+      }*/
+    #canvasWrapper {
       max-width: 400px;
       margin: 0px auto;
-      }
-      body{
-      text-align:center;
-      }
-    </style>
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Contents List</h1>
-      <a href="../../" class="btn">Main Menu</a>
-    </section>
-    <section class="main-content">
-      <p>
-        A mandelbrot set generator using pure javascript.
-        Uses rainbow-vis.js for pallete and coloring.
-        Press the "RESET" button to start.
-      </p>
-      <p>Mandelbrot Set Generator</p>
-      <div id="canvasWrapper">
-        <canvas id="paper"></canvas>
-      </div>
-      <h3>On click:</h3>
-      <input type="radio" name="zoomType" id="zoomIn" value="zoomIn" onclick="plus()" checked/>
-      <label for="zoomIn">Zoom in</label>
+    }
+
+    body {
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="../css/sweetalert2.min.css">
+  <link rel="stylesheet" href="../../css/main.css" />
+</head>
+
+<body>
+  <section class="page-header">
+    <h1 class="project-name">Contents List</h1>
+    <a href="../../" class="btn">Main Menu</a>
+  </section>
+  <section class="main-content">
+    <p>
+      A mandelbrot set generator using pure javascript.
+      Uses rainbow-vis.js for pallete and coloring.
+    </p>
+    <p>Mandelbrot Set Generator</p>
+    <div id="canvasWrapper" class="tw-w-full tw-m-0">
+      <canvas id="paper"></canvas>
+    </div>
+    <h3>On click:</h3>
+    <span class="tw-inline-block">
+      <input type="radio" name="zoomType" id="zoomIn" value="zoomIn" class="tw-d-radio" onclick="plus()" checked />
+      <label for="zoomIn" class="tw-block">Zoom in</label>
       <br />
-      <input type="radio" name="zoomType" id="zoomOut" value="zoomOut" onclick="minus()"/>
-      <label for="zoomOut">Zoom out</label>
-      <br />
-      <br />
-      <input type="button" id="trigger" value="Full" onclick="fullResize()"/>
-      <input type="button" id="trigger" value="RESET" onclick="work()"/>
-      <input type="button" id="trigger" value="Re-draw" onclick="drawAgain()"/>
-      <input type="button" id="trigger" value="Resize" onclick="resize()"/>
-      <input type="button" id="trigger" value=" ? " onclick="about()"/>
-      <br/>
-      <br/>
-      <input type="checkbox" name="axis" id="flipImaginaryAxis" value="flipImaginaryAxis" onclick="flipImagAxis()" checked/>
-      <label for="flipImaginaryAxis">Flip Imaginary Axis</label>
-      <br/>
-      <br/>
-      <input type="button" id="trigger" value="Reset coordinates" onclick="resetCoordinates()"/>
-      <br />
-      <br />
-      left: <input type="text" id="xa" value="-2.5"/>
-      <input type="button" id="xp" value="+" onclick="xScroll(1)"/>
-      <input type="button" id="xm" value="-" onclick="xScroll(0)"/>
-      <br/>
-      <br/>
-      top: <input type="text" id="ya" value="-2"/>
-      <input type="button" id="yp" value="+" onclick="yScroll(1)"/>
-      <input type="button" id="ym" value="-" onclick="yScroll(0)"/>
-      <br/>
-      <br/>
-      zoom: <input type="text" id="za" value="100"/>
-      <input type="button" id="xz" value="+" onclick="zoomIn()"/>
-      <input type="button" id="yz" value="-" onclick="zoomOut()"/>
-      <br />
-      <!-- input type="button" id="lrg" value="Change" onclick="zoom()"/ -->
-      <br />
-      <br />
-      zoom-factor: <input type="text" id="zf" value="1.5"/>
-      <input type="button" id="zfb" value="Change" onclick="zoomFactor()"/>
-      <br />
-      <br />
-      iteration: <input type="text" id="mi" value="50"/>
-      <input type="button" id="trigger" value="Change" onclick="changeMaxI()"/>
-      <br />
-      <br />
-      <h3>Pallete (use space as delimiter):</h3>
-      <textarea id="plt" width="150">red orange yellow black</textarea>
-      <input type="button" id="lrg" value="Change pallete" onclick="changePallete()"/>	
-      <br />
-      <br />
-      <h3>Coloring type:</h3>
-      <input type="radio" name="coloringType" id="smoothColoring" value="smoothColoring" onclick="changeColoringType(this)" checked/>
-      <label for="smoothColoring">Smooth Coloring</label>
-      <br />
-      <input type="radio" name="coloringType" id="escapeTime" value="escapeTime" onclick="changeColoringType(this)"/>
-      <label for="escapeTime">Escape Time</label>
-      <br />
-      <br />
-      <h3>Update coords (Use space as delimiter):</h3> <p>panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
-      <textarea id="crd" width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
-      <input type="button" id="lrg" value="Update Coords" onclick="changeCoords()"/>
-      <br />
-      <h3> Advance Details: </h3>
-      <div id="dtls">
+      <input type="radio" name="zoomType" id="zoomOut" value="zoomOut" class="tw-d-radio" onclick="minus()" />
+      <label for="zoomOut" class="tw-block">Zoom out</label>
+    </span>
+    <br />
+    <br />
+    <input type="button" id="trigger" value="Full" class="tw-d-btn" onclick="fullResize()" />
+    <input type="button" id="trigger" value="RESET" class="tw-d-btn" onclick="work()" />
+    <input type="button" id="trigger" value="Re-draw" class="tw-d-btn" onclick="drawAgain()" />
+    <input type="button" id="trigger" value="Resize" class="tw-d-btn" onclick="resize()" />
+    <input type="button" id="trigger" value=" ? " class="tw-d-btn" onclick="about()" />
+    <br />
+    <br />
+    <input type="checkbox" name="axis" id="flipImaginaryAxis" value="flipImaginaryAxis" class="tw-d-checkbox"
+      onclick="flipImagAxis()" checked />
+    <label for="flipImaginaryAxis">Flip Imaginary Axis</label>
+    <br />
+    <br />
+    <input type="button" id="trigger" value="Reset coordinates" class="tw-d-btn" onclick="resetCoordinates()" />
+    <br />
+    <br />
+    left: <input type="text" id="xa" value="-2.5" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
+    <input type="button" id="xp" value="+" class="tw-d-btn" onclick="xScroll(1)" />
+    <input type="button" id="xm" value="-" class="tw-d-btn" onclick="xScroll(0)" />
+    <br />
+    <br />
+    top: <input type="text" id="ya" value="-2" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
+    <input type="button" id="yp" value="+" class="tw-d-btn" onclick="yScroll(1)" />
+    <input type="button" id="ym" value="-" class="tw-d-btn" onclick="yScroll(0)" />
+    <br />
+    <br />
+    zoom: <input type="text" id="za" value="100" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
+    <input type="button" id="xz" value="+" class="tw-d-btn" onclick="zoomIn()" />
+    <input type="button" id="yz" value="-" class="tw-d-btn" onclick="zoomOut()" />
+    <br />
+    <!-- input type="button" id="lrg" value="Change" onclick="zoom()"/ -->
+    <br />
+    <br />
+    zoom-factor: <input type="text" id="zf" value="1.5" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
+    <input type="button" id="zfb" value="Change" class="tw-d-btn" onclick="zoomFactor()" />
+    <br />
+    <br />
+    iteration: <input type="text" id="mi" value="50" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
+    <input type="button" id="trigger" value="Change" class="tw-d-btn" onclick="changeMaxI()" />
+    <br />
+    <br />
+    <h3>Pallete (use space as delimiter):</h3>
+    <textarea id="plt" class="tw-d-textarea tw-d-textarea-bordered tw-d-textarea-md tw-w-full tw-max-w-xs"
+      width="150">red orange yellow black</textarea>
+    <input type="button" id="lrg" value="Change pallete" class="tw-d-btn" onclick="changePallete()" />
+    <br />
+    <br />
+    <h3>Coloring type:</h3>
+    <input type="radio" name="coloringType" id="smoothColoring" value="smoothColoring" class="tw-d-radio"
+      onclick="changeColoringType(this)" checked />
+    <label for="smoothColoring">Smooth Coloring</label>
+    <br />
+    <input type="radio" name="coloringType" id="escapeTime" value="escapeTime" class="tw-d-radio"
+      onclick="changeColoringType(this)" />
+    <label for="escapeTime">Escape Time</label>
+    <br />
+    <br />
+    <h3>Update coords (Use space as delimiter):</h3>
+    <p>panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
+    <textarea id="crd" class="tw-d-textarea tw-d-textarea-bordered tw-d-textarea-md tw-w-full tw-max-w-xs"
+      width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
+    <input type="button" id="lrg" value="Update Coords" class="tw-d-btn" onclick="changeCoords()" />
+    <br />
+    <h3> Advance Details: </h3>
+    <div id="dtls">
       Start by clicking the reset button.<br />
       Available palletes: <br />
-      #000764 #206bcb #edffff #ffaa00 #000200<br/>
+      #000764 #206bcb #edffff #ffaa00 #000200<br />
       red orange yellow green blue indigo violet black<br />
       white black white black<br />
-      </div>
-      <br />
-      <footer class="site-footer">
-        <span class="site-footer-owner">Miles Jamon (c) 2019 - <span id="yearToday"></span></span>
-        <script>document.getElementById("yearToday").innerText = (new Date()).getFullYear();</script>
-        <span class="site-footer-credits">This uses the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a></span>
-        <span class="site-footer-credits">and this page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
-    </section>
-    <script src="mandelbrot.js"></script>
-  </body>
+    </div>
+    <br />
+    <footer class="site-footer">
+      <span class="site-footer-owner">Miles Jamon (c) 2019 - <span id="yearToday"></span></span>
+      <script>
+        document.getElementById("yearToday").innerText = (new Date()).getFullYear();
+      </script>
+      <span class="site-footer-credits">This uses the <a href="https://github.com/jasonlong/cayman-theme">Cayman
+          theme</a></span>
+      <span class="site-footer-credits">and this page was generated by <a href="https://pages.github.com">GitHub
+          Pages</a>.</span>
+    </footer>
+  </section>
+  <script src="../js/sweetalert2.min.js"></script>
+  <script src="mandelbrot.js"></script>
+</body>
+
 </html>
