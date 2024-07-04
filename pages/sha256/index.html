@@ -25,12 +25,14 @@
   <!-- script src="test.js"></script -->
   <!-- script>var sha256_ = sha256;</script -->
   <script src="sha256build.js"></script>
+  <link rel="stylesheet" href="../../css/main.css">
 </head>
 
 <body>
   <section class="page-header">
     <h1 class="project-name">Contents List</h1>
     <a href="../../" class="btn">Main Menu</a>
+    <a href="../" class="btn">Back to contents list</a>
   </section>
 
   <section class="main-content">
@@ -39,15 +41,15 @@
     <h2> For text: </h2>
     <textarea id="target" width="600" height="300" autofocus="true"></textarea>
     <br />
-    <input type="button" id="fire" value="Get hash" onclick="hash256()">
+    <input type="button" id="fire" value="Get hash" class="tw-d-btn" onclick="hash256()">
     <br />
     <hr />
     <h2> For files: </h2>
-    <input type="file" id="files">
+    <input type="file" id="files" class="tw-d-file-input tw-w-full tw-max-w-xs">
     <br />
     <br />
     <br />
-    <input type="button" id="fire" value="Get hash of the file" onclick="hash256file()">
+    <input type="button" id="fire" value="Get hash of the file" class="tw-d-btn" onclick="hash256file()">
     <br />
     <p id="output" style="white-space: pre-line;"></p>
     <footer class="site-footer">

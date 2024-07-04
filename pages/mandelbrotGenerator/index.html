@@ -49,6 +49,7 @@
   <section class="page-header">
     <h1 class="project-name">Contents List</h1>
     <a href="../../" class="btn">Main Menu</a>
+    <a href="../" class="btn">Back to contents list</a>
   </section>
   <section class="main-content">
     <p>
@@ -126,13 +127,13 @@
     <br />
     <br />
     <h3>Update coords (Use space as delimiter):</h3>
-    <p>panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
+    <pre><code>panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</code></pre>
     <textarea id="crd" class="tw-d-textarea tw-d-textarea-bordered tw-d-textarea-md tw-w-full tw-max-w-xs"
       width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
     <input type="button" id="lrg" value="Update Coords" class="tw-d-btn" onclick="changeCoords()" />
     <br />
     <h3> Advance Details: </h3>
-    <div id="dtls">
+    <div id="dtls" class="tw-d-card tw-bg-base-100 tw-shadow-xl ">
       Start by clicking the reset button.<br />
       Available palletes: <br />
       #000764 #206bcb #edffff #ffaa00 #000200<br />
