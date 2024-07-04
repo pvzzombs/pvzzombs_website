@@ -10,7 +10,7 @@ const log = require("fancy-log");
 const liveServer = require("live-server");
 
 const pathToDestination = "../pvzzombs_github_io/";
-const ignorePaths = ["!./node_modules/**", "!./gulpfile.js", "!./package.json"];
+const ignorePaths = ["!./node_modules/**", "!./gulpfile.js", "!./tailwind.config.js", "!./package.json"];
 
 const htmlOptions = {};
 const serverParams = {
