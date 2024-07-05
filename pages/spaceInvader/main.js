@@ -156,19 +156,20 @@ function draw() {
 }
 
 function mouseClicked() {
-  if (mouseX < player.x) {
+  if (mouseX < 150) {
     if (player.x > 0) player.x -= 30
   }
-  if (mouseX > player.x) {
+  if (mouseX >= 150) {
     if ((back.width - player.width) > player.x) player.x += 30
   }
 }
 
 function touchStarted() {
-  if (mouseX < player.x) {
+  var touch = touches[0];
+  if (touch.x < 150) {
     if (player.x > 0) player.x -= 30
   }
-  if (mouseX > player.x) {
+  if (touch.x >= 150) {
     if ((back.width - player.width) > player.x) player.x += 30
   }
 }
