@@ -1,4 +1,6 @@
 //basically load all sprites using objects
+var imagesLength = 5;
+var currentImageLoadedLength = 0;
 var back = {
   img: "img/galaxy.jpeg",
   loaded: null,
@@ -14,6 +16,7 @@ var player = {
   y: 350,
   width: 32,
   height: 32,
+  cropHeight: 18,
   life: 3,
   maxLife: 3
 }
@@ -24,6 +27,7 @@ var enemy = {
   y: 25,
   width: 90,
   height: 90,
+  cropHeight: 45,
   life: 1000,
   maxLife: 1000
 }
@@ -48,12 +52,19 @@ var temp = 2;
 var wait = 0;
 var dt, now, last, pft;
 
+function loadingText() {
+  var loadingTextElement = document.getElementById("loadingText");
+  if(loadingTextElement) {
+    loadingTextElement.innerText = "Loaded " + (++currentImageLoadedLength) + "/" + imagesLength;
+  }
+}
+
 function preload() {
-  back.loaded = loadImage(back.img)
-  player.loaded = loadImage(player.img);
-  enemy.loaded = loadGif(enemy.img);
-  bullet.loaded = loadImage(bullet.img);
-  bomb.loaded = loadImage(bomb.img);
+  back.loaded = loadImage(back.img, loadingText)
+  player.loaded = loadImage(player.img, loadingText);
+  enemy.loaded = loadGif(enemy.img, loadingText);
+  bullet.loaded = loadImage(bullet.img, loadingText);
+  bomb.loaded = loadImage(bomb.img, loadingText);
 }
 
 function setup() {
@@ -63,10 +74,10 @@ function setup() {
 }
 
 function draw() {
-  pft = 1000 / frameRate(); // frames per second, perfect frame time
+  pft = frameRate() / 1000; // frames per milliseconds
   now = (new Date()).getTime(); // milliseconds
   dt = now - last;
-  dt /= pft;
+  dt *= pft;
   last = now;
 
   //load images
@@ -96,21 +107,23 @@ function draw() {
   }
 
   // movement
-  enemy.x += dt * temp;
+  enemy.x += temp * dt;
   //movement of firecharges!!!!!!
-  bullet.y -= dt * 30;
-  bomb.y += dt * 4;
+  bullet.y -= 10 * dt;
+  bomb.y += 4 * dt;
 
   //detect collisions
-  var hitEnemy = collideRectRect(bullet.x, bullet.y, bullet.width, bullet.height, enemy.x, enemy.y, enemy.width, enemy.height);
-  var hitPlayer = collideRectRect(bomb.x, bomb.y, bomb.width, bomb.height, player.x, player.y, player.width, player.height);
+  var hitEnemy = collideRectRect(bullet.x, bullet.y, bullet.width, bullet.height, enemy.x, enemy.y, enemy.width, enemy.cropHeight);
+  var hitPlayer = collideRectRect(bomb.x, bomb.y, bomb.width, bomb.height, player.x, player.y, player.width, player.cropHeight);
 
   if (hitEnemy) {
+    // image(bullet.loaded, bullet.x, enemy.y+enemy.height - 10);
     bullet.x = player.x + 8;
     bullet.y = 345 - player.height;
     if (enemy.life > 0) {
       enemy.life -= 5;
-    } else {
+    }
+    if (enemy.life === 0) {
       fill("green");
       textSize(25);
       text("You win!", 60, 250);
@@ -120,9 +133,10 @@ function draw() {
   if (hitPlayer) {
     bomb.x = enemy.x + 8;
     bomb.y = 15 + enemy.height;
-    if (player.life > 1) {
+    if (player.life > 0) {
       player.life--;
-    } else {
+    }
+    if (player.life === 0) {
       fill("red");
       textSize(20);
       text("Game over", 60, 250);
@@ -136,12 +150,21 @@ function draw() {
   text("Player: " + player.life, 0, 24);
 
   fill("red");
-  rect(150, 0, enemy.life / enemy.maxLife * 100, 10);
+  rect(200, 0, enemy.life / enemy.maxLife * 100, 10);
   fill("green");
-  rect(150, 11, player.life / player.maxLife * 100, 10);
+  rect(200, 11, player.life / player.maxLife * 100, 10);
 }
 
 function mouseClicked() {
+  if (mouseX < player.x) {
+    if (player.x > 0) player.x -= 30
+  }
+  if (mouseX > player.x) {
+    if ((back.width - player.width) > player.x) player.x += 30
+  }
+}
+
+function touchStarted() {
   if (mouseX < player.x) {
     if (player.x > 0) player.x -= 30
   }
