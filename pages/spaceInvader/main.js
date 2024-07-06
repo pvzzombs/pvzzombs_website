@@ -54,8 +54,11 @@ var dt, now, last, pft;
 
 function loadingText() {
   var loadingTextElement = document.getElementById("loadingText");
-  if(loadingTextElement) {
+  if (loadingTextElement) {
     loadingTextElement.innerText = "Loaded " + (++currentImageLoadedLength) + "/" + imagesLength;
+  }
+  if (currentImageLoadedLength === imagesLength) {
+    loadingTextElement.style.display = "none";
   }
 }
 
@@ -155,7 +158,8 @@ function draw() {
   rect(200, 11, player.life / player.maxLife * 100, 10);
 }
 
-function mouseClicked() {
+function mousePressed() {
+  // console.log("Mouse");
   if (mouseX < 150) {
     if (player.x > 0) player.x -= 30
   }
@@ -165,6 +169,7 @@ function mouseClicked() {
 }
 
 function touchStarted() {
+  // console.log("Tap");
   var touch = touches[0];
   if (touch.x < 150) {
     if (player.x > 0) player.x -= 30
