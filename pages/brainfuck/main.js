@@ -59,7 +59,7 @@ function ok() {
   //console.log("Still running");
   if (status === "idle") {
     Swal.fire({
-      type: "error",
+      icon: "error",
       title: "Error",
       text: "Parse first!"
     });
@@ -74,7 +74,7 @@ function ok() {
   var cmd = program[pc];
   if (!cmd) {
     Swal.fire({
-      type: "success",
+      icon: "success",
       title: "Success",
       text: "Compiler finished!"
     });
@@ -148,13 +148,13 @@ function ok() {
 function run() {
   if (status === "idle") {
     Swal.fire({
-      type: "error",
+      icon: "error",
       title: "Error",
       text: "Parse first!"
     });
   } else if (status === "running") {
     Swal.fire({
-      type: "info",
+      icon: "info",
       title: "Info",
       text: "Already running!"
     });
@@ -172,13 +172,13 @@ function pause() {
     clearInterval(running);
   } else if (status === "paused") {
     Swal.fire({
-      type: "info",
+      icon: "info",
       title: "Info",
       text: "Already paused!"
     });
   } else {
     Swal.fire({
-      type: "info",
+      icon: "info",
       title: "Info",
       text: "Not yet running!"
     });
@@ -196,7 +196,7 @@ function changeSpeed() {
     var value = parseInt(result.value);
     if (Number.isNaN(value)) {
       Swal.fire({
-        type: "error",
+        icon: "error",
         title: "Error",
         text: "Invalid number!"
       });
@@ -204,7 +204,7 @@ function changeSpeed() {
     }
     if (value < 0) {
       Swal.fire({
-        type: "error",
+        icon: "error",
         title: "Error",
         text: "Lowest allowed number is 0"
       });
@@ -212,7 +212,7 @@ function changeSpeed() {
     }
     if (value > 10000) {
       Swal.fire({
-        type: "error",
+        icon: "error",
         title: "Error",
         text: "Highest allowed number is 10000"
       });

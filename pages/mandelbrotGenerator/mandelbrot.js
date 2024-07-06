@@ -417,7 +417,7 @@ function about() {
   // alert("A mandelbrot set generator in javascript created by pvzzombs")
   // console.log("A mandelbrot set generator in javascript created by pvzzombs");
   Swal.fire({
-    type: "info",
+    icon: "info",
     title: "About",
     text: "A mandelbrot set generator in javascript created by pvzzombs. "
   });

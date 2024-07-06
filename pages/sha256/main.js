@@ -2,7 +2,7 @@ function hash256() {
   var message = document.getElementById('target').value;
   var hash = sha256(message, true);
   Swal.fire({
-    type: "success",
+    icon: "success",
     title: "SHA-256 hash",
     html: "message: '" + message + "', hash: " + hash + "\n"
   });
@@ -13,7 +13,7 @@ function _hash256file() {
   var message = getBase64File(file);
   var hash = sha256(message);
   Swal.fire({
-    type: "success",
+    icon: "success",
     title: "SHA-256 hash",
     html: "hash: " + hash + "\n"
   });
@@ -23,7 +23,7 @@ function hash256file() {
   var file = document.getElementById('files').files[0];
   if(typeof file === "undefined") {
     Swal.fire({
-      type: "error",
+      icon: "error",
       title: "SHA-256 hash",
       html: "Please choose a valid file"
     });
@@ -31,7 +31,7 @@ function hash256file() {
   }
   var reader = new FileReader();
   Swal.fire({
-    type: "info",
+    icon: "info",
     title: "SHA-256 hash",
     html: "Please wait while the file is being hashed...",
     showConfirmButton: false
@@ -42,7 +42,7 @@ function hash256file() {
     setTimeout(function() {
       var output = sha256(message);
       Swal.fire({
-        type: "success",
+        icon: "success",
         title: "SHA-256 hash",
         html: "hash: " + output + "\n"
       });
@@ -50,7 +50,7 @@ function hash256file() {
   };
   reader.onerror = function(err) {
     Swal.fire({
-      type: "error",
+      icon: "error",
       title: "SHA-256 hash",
       message: err
     });

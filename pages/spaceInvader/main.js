@@ -51,6 +51,7 @@ var score = 0;
 var temp = 2;
 var wait = 0;
 var dt, now, last, pft;
+var shouldDisplay = false;
 
 function loadingText() {
   var loadingTextElement = document.getElementById("loadingText");
@@ -60,15 +61,24 @@ function loadingText() {
   if (currentImageLoadedLength === imagesLength) {
     loadingTextElement.style.display = "none";
     loop();
+    shouldDisplay = true;
   }
 }
 
+function loadingError(e) {
+  Swal.fire({
+    icon: "error",
+    title: "Error",
+    text: "An error occured while loading the image. Please refresh this page or try again later."
+  });
+}
+
 function preload() {
-  back.loaded = loadImage(back.img, loadingText)
-  player.loaded = loadImage(player.img, loadingText);
-  enemy.loaded = loadGif(enemy.img, loadingText);
-  bullet.loaded = loadImage(bullet.img, loadingText);
-  bomb.loaded = loadImage(bomb.img, loadingText);
+  back.loaded = loadImage(back.img, loadingText, loadingError);
+  player.loaded = loadImage(player.img, loadingText, loadingError);
+  enemy.loaded = loadGif(enemy.img, loadingText, loadingError);
+  bullet.loaded = loadImage(bullet.img, loadingText, loadingError);
+  bomb.loaded = loadImage(bomb.img, loadingText, loadingError);
 }
 
 p5.disableFriendlyErrors = true;
@@ -81,6 +91,8 @@ function setup() {
 }
 
 function draw() {
+  if (!shouldDisplay) { return; }
+
   pft = frameRate() / 1000; // frames per milliseconds
   now = (new Date()).getTime(); // milliseconds
   dt = now - last;
