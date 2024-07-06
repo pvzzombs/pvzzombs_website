@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Brainfuck Visualizer</title>
+  <title>Brainfuck Visualizer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#157878">
   <link rel="stylesheet" href="../../css/normalize.css">
@@ -9,102 +10,114 @@
   <link rel="stylesheet" href="../../css/cayman.css">
   <!-- script src="../js/eruda.js"></script>
   <script>eruda.init();</script -->
-<style type="text/css">
-.memory{
-display:inline-block;
-}
+  <style type="text/css">
+    .memory {
+      display: inline-block;
+    }
 
-.box{
-float: left;
-width: 30px;
-height: 30px;
-font-size: 16px;
-border: 1px solid black;
-text-align:center
-}
+    .box {
+      float: left;
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+      border: 1px solid black;
+      text-align: center
+    }
 
-#code, #output {
-width: 100%;
-height: 250px;
-font-size: 16px;
-}
+    #code,
+    #output {
+      width: 100%;
+      height: 250px;
+      font-size: 16px;
+    }
 
-#o {
-height: 50px;
-}
+    #o {
+      height: 50px;
+    }
 
-#input {
-width: 100%;
-}
-</style>
-<script src="index.js"></script>
+    #input {
+      width: 100%;
+    }
+  </style>
+  <script src="index.js"></script>
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../css/sweetalert2.min.css">
+  <script src="../js/sweetalert2.min.js"></script>
 </head>
+
 <body>
-    <section class="page-header">
-      <h1 class="project-name">Contents List</h1>
-      <a href="../../" class="btn">Main Menu</a>
-      <a href="../" class="btn">Back to contents list</a>
-    </section>
+  <section class="page-header">
+    <h1 class="project-name">Contents List</h1>
+    <a href="../../" class="btn">Main Menu</a>
+    <a href="../" class="btn">Back to contents list</a>
+  </section>
 
-    <section class="main-content">
-        <div id="wrapper" class="memory">
-          <div id="box1" class="box">0</div>
-          <div id="box2" class="box">0</div>
-          <div id="box3" class="box">0</div>
-          <div id="box4" class="box">0</div>
-          <div id="box5" class="box">0</div>
-          <div id="box6" class="box">0</div>
-          <div id="box7" class="box">0</div>
-          <div id="box8" class="box">0</div>
-          <div id="box9" class="box">0</div>
-          <div id="box10" class="box">0</div>
-          <div id="box11" class="box">0</div>
-          <div id="box12" class="box">0</div>
-          <div id="box13" class="box">0</div>
-          <div id="box14" class="box">0</div>
-          <div id="box15" class="box">0</div>
-          <div id="box16" class="box">0</div>
-          <div id="box17" class="box">0</div>
-          <div id="box18" class="box">0</div>
-          <div id="box19" class="box">0</div>
-          <div id="box20" class="box">0</div>
-          <div id="box21" class="box">0</div>
-          <div id="box22" class="box">0</div>
-          <div id="box23" class="box">0</div>
-          <div id="box24" class="box">0</div>
-          <div id="box25" class="box">0</div>
-          <div id="box26" class="box">0</div>
-          <div id="box27" class="box">0</div>
-          <div id="box28" class="box">0</div>
-          <div id="box29" class="box">0</div>
-          <div id="box30" class="box">0</div>
-        </div>
+  <section class="main-content">
+    <div id="wrapper" class="memory">
+      <div id="box1" class="box">0</div>
+      <div id="box2" class="box">0</div>
+      <div id="box3" class="box">0</div>
+      <div id="box4" class="box">0</div>
+      <div id="box5" class="box">0</div>
+      <div id="box6" class="box">0</div>
+      <div id="box7" class="box">0</div>
+      <div id="box8" class="box">0</div>
+      <div id="box9" class="box">0</div>
+      <div id="box10" class="box">0</div>
+      <div id="box11" class="box">0</div>
+      <div id="box12" class="box">0</div>
+      <div id="box13" class="box">0</div>
+      <div id="box14" class="box">0</div>
+      <div id="box15" class="box">0</div>
+      <div id="box16" class="box">0</div>
+      <div id="box17" class="box">0</div>
+      <div id="box18" class="box">0</div>
+      <div id="box19" class="box">0</div>
+      <div id="box20" class="box">0</div>
+      <div id="box21" class="box">0</div>
+      <div id="box22" class="box">0</div>
+      <div id="box23" class="box">0</div>
+      <div id="box24" class="box">0</div>
+      <div id="box25" class="box">0</div>
+      <div id="box26" class="box">0</div>
+      <div id="box27" class="box">0</div>
+      <div id="box28" class="box">0</div>
+      <div id="box29" class="box">0</div>
+      <div id="box30" class="box">0</div>
+    </div>
 
-          <br/>
-          Status: <span id="status" > idle </span><br />
-          Program: <textarea id="code" width="300" height="250"></textarea>
-          <br/>
-          <input id="o" type="button" onclick="parse()" value="Parse" />
-          <input id="o" type="button" onclick="run()" value="Run" />
-          <input id="o" type="button" onclick="pause()" value="Pause" />
-          <input id="o" type="button" onclick="ok()" value="Step" />
-          <br>
-          <br>
-          Output:
-          <br>
-          <textarea id="output" width="300" height="250" readonly="readonly" ></textarea>
-          <br>
-          <br>
-      <footer class="site-footer">
-        <span class="site-footer-owner">Miles MJ Jamon (c) 2019 - <span id="yearToday"></span></span>
-        <script>document.getElementById("yearToday").innerText = (new Date()).getFullYear();</script>
-        <span class="site-footer-credits">This uses the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a></span>
-        <span class="site-footer-credits">and this page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
+    <br />
+    Status: <span id="status"> idle </span><br />
+    Program: <textarea id="code" class="tw-d-textarea tw-d-textarea-bordered" width="300" height="250"></textarea>
+    <br />
+    <input id="o" class="tw-d-btn" type="button" onclick="parse()" value="Parse" />
+    <input id="o" class="tw-d-btn" type="button" onclick="run()" value="Run" />
+    <input id="o" class="tw-d-btn" type="button" onclick="pause()" value="Pause" />
+    <input id="o" class="tw-d-btn" type="button" onclick="ok()" value="Step" />
+    <input id="o" class="tw-d-btn" type="button" onclick="changeSpeed()" value="Change speed" />
+    <br>
+    <br>
+    Output:
+    <br>
+    <textarea id="output" class="tw-d-textarea tw-d-textarea-bordered" width="300" height="250"
+      readonly="readonly"></textarea>
+    <br>
+    <br>
+    <footer class="site-footer">
+      <span class="site-footer-owner">Miles MJ Jamon (c) 2019 - <span id="yearToday"></span></span>
+      <script>
+        document.getElementById("yearToday").innerText = (new Date()).getFullYear();
+      </script>
+      <span class="site-footer-credits">This uses the <a href="https://github.com/jasonlong/cayman-theme">Cayman
+          theme</a></span>
+      <span class="site-footer-credits">and this page was generated by <a href="https://pages.github.com">GitHub
+          Pages</a>.</span>
+    </footer>
 
-    </section>
+  </section>
 
-<script type="text/javascript" src="main.js">
-</script>
+  <script type="text/javascript" src="main.js">
+  </script>
 </body>
+
 </html>
