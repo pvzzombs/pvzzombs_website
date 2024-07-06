@@ -70,6 +70,8 @@ function preload() {
   bomb.loaded = loadImage(bomb.img, loadingText);
 }
 
+p5.disableFriendlyErrors = true;
+
 function setup() {
   var cv = createCanvas(300, 400);
   cv.parent("canvas");
@@ -166,6 +168,7 @@ function mousePressed() {
   if (mouseX >= 150) {
     if ((back.width - player.width) > player.x) player.x += 30
   }
+  return false;
 }
 
 function touchStarted() {
@@ -177,6 +180,7 @@ function touchStarted() {
   if (touch.x >= 150) {
     if ((back.width - player.width) > player.x) player.x += 30
   }
+  return false;
 }
 
 function keyPressed() {
@@ -185,6 +189,7 @@ function keyPressed() {
   } else if (keyCode === RIGHT_ARROW) {
     if ((back.width - player.width) > player.x) player.x += 30
   }
+  return false;
 }
 
 /*

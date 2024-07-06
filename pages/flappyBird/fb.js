@@ -73,6 +73,9 @@ function Pipe(){
 		}
 	}
 }
+
+p5.disableFriendlyErrors = true;
+
 function setup(){
 	var cv = createCanvas(300,400);
 	cv.parent("canvas");

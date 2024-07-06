@@ -88,6 +88,8 @@ function pNoise(x,y,z,o,p){
   return (total / maxValue);
 }
 
+p5.disableFriendlyErrors = true;
+
 function setup(argument) {
   // body...
   var cv = createCanvas(300, 300);
