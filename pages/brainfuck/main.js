@@ -23,7 +23,7 @@ function right() {
     id("wrapper").appendChild(node);
     boxCount++;
   }
-  id("box" + (pointer + 1)).style.background = "white";
+  id("box" + (pointer + 1)).style.background = "";
   id("box" + (pointer + 2)).style.background = color;
 }
 
@@ -34,7 +34,7 @@ function left() {
     error = true;
     return;
   }
-  id("box" + (pointer + 1)).style.background = "white";
+  id("box" + (pointer + 1)).style.background = "";
   id("box" + (pointer)).style.background = color;
 }
 
@@ -48,7 +48,7 @@ function parse() {
   clearInterval(running);
   for (var i = 1; i <= boxCount; i++) {
     id("box" + i).innerText = 0;
-    id("box" + i).style.background = "white";
+    id("box" + i).style.background = "";
   }
   id("output").value = "";
   id("box1").style.background = "#7CFF89";
