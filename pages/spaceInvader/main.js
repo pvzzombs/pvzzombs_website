@@ -10,7 +10,7 @@ var back = {
   height: 400
 }
 var player = {
-  img: "img/player.gif",
+  img: "img/player.png",
   loaded: null,
   x: 150,
   y: 350,
