@@ -50,7 +50,7 @@ var bomb = {
 var score = 0;
 var temp = 2;
 var wait = 0;
-var dt, now, last, pft;
+var dt, now, last, fpm;
 var shouldDisplay = false;
 
 function loadingText() {
@@ -111,10 +111,10 @@ function mainGame() {
     return;
   }
 
-  pft = frameRate() / 1000; // frames per milliseconds
+  fpm = frameRate() / 1000; // frames per milliseconds
   now = (new Date()).getTime(); // milliseconds
   dt = now - last;
-  dt *= pft;
+  dt *= fpm;
   last = now;
 
   //load images

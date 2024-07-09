@@ -19,6 +19,13 @@ var pipes;
 var score = 0;
 var highScore = 0;
 var speedUp = false;
+
+// for fps
+var lastTime;
+var nowTime;
+var dt;
+var fpm;
+
 //the bird
 function Bird() {
 	this.x = 50;
@@ -33,10 +40,10 @@ function Bird() {
 		// image(player, this.x, this.y);
 		birdSprite.drawP5Image(this.x, this.y, this.width, this.height);
 	}
-	this.update = function () {
+	this.update = function (dt) {
 		bird.dy += gravity;
 		bird.dy *= friction;
-		bird.y += bird.dy;
+		bird.y += bird.dy * dt;
 		if (this.y + this.height >= 400) {
 			restartGame();
 		}
@@ -71,7 +78,7 @@ function Pipe() {
 			0, 0, 32, lowerPipeHeight * 80 / 200);
 		return this.x;
 	}
-	this.update = function (bird) {
+	this.update = function (bird, dt) {
 		var isUpperCollided = collideRectRect(bird.x, bird.y, 50, 50, this.x, this.y, this.width, this.height);
 		var isLowerCollided = collideRectRect(bird.x, bird.y, 50, 50, this.x, this.height + this.hole, this.width, 400 - this.height - this.hole);
 		if (isUpperCollided || isLowerCollided) {
@@ -87,7 +94,7 @@ function Pipe() {
 			// this.scored = false;
 			return true;
 		} else {
-			this.x -= speed;
+			this.x -= speed * dt;
 		}
 		return false;
 	}
@@ -115,11 +122,19 @@ function setup() {
 	var cv = createCanvas(300, 400);
 	cv.parent("canvas");
 	noSmooth();
+	lastTime = (new Date()).getTime();
 }
 
 function draw() {
 	var lastPipeX;
 	var isOutOfBounds;
+
+	fpm = frameRate() / 1000; // frames per milliseconds
+  nowTime = (new Date()).getTime(); // milliseconds
+  dt = nowTime - lastTime;
+  dt *= fpm;
+  lastTime = nowTime;
+
 	clear();
 	// background(128, 128, 255);
 	backgroundSprite.drawP5Image(0, 0, 300, 400);
@@ -129,10 +144,10 @@ function draw() {
 	pipes[1].draw(pipesSprites);
 	lastPipeX = pipes[2].draw(pipesSprites);
 
-	bird.update()
-	isOutOfBounds = pipes[0].update(bird);
-	pipes[1].update(bird);
-	pipes[2].update(bird);
+	bird.update(dt)
+	isOutOfBounds = pipes[0].update(bird, dt);
+	pipes[1].update(bird, dt);
+	pipes[2].update(bird, dt);
 
 	if (isOutOfBounds) {
 		var temp = pipes[0];
