@@ -48,6 +48,7 @@ JSAnimatedSprite.prototype = {
       width = intDestWidth;
       height = intDestHeight;
     }
+    // image.noSmooth();
     image(this.imageHandle, intDestX, intDestY, width, height,
       this.currentFrame * this.sourceWidth, 0, this.sourceWidth, this.sourceHeight);
 
@@ -57,5 +58,21 @@ JSAnimatedSprite.prototype = {
       this.moveFrameCount = 0;
       this.currentFrame = (this.currentFrame + 1) % this.frameCount;
     }
+  }
+};
+
+function JSSpriteSheet(stringName) {
+  this.imageHandle = null;
+  this.name = stringName;
+}
+
+JSSpriteSheet.prototype = {
+  loadP5Image: function (functionSuccessCallback, functionFailCallback) {
+    this.imageHandle = loadImage(this.name, functionSuccessCallback, functionFailCallback);
+  },
+  drawP5Image: function (intDestX, intDestY, intDestWidth, intDestHeight,
+    intSourceX, intSourceY, intSourceWidth, intSourceHeight) {
+    image(this.imageHandle, intDestX, intDestY, intDestWidth, intDestHeight,
+      intSourceX, intSourceY, intSourceWidth, intSourceHeight);
   }
 };
