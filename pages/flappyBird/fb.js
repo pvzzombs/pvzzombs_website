@@ -7,7 +7,7 @@
 //   }
 // }
 //the world
-var player;
+var playerSprite;
 var pipesSprites;
 var backgroundSprite;
 var gravity = 0.3;
@@ -37,7 +37,7 @@ function Bird() {
     // Box test
     // fill("red");
     // rect(this.x, this.y, this.width, this.height);
-    // image(player, this.x, this.y);
+    // image(playerSprite, this.x, this.y);
     birdSprite.drawP5Image(this.x, this.y, this.width, this.height);
   }
   this.update = function (dt) {
@@ -122,10 +122,10 @@ function preload() {
     pipes[i].x = pipeStartX + 350;
     pipeStartX += 200;
   }
-  player = new JSAnimatedSprite("img/bird.png", 4, 5, 16, 16);
+  playerSprite = new JSAnimatedSprite("img/bird.png", 4, 5, 16, 16);
   pipesSprites = new JSSpriteSheet("img/pipes.png");
   backgroundSprite = new JSSprite("img/background.png", 0, 0, 256, 256);
-  player.loadP5Image(loadingSucess, loadingError);
+  playerSprite.loadP5Image(loadingSucess, loadingError);
   pipesSprites.loadP5Image(loadingSucess, loadingError);
   backgroundSprite.loadP5Image(loadingSucess, loadingError);
 }
@@ -151,7 +151,7 @@ function draw() {
   // background(128, 128, 255);
   backgroundSprite.drawP5Image(0, 0, 300, 400);
 
-  bird.draw(player);
+  bird.draw(playerSprite);
   pipes[0].draw(pipesSprites);
   pipes[1].draw(pipesSprites);
   lastPipeX = pipes[2].draw(pipesSprites);
@@ -207,7 +207,7 @@ function restartGame() {
   score = 0;
   speed = 2;
   bird = new Bird();
-  bird.sprite = player;
+  bird.sprite = playerSprite;
   pipes = [(new Pipe()), (new Pipe()), (new Pipe())];
   var $pipe = 0;
   for (var i = 0; i < pipes.length; i++) {

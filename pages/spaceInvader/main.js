@@ -3,7 +3,7 @@ var imagesLength = 5;
 var currentImageLoadedLength = 0;
 var back = {
   img: "img/galaxy.jpeg",
-  loaded: null,
+  spriteHandle: null,
   x: 0,
   y: 0,
   width: 300,
@@ -11,7 +11,7 @@ var back = {
 }
 var player = {
   img: "img/player.png",
-  loaded: null,
+  spriteHandle: null,
   x: 150,
   y: 350,
   width: 32,
@@ -22,7 +22,7 @@ var player = {
 }
 var enemy = {
   img: "img/enemy.png",
-  loaded: null,
+  spriteHandle: null,
   x: 0,
   y: 25,
   width: 90,
@@ -33,7 +33,7 @@ var enemy = {
 }
 var bullet = {
   img: "img/bullet.png",
-  loaded: null,
+  spriteHandle: null,
   x: player.x + 8,
   y: 345 - player.height,
   width: 16,
@@ -41,7 +41,7 @@ var bullet = {
 }
 var bomb = {
   img: "img/bomb.png",
-  loaded: null,
+  spriteHandle: null,
   x: enemy.x + 8,
   y: 15 + enemy.height,
   width: 16,
@@ -79,17 +79,17 @@ function preload() {
 //   enemy.loaded = loadGif(enemy.img, loadingText, loadingError);
 //   bullet.loaded = loadImage(bullet.img, loadingText, loadingError);
 //   bomb.loaded = loadImage(bomb.img, loadingText, loadingError);
-  back.loaded = new JSSprite(back.img, 0, 0, 183, 275);
-  player.loaded = new JSSprite(player.img, 0, 0, 264, 270);
-  enemy.loaded = new JSAnimatedSprite(enemy.img, 36, 5, 288, 348);
-  bullet.loaded = new JSSprite(bullet.img, 0, 0, 16, 16);
-  bomb.loaded = new JSSprite(bomb.img, 0, 0, 16, 16);
+  back.spriteHandle = new JSSprite(back.img, 0, 0, 183, 275);
+  player.spriteHandle = new JSSprite(player.img, 0, 0, 264, 270);
+  enemy.spriteHandle = new JSAnimatedSprite(enemy.img, 36, 5, 288, 348);
+  bullet.spriteHandle = new JSSprite(bullet.img, 0, 0, 16, 16);
+  bomb.spriteHandle = new JSSprite(bomb.img, 0, 0, 16, 16);
 
-  back.loaded.loadP5Image(loadingText, loadingError);
-  player.loaded.loadP5Image(loadingText, loadingError);
-  enemy.loaded.loadP5Image(loadingText, loadingError);
-  bullet.loaded.loadP5Image(loadingText, loadingError);
-  bomb.loaded.loadP5Image(loadingText, loadingError);
+  back.spriteHandle.loadP5Image(loadingText, loadingError);
+  player.spriteHandle.loadP5Image(loadingText, loadingError);
+  enemy.spriteHandle.loadP5Image(loadingText, loadingError);
+  bullet.spriteHandle.loadP5Image(loadingText, loadingError);
+  bomb.spriteHandle.loadP5Image(loadingText, loadingError);
 }
 
 p5.disableFriendlyErrors = true;
@@ -102,7 +102,7 @@ function setup() {
 
 function draw() {
   // clear();
-  // enemy.loaded.drawP5Image(0, 0);
+  // enemy.spriteHandle.drawP5Image(0, 0);
   mainGame();
 }
 
@@ -118,11 +118,11 @@ function mainGame() {
   last = now;
 
   //load images
-  back.loaded.drawP5Image(back.x, back.y, back.width, back.height);
-  player.loaded.drawP5Image(player.x, player.y, player.width, player.height);
-  enemy.loaded.drawP5Image(enemy.x, enemy.y, enemy.width, enemy.height);
-  bullet.loaded.drawP5Image(bullet.x, bullet.y);
-  bomb.loaded.drawP5Image(bomb.x, bomb.y);
+  back.spriteHandle.drawP5Image(back.x, back.y, back.width, back.height);
+  player.spriteHandle.drawP5Image(player.x, player.y, player.width, player.height);
+  enemy.spriteHandle.drawP5Image(enemy.x, enemy.y, enemy.width, enemy.height);
+  bullet.spriteHandle.drawP5Image(bullet.x, bullet.y);
+  bomb.spriteHandle.drawP5Image(bomb.x, bomb.y);
 
   //start the funny game
   //check if firecharges goes off the screen!!!
