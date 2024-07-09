@@ -100,6 +100,18 @@ function Pipe() {
 	}
 }
 
+function loadingSucess() {
+
+}
+
+function loadingError(e) {
+  Swal.fire({
+    icon: "error",
+    title: "Error",
+    text: "An error occured while loading the image. Please refresh this page or try again later."
+  });
+}
+
 p5.disableFriendlyErrors = true;
 
 function preload() {
@@ -113,9 +125,9 @@ function preload() {
 	player = new JSAnimatedSprite("img/bird.png", 4, 5, 16, 16);
 	pipesSprites = new JSSpriteSheet("img/pipes.png");
 	backgroundSprite = new JSSprite("img/background.png", 0, 0, 256, 256);
-	player.loadP5Image();
-	pipesSprites.loadP5Image();
-	backgroundSprite.loadP5Image();
+	player.loadP5Image(loadingSucess, loadingError);
+	pipesSprites.loadP5Image(loadingSucess, loadingError);
+	backgroundSprite.loadP5Image(loadingSucess, loadingError);
 }
 
 function setup() {
