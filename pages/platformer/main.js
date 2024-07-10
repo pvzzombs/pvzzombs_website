@@ -1,4 +1,6 @@
 var player;
+var platforms;
+var platformTest;
 
 function loadingText() {
   var loadingTextElement = document.getElementById("loadingText");
@@ -30,6 +32,13 @@ function setup() {
   var cv = createCanvas(400, 300);
   cv.parent("canvas");
   player = new Player();
+  platforms = [];
+  // for (var i = 0; i < 3; i++) {
+  //   platforms.push(new Platform());
+  // }
+  platformTest = new Platform();
+  platformTest.y = 250;
+  platformTest.x = 150;
 }
 
 function draw() {
@@ -38,13 +47,24 @@ function draw() {
 
 function mainGame() {
   background(128);
-  if(player.y + player.height + player.dy >= 300) {
+  if (player.y + player.height + player.dy >= 300) {
     player.dy = 0;
   } else {
     player.dy += player.gravity;
   }
+  
+  // for (var i = 0; i < 3; i++) {
+  //   platforms[i].update();
+  // }
+  platformTest.update();
   player.update();
+
+
+  platformTest.draw();
   player.draw();
+  // for (var i = 0; i < 3; i++) {
+  //   platforms[i].draw();
+  // }
 }
 
 function mousePressed() {
@@ -58,12 +78,14 @@ function touchStarted() {
 function keyPressed() {
   switch (key) {
     case " ":
-      if (player.dy === 0) player.dy = -10;
+      if (player.dy === 0) player.dy = -15;
       break;
-    case "a" : case "A":
+    case "a":
+    case "A":
       player.dx = -1
       break;
-    case "d" : case "D":
+    case "d":
+    case "D":
       player.dx = 1;
       break;
   }
