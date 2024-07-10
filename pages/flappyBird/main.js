@@ -126,13 +126,12 @@ function restartGame() {
   highScore = (highScore < score) ? score : highScore;
   score = 0;
   speed = 2;
+  speedUp = 0;
   bird = new Bird();
-  bird.sprite = playerSprite;
   pipes = [(new Pipe()), (new Pipe()), (new Pipe())];
-  var $pipe = 0;
+  var pipeStartX = 0;
   for (var i = 0; i < pipes.length; i++) {
-    pipes[i].x = $pipe + 350;
-    $pipe += 200;
+    pipes[i].x = pipeStartX + 350;
+    pipeStartX += 200;
   }
-
 }

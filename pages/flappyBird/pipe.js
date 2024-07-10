@@ -25,11 +25,11 @@ function Pipe() {
     return this.x;
   }
   this.update = function (bird, dt) {
-    // var isUpperCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.y, this.width, this.height);
-    // var isLowerCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.height + this.hole, this.width, 400 - this.height - this.hole);
-    // if (isUpperCollided || isLowerCollided) {
-    //   restartGame();
-    // }
+    var isUpperCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.y, this.width, this.height);
+    var isLowerCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.height + this.hole, this.width, 400 - this.height - this.hole);
+    if (isUpperCollided || isLowerCollided) {
+      restartGame();
+    }
     if (bird.x > this.x + this.width && !this.scored) {
       score++;
       speedUp++;
