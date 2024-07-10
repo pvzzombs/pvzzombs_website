@@ -33,12 +33,22 @@ function Bird() {
   this.dx = 0;
   this.dy = 0;
   this.width = this.height = 50;
+  this.hitbox = {
+    x: 0,
+    y: 3,
+    width: 16 * 50 / 16,
+    height: 14 * 50 / 16 /* I'm not sure the math here is correct */
+  }
   this.draw = function (birdSprite) {
     // Box test
     // fill("red");
     // rect(this.x, this.y, this.width, this.height);
     // image(playerSprite, this.x, this.y);
     birdSprite.drawP5Image(this.x, this.y, this.width, this.height);
+
+    // Hitbox
+    // fill(255, 0, 0, 128);
+    // rect(this.x + this.hitbox.x, this.y + this.hitbox.y, this.hitbox.width, this.hitbox.height);
   }
   this.update = function (dt) {
     bird.dy += gravity * dt;
@@ -80,8 +90,8 @@ function Pipe() {
     return this.x;
   }
   this.update = function (bird, dt) {
-    var isUpperCollided = collideRectRect(bird.x, bird.y, 50, 50, this.x, this.y, this.width, this.height);
-    var isLowerCollided = collideRectRect(bird.x, bird.y, 50, 50, this.x, this.height + this.hole, this.width, 400 - this.height - this.hole);
+    var isUpperCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.y, this.width, this.height);
+    var isLowerCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.height + this.hole, this.width, 400 - this.height - this.hole);
     if (isUpperCollided || isLowerCollided) {
       restartGame();
     }
