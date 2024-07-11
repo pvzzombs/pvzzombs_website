@@ -161,6 +161,7 @@ function mainGame() {
 }
 
 function keyTyped() {
+  if (bird.gameOver) { return; }
   if (key === ' ') {
     bird.dy = flap;
     sfx_wing.play();
@@ -169,12 +170,14 @@ function keyTyped() {
 }
 
 function mousePressed() {
+  if (bird.gameOver) { return; }
   bird.dy = flap;
   sfx_wing.play();
   return false;
 }
 
 function touchStarted() {
+  if (bird.gameOver) { return; }
   bird.dy = flap;
   sfx_wing.play();
   return false;
