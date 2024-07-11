@@ -18,6 +18,17 @@ var nowTime;
 var dt;
 var fpm;
 
+// sounds
+var sfx_die;
+var sfx_hit;
+var sfx_point;
+var sfx_wing;
+
+// scenes
+var SCENE_MAIN = 1;
+var SCENE_DEATH = 2;
+var currentScene = SCENE_MAIN;
+
 function loadingSucess() {
 
 }
@@ -46,6 +57,15 @@ function preload() {
   playerSprite.loadP5Image(loadingSucess, loadingError);
   pipesSprites.loadP5Image(loadingSucess, loadingError);
   backgroundSprite.loadP5Image(loadingSucess, loadingError);
+
+  sfx_die = loadSound("sfx/die.wav");
+  sfx_hit = loadSound("sfx/hit.wav");
+  sfx_point = loadSound("sfx/point.wav");
+  sfx_wing = loadSound("sfx/wing.wav");
+  sfx_die.setVolume(0.5);
+  sfx_hit.setVolume(0.5);
+  sfx_point.setVolume(0.5);
+  sfx_wing.setVolume(0.5);
 }
 
 function setup() {
@@ -56,6 +76,41 @@ function setup() {
 }
 
 function draw() {
+  switch (currentScene) {
+    case SCENE_DEATH:
+      death();
+      break;
+    case SCENE_MAIN:
+      mainGame();
+      break;
+  }
+}
+
+function death() {
+  speed = 0;
+
+  clear();
+  backgroundSprite.drawP5Image(0, 0, 300, 400);
+
+  pipes[0].draw(pipesSprites);
+  pipes[1].draw(pipesSprites);
+  pipes[2].draw(pipesSprites);
+  bird.draw(playerSprite);
+  
+  bird.update(dt)
+  pipes[0].update(bird, dt);
+  pipes[1].update(bird, dt);
+  pipes[2].update(bird, dt);
+
+  if (bird.y >= 400) {
+    sfx_die.play();
+    currentScene = SCENE_MAIN;
+    restartGame();
+    // debugger;
+  }
+}
+
+function mainGame() {
   var lastPipeX;
   var isOutOfBounds;
 
@@ -108,21 +163,25 @@ function draw() {
 function keyTyped() {
   if (key === ' ') {
     bird.dy = flap;
+    sfx_wing.play();
   }
   return false;
 }
 
 function mousePressed() {
   bird.dy = flap;
+  sfx_wing.play();
   return false;
 }
 
 function touchStarted() {
   bird.dy = flap;
+  sfx_wing.play();
   return false;
 }
 
 function restartGame() {
+  sfx_hit.stop();
   highScore = (highScore < score) ? score : highScore;
   score = 0;
   speed = 2;

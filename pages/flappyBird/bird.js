@@ -5,6 +5,7 @@ function Bird() {
   this.dx = 0;
   this.dy = 0;
   this.width = this.height = 50;
+  this.gameOver = false;
   this.hitbox = {
     x: 0,
     y: 3,
@@ -23,15 +24,27 @@ function Bird() {
     // rect(this.x + this.hitbox.x, this.y + this.hitbox.y, this.hitbox.width, this.hitbox.height);
   }
   this.update = function (dt) {
-    bird.dy += gravity * dt;
+    this.dy += gravity * dt;
     // bird.dy *= friction;
     // bird.dy *= dt;
-    bird.y += bird.dy * dt;
-    if (this.y + this.height >= 400) {
-      restartGame();
+    this.y += this.dy * dt;
+    if (this.y + this.height >= 400 && !this.gameOver) {
+      sfx_hit.play();
+      this.dy = flap;
+      // sfx_die.play();
+      this.gameOver = true;
+      currentScene = SCENE_DEATH;
+      // debugger;
+      // restartGame();
     }
-    if (this.y + this.height <= 0) {
-      restartGame();
+    if (this.y + this.height <= 0 && !this.gameOver) {
+      sfx_hit.play();
+      this.dy = flap;
+      // sfx_die.play();
+      this.gameOver = true;
+      currentScene = SCENE_DEATH;
+      // debugger;
+      // restartGame();
     }
   }
 }
