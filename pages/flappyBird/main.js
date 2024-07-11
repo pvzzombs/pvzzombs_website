@@ -58,14 +58,18 @@ function preload() {
   pipesSprites.loadP5Image(loadingSucess, loadingError);
   backgroundSprite.loadP5Image(loadingSucess, loadingError);
 
-  sfx_die = loadSound("sfx/die.wav");
-  sfx_hit = loadSound("sfx/hit.wav");
-  sfx_point = loadSound("sfx/point.wav");
-  sfx_wing = loadSound("sfx/wing.wav");
-  sfx_die.setVolume(0.5);
-  sfx_hit.setVolume(0.5);
-  sfx_point.setVolume(0.5);
-  sfx_wing.setVolume(0.5);
+  sfx_die = new Howl({
+    src: ["sfx/die.wav"]
+  });
+  sfx_hit = new Howl({
+    src: ["sfx/hit.wav"]
+  });
+  sfx_point = new Howl({
+    src: ["sfx/point.wav"]
+  });
+  sfx_wing = new Howl({
+    src: ["sfx/wing.wav"]
+  });
 }
 
 function setup() {
