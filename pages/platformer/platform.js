@@ -18,7 +18,8 @@ Platform.prototype = {
     }
     if (player.x + player.width > this.x && player.x < this.x + this.width
       && player.y + player.height + player.dy >= this.y && this.passed) {
-      player.dy = 0;
+        player.dy = 0;
+        player.y = this.y - player.height;
     }
   },
   draw: function() {

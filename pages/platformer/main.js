@@ -1,6 +1,8 @@
 var player;
 var platforms;
 var platformTest;
+var leftKeyPressed = false;
+var rightKeyPressed = false;
 
 function loadingText() {
   var loadingTextElement = document.getElementById("loadingText");
@@ -49,10 +51,18 @@ function mainGame() {
   background(128);
   if (player.y + player.height + player.dy >= 300) {
     player.dy = 0;
+    player.y = 300 - player.height;
   } else {
     player.dy += player.gravity;
   }
   
+  player.dx = 0;
+  if (leftKeyPressed) {
+    player.dx = -1;
+  } else if (rightKeyPressed) {
+    player.dx = 1;
+  }
+
   // for (var i = 0; i < 3; i++) {
   //   platforms[i].update();
   // }
@@ -80,13 +90,35 @@ function keyPressed() {
     case " ":
       if (player.dy === 0) player.dy = -15;
       break;
+    case "s":
+    case "S":
+      player.dy += player.gravity;
+      break;
     case "a":
     case "A":
-      player.dx = -1
+      leftKeyPressed = true;
       break;
     case "d":
     case "D":
-      player.dx = 1;
+      rightKeyPressed = true;
+      break;
+  }
+  player.update();
+  player.draw();
+}
+
+function keyReleased() {
+  switch (key) {
+    // case " ":
+    //   if (player.dy === 0) player.dy = -15;
+    //   break;
+    case "a":
+    case "A":
+      leftKeyPressed = false;
+      break;
+    case "d":
+    case "D":
+      rightKeyPressed = false;
       break;
   }
   player.update();
