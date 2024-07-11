@@ -23,26 +23,55 @@ function Bird() {
     // fill(255, 0, 0, 128);
     // rect(this.x + this.hitbox.x, this.y + this.hitbox.y, this.hitbox.width, this.hitbox.height);
   }
-  this.update = function (dt) {
+  this.updateMove = function(dt) {
     this.dy += gravity * dt;
     // bird.dy *= friction;
     // bird.dy *= dt;
     this.y += this.dy * dt;
-    if (this.y + this.height >= 400 && !this.gameOver) {
+  }
+  this.update = function (dt, pipes) {
+    this.dy += gravity * dt;
+    // bird.dy *= friction;
+    // bird.dy *= dt;
+    this.y += this.dy * dt;
+
+    if (this.gameOver) { return; }
+
+    if (this.y + this.height >= 400) {
       sfx_hit.play();
       this.dy = flap;
-      // sfx_die.play();
+      birdPos.x = this.x;
+      birdPos.y = this.y;
+      for(var i=0; i<3; i++) {
+        pipesPos[i].x = pipes[i].x;
+        pipesPos[i].y = pipes[i].y;
+        pipesPos[i].height = pipes[i].height;
+        // console.log(pipesPos[i].y);
+      }
       this.gameOver = true;
-      currentScene = SCENE_DEATH;
+      mgr.showScene(deathScene);
+      return;
+      // sfx_die.play();
+      // currentScene = SCENE_DEATH;
       // debugger;
       // restartGame();
     }
-    if (this.y + this.height <= 0 && !this.gameOver) {
+    if (this.y + this.height <= 0) {
       sfx_hit.play();
       this.dy = flap;
-      // sfx_die.play();
+      birdPos.x = this.x;
+      birdPos.y = this.y;
+      for(var i=0; i<3; i++) {
+        pipesPos[i].x = pipes[i].x;
+        pipesPos[i].y = pipes[i].y;
+        pipesPos[i].height = pipes[i].height;
+        // console.log(pipesPos[i].y);
+      }
       this.gameOver = true;
-      currentScene = SCENE_DEATH;
+      mgr.showScene(deathScene);
+      return;
+      // sfx_die.play();
+      // currentScene = SCENE_DEATH;
       // debugger;
       // restartGame();
     }
