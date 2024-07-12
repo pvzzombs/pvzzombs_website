@@ -24,7 +24,7 @@ function Pipe() {
       0, 0, 32, lowerPipeHeight * 80 / 200);
     return this.x;
   }
-  this.update = function (bird, dt, pipes) {
+  this.update = function (dt, bird, pipes) {
     if (bird.gameOver) { return; }
     var isUpperCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.y, this.width, this.height);
     var isLowerCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.height + this.hole, this.width, 400 - this.height - this.hole);

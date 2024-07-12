@@ -48,9 +48,9 @@ function mainScene() {
     lastPipeX = pipes[2].draw(pipesSprites);
 
     bird.update(dt, pipes)
-    isOutOfBounds = pipes[0].update(bird, dt, pipes);
-    pipes[1].update(bird, dt, pipes);
-    pipes[2].update(bird, dt, pipes);
+    isOutOfBounds = pipes[0].update(dt, bird, pipes);
+    pipes[1].update(dt, bird, pipes);
+    pipes[2].update(dt, bird, pipes);
 
     if (isOutOfBounds) {
       var temp = pipes[0];

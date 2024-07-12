@@ -54,7 +54,7 @@ function deathScene() {
     // pipes[2].update(bird, dt);
 
     if (deadBird.y >= 400) {
-      // sfx_die.play();
+      sfx_die.play();
       // sfx_hit.stop();
       // highScore = (highScore < score) ? score : highScore;
       // score = 0;
