@@ -129,7 +129,8 @@ gulp.task("build-json", buildJSON);
 gulp.task("build-images", buildImages);
 gulp.task("minify-images", minImages);
 gulp.task("build-fonts", buildFonts);
-gulp.task("other", gulp.parallel(buildJSON, buildImages, buildFonts));
+gulp.task("build-sounds", buildSounds);
+gulp.task("other", gulp.parallel(buildJSON, buildImages, buildFonts, buildSounds));
 
 gulp.task("default", gulp.series(startMessage, gulp.parallel(minHTML, minCSS, minJS, buildJSON,
   minImages, buildFonts, buildSounds), endMessage));

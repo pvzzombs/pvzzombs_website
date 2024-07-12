@@ -5,6 +5,7 @@ function Bird() {
   this.dx = 0;
   this.dy = 0;
   this.width = this.height = 50;
+  this.half = this.width / 2;
   this.gameOver = false;
   this.hitbox = {
     x: 0,
@@ -51,10 +52,6 @@ function Bird() {
       this.gameOver = true;
       mgr.showScene(deathScene);
       return;
-      // sfx_die.play();
-      // currentScene = SCENE_DEATH;
-      // debugger;
-      // restartGame();
     }
     if (this.y + this.height <= 0) {
       sfx_hit.play();
@@ -70,10 +67,6 @@ function Bird() {
       this.gameOver = true;
       mgr.showScene(deathScene);
       return;
-      // sfx_die.play();
-      // currentScene = SCENE_DEATH;
-      // debugger;
-      // restartGame();
     }
   }
 }

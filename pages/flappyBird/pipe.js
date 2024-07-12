@@ -5,6 +5,7 @@ function Pipe() {
   this.y = 0;
   this.width = 50;
   this.height = Math.floor(Math.random() * (200 - 50 + 1) + 50);
+  this.half = this.width / 2;
   this.hole = 150;
   this.draw = function (pipeSprite) {
     var higherPipeHeight = this.height;
@@ -42,12 +43,8 @@ function Pipe() {
       bird.gameOver = true;
       mgr.showScene(deathScene);
       return;
-      // sfx_die.play();
-      // currentScene = SCENE_DEATH;
-      // debugger;
-      // restartGame();
     }
-    if (bird.x > this.x + this.width && !this.scored) {
+    if (bird.x >= this.x && !this.scored) {
       score++;
       speedUp++;
       this.scored = true;
