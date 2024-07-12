@@ -91,6 +91,14 @@ function buildFonts() {
   .pipe(gulp.dest(pathToDestination));
 }
 
+function buildSounds() {
+  return gulp.src(["**/*.mp3", "**/*.wav", ...ignorePaths],
+    { encoding: false }
+  )
+  .pipe(logger())
+  .pipe(gulp.dest(pathToDestination));
+}
+
 function startMessage(done) {
   log.warn("Building distribution on the path: " + pathToDestination);
   done();
@@ -124,6 +132,6 @@ gulp.task("build-fonts", buildFonts);
 gulp.task("other", gulp.parallel(buildJSON, buildImages, buildFonts));
 
 gulp.task("default", gulp.series(startMessage, gulp.parallel(minHTML, minCSS, minJS, buildJSON,
-  minImages, buildFonts), endMessage));
+  minImages, buildFonts, buildSounds), endMessage));
 
 gulp.task("server", startServer);
