@@ -68,6 +68,17 @@ function mainScene() {
     text("Score : " + score, 5, 20);
     text("High score : " + highScore, 5, 35);
     text("Speed : " + speed, 5, 50);
+    // fill(255);
+    // rect((300 / 2) - (30 / 2), 0, 30, 50);
+    push();
+    textFont(mainFont);
+    strokeWeight(6);
+    stroke(0);
+    fill(255);
+    textSize(50);
+    var scoreText = score.toString().padStart(2, "0");
+    text(scoreText, (300 / 2) - (textWidth(scoreText) / 2), 50);
+    pop();
   }
 
   this.keyTyped = function () {

@@ -39,10 +39,8 @@ var sfx_hit;
 var sfx_point;
 var sfx_wing;
 
-// scenes
-// var SCENE_MAIN = 1;
-// var SCENE_DEATH = 2;
-// var currentScene = SCENE_MAIN;
+// fonts
+var mainFont;
 
 // bird death position
 var birdDeathX;
@@ -85,6 +83,7 @@ function preload() {
   sfx_wing = new Howl({
     src: ["sfx/wing.wav"]
   });
+  mainFont = loadFont("font/FlappyBirdRegular-9Pq0.ttf");
 }
 
 function setup() {
@@ -95,8 +94,8 @@ function setup() {
   // mgr.wire();
   mgr.addScene(mainScene);
   mgr.addScene(deathScene);
-  mgr.showNextScene();
-
+  // mgr.addScene(tryAgainScene);
+  mgr.showScene(mainScene);
 }
 
 function draw() {

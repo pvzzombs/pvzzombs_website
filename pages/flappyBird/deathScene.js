@@ -1,7 +1,7 @@
 function deathScene() {
   var deadBird;
   var pipes;
-  var startAgain = true;
+  var startAgain;
   this.setup = function () {
     startAgain = false;
     deadBird = new Bird();
@@ -42,6 +42,7 @@ function deathScene() {
       sfx_die.play();
       startAgain = true;
       mgr.showScene(mainScene);
+      // mgr.showScene(tryAgainScene);
       return;
     }
   }
