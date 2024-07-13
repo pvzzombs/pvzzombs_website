@@ -41,8 +41,8 @@ function deathScene() {
     if (deadBird.y >= 400) {
       sfx_die.play();
       startAgain = true;
-      mgr.showScene(mainScene);
-      // mgr.showScene(tryAgainScene);
+      // mgr.showScene(mainScene);
+      mgr.showScene(tryAgainScene);
       return;
     }
   }

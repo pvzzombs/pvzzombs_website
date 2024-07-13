@@ -13,11 +13,20 @@ function tryAgainScene() {
     str4 = "press space to restart";
     go = false;
     // console.log(str4Width);
+    lastTime = (new Date()).getTime();
   }
   this.draw = function () {
-    console.log(0);
+    fpm = frameRate() / 1000; // frames per milliseconds
+    nowTime = (new Date()).getTime(); // milliseconds
+    dt = nowTime - lastTime;
+    dt *= fpm;
+    lastTime = nowTime;
+
     clear();
     backgroundSprite.drawP5Image(0, 0, 300, 400);
+
+    highScore = score > highScore ? score : highScore;
+
     push();
     fill(0);
     textSize(20);
@@ -27,26 +36,20 @@ function tryAgainScene() {
     text(str2, (300 / 2) - (textWidth(str2) / 2), 90)
     text(str3, (300 / 2) - (textWidth(str3) / 2), 110);
     text(str4, (300 / 2) - (textWidth(str4) / 2), 130);
-    // console.log(textWidth(str4));
     pop();
-    if (go) {
-      mgr.showScene(mainScene);
-      go = false;
-      return;
-    }
   }
   this.keyTyped = function () {
-    go = true;
+    mgr.showScene(mainScene);
     return false;
   }
 
   this.mousePressed = function () {
-    go = true;
+    mgr.showScene(mainScene);
     return false;
   }
 
   this.touchStarted = function () {
-    go = true;
+    mgr.showScene(mainScene);
     return false;
   }
 }
