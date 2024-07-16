@@ -24,13 +24,13 @@ Player.prototype = {
   },
   draw: function() {
     this.currentSprite.drawP5Image(this.x, this.y, this.width, this.height);
-    fill(255, 0, 0, 128);
-    rect(this.x + this.hitbox.x, this.y + this.hitbox.y, this.hitbox.width, this.hitbox.height);
+    // fill(255, 0, 0, 128);
+    // rect(this.x + this.hitbox.x, this.y + this.hitbox.y, this.hitbox.width, this.hitbox.height);
   },
   drawDelta: function(dx, dy) {
     this.currentSprite.drawP5Image(this.x + dx, this.y + dy, this.width, this.height);
-    fill(255, 0, 0, 128);
-    rect(this.x + this.hitbox.x + dx, this.y + this.hitbox.y + dy, this.hitbox.width, this.hitbox.height);
+    // fill(255, 0, 0, 128);
+    // rect(this.x + this.hitbox.x + dx, this.y + this.hitbox.y + dy, this.hitbox.width, this.hitbox.height);
   },
   drawXY: function(x, y) {
     fill("red");

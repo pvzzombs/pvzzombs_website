@@ -11,6 +11,7 @@
   <!-- script src="../js/p5.min.js"></script -->
   <script src="../js/q5.js"></script>
   <script src="../js/p5.collide2d.min.js"></script>
+  <script src="../js/p5.touchgui.js"></script>
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <script src="../js/sweetalert2.min.js"></script>
 </head>
@@ -20,9 +21,10 @@
   <script src="../js/p5sprites.js"></script>
   <script type="text/javascript" src="platform.js"></script>
   <script type="text/javascript" src="player.js"></script>
+  <script type="text/javascript" src="ground.js"></script>
   <script type="text/javascript" src="main.js"></script>
-  <!-- script src="../js/eruda.js"></script>
-  <script> eruda.init(); </script -->
+  <script src="../js/eruda.js"></script>
+  <script> eruda.init(); </script>
   <section class="page-header">
     <h1 class="project-name">Platformer</h1>
     <a href="../../" class="btn">Main Menu</a>
@@ -35,8 +37,9 @@
     </div -->
     <h1> Under construction! </h1>
     <p id="loadingText"> Loading... </p>
+    <p> Click F to view full screen.</p>
     <div id="canvas"></div>
-    <input type="button" value="Toggle fullscreen" onclick="toggleFullscreen()">
+    <input type="button" id="full" value="Toggle fullscreen" onclick="toggleFullscreen()">
     <footer class="site-footer">
       <span class="site-footer-owner">Miles MJ Jamon (c) 2019 - <span id="yearToday"></span></span>
       <script>

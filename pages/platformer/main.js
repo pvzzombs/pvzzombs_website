@@ -1,6 +1,8 @@
 var player;
 var platforms;
 var platformTest;
+var ground;
+
 var leftKeyPressed = false;
 var rightKeyPressed = false;
 var centerCamera = false;
@@ -12,14 +14,35 @@ var playerSpriteRunLeft;
 var playerSpriteIdleRight;
 var playerSpriteRunRight;
 var platformSprite;
+var worldSprite;
+
+// gui
+var gui;
+var leftBtn;
+var rightBtn;
+var jumpBtn;
+var fullScreenBtn;
+var centerViewBtn;
 
 function toggleFullscreen() {
-  var elem = document.getElementsByTagName("canvas")[0];
+  console.log("Toggle fullscreen");
+  // alert();
+  // var elem = document.getElementsByTagName("canvas")[0];
+  var elem = document.getElementById("canvas");
   if (!document.fullscreenElement) {
-    elem.requestFullscreen();
+    elem.requestFullscreen().catch(function(err) {
+      console.log(err);
+    });
+    screen.orientation.lock('landscape');
   } else {
-    document.exitFullscreen();
+    document.exitFullscreen().catch(function(err) {
+      console.log(err);
+    });
   }
+}
+
+window.onload = function() {
+  document.getElementById("full").onclick = toggleFullscreen;
 }
 
 function loadingText() {
@@ -48,12 +71,14 @@ function preload() {
   playerSpriteRunLeft = new JSAnimatedSprite("img/runLeft.png", 4, 5, 16, 20);
   playerSpriteRunRight = new JSAnimatedSprite("img/runRight.png", 4, 5, 16, 20);
   platformSprite = new JSSprite("img/platforms.png", 0, 0, 16, 16);
+  worldSprite = new JSSpriteSheet("img/world_tileset.png");
 
   playerSpriteIdleLeft.loadP5Image();
   playerSpriteIdleRight.loadP5Image();
   playerSpriteRunLeft.loadP5Image();
   playerSpriteRunRight.loadP5Image();
   platformSprite.loadP5Image();
+  worldSprite.loadP5Image();
 }
 
 p5.disableFriendlyErrors = true;
@@ -63,9 +88,10 @@ function setup() {
   cv.parent("canvas");
   noSmooth();
   player = new Player();
+  ground = new Ground();
   platforms = [];
   var startX = 0
-  var startY = 350;
+  var startY = 340;
   for (var i = 0; i < platformsCount; i++) {
     platforms.push(new Platform());
     platforms[i].x = startX;
@@ -77,6 +103,13 @@ function setup() {
   // platformTest.y = 250;
   // platformTest.x = 150;
   player.currentSprite = playerSpriteIdleRight;
+  gui = createGui();
+  leftBtn = createButton("A", 10, 240, 50, 50);
+  rightBtn = createButton("D", 80, 240, 50, 50);
+  jumpBtn = createButton(" ", 580, 240, 50, 50);
+  // 580 to 10
+  fullScreenBtn = createButton("F", 10, 10, 50, 50);
+  centerViewBtn = createButton("C", 580, 10, 50, 50);
 }
 
 function draw() {
@@ -120,14 +153,49 @@ function mainGame() {
     }
     // player.drawXY(player.x + adjX, player.y + adjY);
     player.drawDelta(adjX, adjY);
-    fill("blue");
-    rect(-1000 + adjX, 360 + adjY, 2000, 100);
+
+
+    // fill("blue");
+    // rect(-1000 + adjX, 360 + adjY, 2000, 100);
+    // worldSprite.drawP5Image(0, 0, 20, 20, 0, 0, 16, 16);
+    ground.drawDelta(adjX, adjY);
   } else {
     for (var i = 0; i < platformsCount; i++) {
       platforms[i].draw();
     }
     player.draw();
   }
+  if (leftBtn.isPressed) {
+    leftKeyPressed = true;
+    rightKeyPressed = false;
+    player.currentSprite = playerSpriteRunLeft;
+  } else if (rightBtn.isPressed) {
+    rightKeyPressed = true;
+    leftKeyPressed = false;
+    player.currentSprite = playerSpriteRunRight;
+  }
+  if (fullScreenBtn.isPressed) {
+    toggleFullscreen();
+  }
+  if (jumpBtn.isPressed) {
+    if (player.canJump) {
+      player.dy = -15;
+      player.canJump = false;
+    }
+  }
+
+  if (centerViewBtn.isPressed) {
+    centerCamera = !centerCamera;
+  }
+
+  if (leftBtn.isReleased) {
+    leftKeyPressed = false;
+    player.currentSprite = playerSpriteIdleLeft;
+  } else if (rightBtn.isReleased) {
+    rightKeyPressed = false;
+    player.currentSprite = playerSpriteIdleRight;
+  }
+  drawGui();
 }
 
 function mousePressed() {
@@ -136,6 +204,10 @@ function mousePressed() {
 
 function touchStarted() {
 
+}
+
+function touchEnded() {
+  
 }
 
 function keyPressed() {
