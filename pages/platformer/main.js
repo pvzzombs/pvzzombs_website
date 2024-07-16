@@ -103,13 +103,13 @@ function setup() {
   // platformTest.y = 250;
   // platformTest.x = 150;
   player.currentSprite = playerSpriteIdleRight;
-  gui = createGui();
-  leftBtn = createButton("A", 10, 240, 50, 50);
-  rightBtn = createButton("D", 80, 240, 50, 50);
-  jumpBtn = createButton(" ", 580, 240, 50, 50);
+
+  leftBtn = new Button("A", 10, 240, 50, 50);
+  rightBtn = new Button("D", 80, 240, 50, 50);
+  jumpBtn = new Button(" ", 580, 240, 50, 50);
   // 580 to 10
-  fullScreenBtn = createButton("F", 10, 10, 50, 50);
-  centerViewBtn = createButton("C", 580, 10, 50, 50);
+  fullScreenBtn = new Button("F", 10, 10, 50, 50);
+  centerViewBtn = new Button("C", 580, 10, 50, 50);
 }
 
 function draw() {
@@ -165,37 +165,11 @@ function mainGame() {
     }
     player.draw();
   }
-  if (leftBtn.isPressed) {
-    leftKeyPressed = true;
-    rightKeyPressed = false;
-    player.currentSprite = playerSpriteRunLeft;
-  } else if (rightBtn.isPressed) {
-    rightKeyPressed = true;
-    leftKeyPressed = false;
-    player.currentSprite = playerSpriteRunRight;
-  }
-  if (fullScreenBtn.isPressed) {
-    toggleFullscreen();
-  }
-  if (jumpBtn.isPressed) {
-    if (player.canJump) {
-      player.dy = -15;
-      player.canJump = false;
-    }
-  }
-
-  if (centerViewBtn.isPressed) {
-    centerCamera = !centerCamera;
-  }
-
-  if (leftBtn.isReleased) {
-    leftKeyPressed = false;
-    player.currentSprite = playerSpriteIdleLeft;
-  } else if (rightBtn.isReleased) {
-    rightKeyPressed = false;
-    player.currentSprite = playerSpriteIdleRight;
-  }
-  drawGui();
+  leftBtn.draw();
+  rightBtn.draw();
+  jumpBtn.draw();
+  fullScreenBtn.draw();
+  centerViewBtn.draw();
 }
 
 function mousePressed() {
@@ -203,11 +177,53 @@ function mousePressed() {
 }
 
 function touchStarted() {
-
+  if (leftBtn.isTouchOver()) {
+    leftBtn.active = true;
+    leftKeyPressed = true;
+    rightKeyPressed = false;
+    player.currentSprite = playerSpriteRunLeft;
+  } else if (rightBtn.isTouchOver()) {
+    rightBtn.active = true;
+    rightKeyPressed = true;
+    leftKeyPressed = false;
+    player.currentSprite = playerSpriteRunRight;
+  }
+  if (jumpBtn.isTouchOver()) {
+    jumpBtn.active = true;
+    if (player.canJump) {
+      player.dy = -15;
+      player.canJump = false;
+    }
+  }
+  if (fullScreenBtn.isTouchOver()) {
+    fullScreenBtn.active = true;
+    toggleFullscreen();
+  }
+  if (centerViewBtn.isTouchOver()) {
+    centerViewBtn.active = true;
+    centerCamera = !centerCamera;
+  }
 }
 
 function touchEnded() {
-  
+  if (leftBtn.active) {
+    leftBtn.active = false;
+    leftKeyPressed = false;
+    player.currentSprite = playerSpriteIdleLeft;
+  } else if (rightBtn.active) {
+    rightBtn.active = false;
+    rightKeyPressed = false;
+    player.currentSprite = playerSpriteIdleRight;
+  }
+  if (jumpBtn.active) {
+    jumpBtn.active = false;
+  }
+  if (fullScreenBtn.active) {
+    fullScreenBtn.active = false;
+  }
+  if (centerViewBtn.active) {
+    centerViewBtn.active = false;
+  }
 }
 
 function keyPressed() {

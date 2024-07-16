@@ -23,7 +23,6 @@ Platform.prototype = {
         player.dy = 0;
         player.y = this.y - player.hitbox.height - player.hitbox.y;
         player.canJump = true;
-        console.log(1);
     }
   },
   draw: function() {
