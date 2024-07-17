@@ -2,6 +2,7 @@ var player;
 var platforms;
 var platformTest;
 var ground;
+var details;
 
 var leftKeyPressed = false;
 var rightKeyPressed = false;
@@ -124,8 +125,10 @@ function setup() {
   var cv = createCanvas(worldWidth, worldHeight);
   cv.parent("canvas");
   noSmooth();
+  randomSeed(100);
   player = new Player();
   ground = new Ground();
+  details = new Details();
   platforms = [];
   var startX = 0
   var startY = 340;
@@ -196,6 +199,8 @@ function mainGame() {
     // rect(-1000 + adjX, worldHeight + adjY, 2000, 100);
     // worldSprite.drawP5Image(0, 0, 20, 20, 0, 0, 16, 16);
     ground.drawDelta(adjX, adjY);
+    details.drawDelta(adjX, adjY);
+
   } else {
     for (var i = 0; i < platformsCount; i++) {
       platforms[i].draw();
