@@ -26,18 +26,23 @@ Button.prototype = {
     return false;
   },
   draw: function() {
-    if (this.isMouseOver() || this.isTouchOver) {
-      fill(this.hoverColor);
+    if (typeof this.label === "string") {
+      if (this.isMouseOver() || this.isTouchOver) {
+        fill(this.hoverColor);
+      } else {
+        fill(this.defaultColor);
+      }
+      rect(this.x, this.y, this.width, this.height, 10);
+      var txtW = textWidth(this.label);
+      var txtH = textAscent() / 2;
+      var centerX = (this.x + this.width / 2) - (txtW / 2);
+      var centerY = (this.y + this.height / 2) - (txtH / 2);
+      textSize(16);
+      fill(this.textColor);
+      text(this.label, centerX, centerY);
     } else {
-      fill(this.defaultColor);
+      rect(this.x, this.y, this.width, this.height, 10);
+      this.label.drawP5Image(this.x, this.y, this.width, this.height);
     }
-    rect(this.x, this.y, this.width, this.height, 10);
-    var txtW = textWidth(this.label);
-    var txtH = textAscent() / 2;
-    var centerX = (this.x + this.width / 2) - (txtW / 2);
-    var centerY = (this.y + this.height / 2) - (txtH / 2);
-    textSize(16);
-    fill(this.textColor);
-    text(this.label, centerX, centerY);
   }
 };

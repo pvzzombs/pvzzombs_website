@@ -39,7 +39,13 @@ Platform.prototype = {
     var len = this.width / this.height;
     var startX = 0;
     for (var i = 0; i < len; i++) {
-      platformSprite.drawP5Image(this.x + startX + dx, this.y + dy, this.height, this.height);
+      var tempX = this.x + startX + dx;
+      var tempY = this.y + dy;
+      var tempXW = tempX + this.height;
+      var tempYW = tempY + this.height;
+      if (tempXW > 0 && tempYW > 0 && tempX < worldWidth && tempY < worldHeight) {
+        platformSprite.drawP5Image(tempX, tempY, this.height, this.height);
+      }
       startX += this.height;
     }
     // fill(this.color);
