@@ -223,52 +223,51 @@ function mousePressed() {
 }
 
 function touchStarted() {
-  if (leftBtn.isTouchOver()) {
+  if (!leftBtn.active && leftBtn.isTouchOver()) {
     leftBtn.active = true;
     leftKeyPressed = true;
     rightKeyPressed = false;
     player.currentSprite = playerSpriteRunLeft;
-  } else if (rightBtn.isTouchOver()) {
+  } else if (!rightBtn.active && rightBtn.isTouchOver()) {
     rightBtn.active = true;
     rightKeyPressed = true;
     leftKeyPressed = false;
     player.currentSprite = playerSpriteRunRight;
   }
-  if (jumpBtn.isTouchOver()) {
+  if (!jumpBtn.active && jumpBtn.isTouchOver()) {
     jumpBtn.active = true;
     if (player.canJump) {
       player.dy = -15;
       player.canJump = false;
     }
   }
-  if (fullScreenBtn.isTouchOver()) {
+  if (!fullScreenBtn.active && fullScreenBtn.isTouchOver()) {
     fullScreenBtn.active = true;
     toggleFullscreen();
   }
-  if (centerViewBtn.isTouchOver()) {
+  if (!centerViewBtn.active && centerViewBtn.isTouchOver()) {
     centerViewBtn.active = true;
     centerCamera = !centerCamera;
   }
 }
 
 function touchEnded() {
-  if (leftBtn.active) {
+  if (leftBtn.active && !leftBtn.isTouchOver()) {
     leftBtn.active = false;
     leftKeyPressed = false;
     player.currentSprite = playerSpriteIdleLeft;
-  }
-  if (rightBtn.active) {
+  } else if (rightBtn.active && !rightBtn.isTouchOver()) {
     rightBtn.active = false;
     rightKeyPressed = false;
     player.currentSprite = playerSpriteIdleRight;
   }
-  if (jumpBtn.active) {
+  if (jumpBtn.active && !jumpBtn.isTouchOver()) {
     jumpBtn.active = false;
   }
-  if (fullScreenBtn.active) {
+  if (fullScreenBtn.active && !fullScreenBtn.isTouchOver()) {
     fullScreenBtn.active = false;
   }
-  if (centerViewBtn.active) {
+  if (centerViewBtn.active && !centerViewBtn.isTouchOver()) {
     centerViewBtn.active = false;
   }
 }
