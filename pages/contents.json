@@ -1,12 +1,12 @@
 {
   "pages": [
   {
-    "link": "pages/blog/creating-flappy-bird-in-js.html",
+    "link": "pages/blog/flappy-bird/",
     "image": "pages/img/flappybird.jpg",
-    "text": "Creating games in javascript is easy. Now in my first gamelesson, i'll teach you how to create a flappy bird clone in javascript."
+    "text": "This blog will focus on the fundamental things needed/required to build a Flappy Bird game."
   },
   {
-    "link": "pages/blog/creating-perlin-noise-in-js.html",
+    "link": "pages/blog/perlin-noise/",
     "image": "pages/img/jsnoise.jpg",
     "text": "Hi there! Do you want to create a perlin noise? Then read this tutorial to learn it."
   }]

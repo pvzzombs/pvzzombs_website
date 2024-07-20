@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy bird in Javascript</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="../../../css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="../../../css/cayman.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</head>
+
+<body>
+  <section class="page-header">
+    <h1 class="project-name">Creating Codes with Javascript</h1>
+    <h2 class="project-tagline">Creating Flappy bird clone in Javascript</h2>
+    <p> Updated July 20, 2024</p>
+    <p> Created June 6, 2019</p>
+    <a href="../" class="btn">Main Menu</a>
+  </section>
+
+  <section class="main-content">
+    <p>This blog will focus on the fundamental things needed/required to build a Flappy Bird game.</p>
+    <h1 id="coordinate-system">Coordinate System</h1>
+    <h2 id="cartesian-coordinate-system">Cartesian coordinate system</h2>
+    <p>Having a coordinate system is very important and required for someone to be able to track position and movements.
+      If you have studied algebra and geometry you&#39;ll be familiar with the cartesian coordinate system.
+      Cartesian coordinate systems have two fixed lines, perpendicular to each other. They are called axes. These axes
+      are used to track the position and distance of a point, and an equation such as a line, curve, and others.
+      The horizontal axis is called the x-axis and the vertical axis is called the y-axis.</p>
+    <p>The most common thing you do when you plot points in the Cartesian coordinate system is that you start at the
+      middle called the origin. The origin is located at (0,0), where the axes intersect.</p>
+    <p>How do you even plot a point, say (1,1)? Well (1,1) is called an ordered pair.
+      The ordered pair consists of an abscissa and an ordinate. The abscissa is the first number in the ordered pair and
+      is also called the x coordinate. The ordinate, on the other hand, is the last number in the ordered pair and is
+      also called the y coordinate.</p>
+    <p>So to plot the point (1,1), let&#39;s check first for the first number, 1.
+      The first number 1, the x coordinate is used to move on the x-axis. If it is negative, we move to the left, if it
+      is positive, we move to the right. Now the last number tells us where to move to the y-axis. So positive means
+      upward, and negative means downward.</p>
+    <p>See this example:</p>
+    <p>[Insert pictures here]</p>
+    <h2 id="graphics-coordinate">Graphics coordinate</h2>
+    <p>Graphics coordinates have similarities with the cartesian coordinate system with some exceptions:</p>
+    <ul>
+      <li>The origin is in the top left corner, not in the middle</li>
+      <li>The y-axis is inverted, it becomes positive when you move downward</li>
+    </ul>
+    <p>[Insert pictures here]</p>
+    <h1 id="speed-velocity-and-acceleration">Speed, Velocity and Acceleration</h1>
+    <p>Speed is how fast something moves. Velocity is speed with a direction. Acceleration is how fast velocity changes.
+      You are here not to study these things but to implement them. Let&#39;s see some code for speed and velocity.</p>
+    <pre><code><span class="hljs-keyword">var</span> speed = <span class="hljs-number">1</span>; <span class="hljs-comment">// 1 px</span>
+<span class="hljs-keyword">var</span> x = <span class="hljs-number">50</span>; <span class="hljs-comment">// Initial x position is 50px from left</span>
+
+<span class="hljs-comment">// some code here</span>
+
+x = x + speed; <span class="hljs-comment">// move x position by 1 px;</span>
+</code></pre>
+    <p>You can modify the speed and change its sign, this way we move our x position in the opposite direction.</p>
+    <p>How about acceleration?</p>
+    <pre><code><span class="hljs-attribute">var acceleration</span> = 1; 
+<span class="hljs-attribute">velocity</span> = velocity + acceleration;
+<span class="hljs-attribute">x</span> = x + velocity;
+</code></pre>
+    <p>From above, we see that the velocity changes because of acceleration.
+      So why is this important? Because we can now simulate gravity. We need gravity for the bird to fall downward.</p>
+    <p>[Insert pictures here]</p>
+    <p>How does the bird fly upwards, if gravity is putting it down?
+      Then we apply a velocity that is opposite in direction. We might change the velocity by a little enough to push
+      the bird upwards at a sudden.</p>
+
+    <hr>
+
+    <h1 id="some-helpful-code-reference-">Some helpful code reference:</h1>
+    <h2 id="possible-bird-implementation-">Possible bird implementation:</h2>
+    <pre><code><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Bird</span><span class="hljs-params">()</span></span>{
+  <span class="hljs-keyword">this</span>.x = <span class="hljs-number">50</span>;
+  <span class="hljs-keyword">this</span>.y = <span class="hljs-number">5</span>;
+  <span class="hljs-keyword">this</span>.dx = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">this</span>.dy = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">this</span>.width = <span class="hljs-keyword">this</span>.height = <span class="hljs-number">50</span>;
+  <span class="hljs-keyword">this</span>.draw = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-comment">// draw here</span>
+  }
+  <span class="hljs-keyword">this</span>.update = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+    bird.dy += gravity;
+    bird.dy *= friction;
+    bird.y += bird.dy;
+    <span class="hljs-comment">// handle collision somewhere</span>
+  }
+}
+</code></pre>
+    <h2 id="possible-pipe-implementation-">Possible pipe implementation:</h2>
+    <pre><code><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Pipe</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">this</span>.scored = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">this</span>.x = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">this</span>.y = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">this</span>.width = <span class="hljs-number">50</span>;
+  <span class="hljs-comment">// the height is the height of the top pipe</span>
+  <span class="hljs-keyword">this</span>.height = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * (<span class="hljs-number">200</span> - <span class="hljs-number">50</span> + <span class="hljs-number">1</span>) + <span class="hljs-number">50</span>);
+  <span class="hljs-keyword">this</span>.hole = <span class="hljs-number">150</span>;
+  <span class="hljs-keyword">this</span>.draw = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-comment">// draw pipe here</span>
+  }
+  <span class="hljs-keyword">this</span>.update = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-comment">// check collision with the bird</span>
+
+    <span class="hljs-comment">// update score, if bird pass the pipe</span>
+
+    <span class="hljs-comment">// move pipe towards the bird</span>
+  }
+}
+</code></pre>
+
+    <footer class="site-footer">
+      <span class="site-footer-owner">Miles MJ Jamon (c) 2019 - <span id="yearToday"></span></span>
+      <script>
+        document.getElementById("yearToday").innerText = (new Date()).getFullYear();
+      </script>
+      <span class="site-footer-credits">This uses the <a href="https://github.com/jasonlong/cayman-theme">Cayman
+          theme</a></span>
+      <span class="site-footer-credits">and this page was generated by <a href="https://pages.github.com">GitHub
+          Pages</a>.</span>
+    </footer>
+
+  </section>
+
+</body>
+
+</html>
