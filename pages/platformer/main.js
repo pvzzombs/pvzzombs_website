@@ -286,14 +286,14 @@ function keyPressed() {
       break;
     case "a":
     case "A":
+      if (rightKeyPressed) { return; }
       leftKeyPressed = true;
-      rightKeyPressed = false;
       player.currentSprite = playerSpriteRunLeft;
       break;
     case "d":
     case "D":
+      if (leftKeyPressed) { return; }
       rightKeyPressed = true;
-      leftKeyPressed = false;
       player.currentSprite = playerSpriteRunRight;
       break;
     case "c":
@@ -312,11 +312,13 @@ function keyReleased() {
     //   break;
     case "a":
     case "A":
+      if (rightKeyPressed) { return; }
       leftKeyPressed = false;
       player.currentSprite = playerSpriteIdleLeft;
       break;
     case "d":
     case "D":
+      if (leftKeyPressed) { return; }
       rightKeyPressed = false;
       player.currentSprite = playerSpriteIdleRight;
       break;
