@@ -8,12 +8,6 @@ function deathScene() {
     deadBird.x = birdPos.x;
     deadBird.y = birdPos.y;
     deadBird.dy += flap;
-    pipes = [new Pipe(), new Pipe(), new Pipe()];
-    for (var i = 0; i < 3; i++) {
-      pipes[i].x = pipesPos[i].x;
-      pipes[i].y = pipesPos[i].y;
-      pipes[i].height = pipesPos[i].height;
-    }
     lastTime = (new Date()).getTime();
   }
   this.draw = function () {
@@ -31,9 +25,7 @@ function deathScene() {
     clear();
     backgroundSprite.drawP5Image(0, 0, 300, 400);
 
-    pipes[0].draw(pipesSprites);
-    pipes[1].draw(pipesSprites);
-    pipes[2].draw(pipesSprites);
+    pipesManager.draw(pipesSprites);
     deadBird.draw(playerSprite);
 
     deadBird.updateMove(dt)

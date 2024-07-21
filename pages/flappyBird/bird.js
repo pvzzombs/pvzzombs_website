@@ -38,21 +38,23 @@ function Bird() {
 
     if (this.gameOver) { return; }
 
-    function passPositions(obj) {
-      birdPos.x = obj.x;
-      birdPos.y = obj.y;
-      for(var i=0; i<3; i++) {
-        pipesPos[i].x = pipes[i].x;
-        pipesPos[i].y = pipes[i].y;
-        pipesPos[i].height = pipes[i].height;
-        // console.log(pipesPos[i].y);
-      }
-    }
+    // function passPositions(obj) {
+    //   birdPos.x = obj.x;
+    //   birdPos.y = obj.y;
+    //   for(var i=0; i<3; i++) {
+    //     pipesPos[i].x = pipes[i].x;
+    //     pipesPos[i].y = pipes[i].y;
+    //     pipesPos[i].height = pipes[i].height;
+    //     // console.log(pipesPos[i].y);
+    //   }
+    // }
 
     if (this.y + this.height >= 400) {
       sfx_hit.play();
       this.dy = flap;
-      passPositions(this);
+      // passPositions(this);
+      birdPos.x = this.x;
+      birdPos.y = this.y;
       this.gameOver = true;
       mgr.showScene(deathScene);
       return;
@@ -60,7 +62,9 @@ function Bird() {
     if (this.y + this.height <= 0) {
       sfx_hit.play();
       this.dy = flap;
-      passPositions(this);
+      // passPositions(this);
+      birdPos.x = this.x;
+      birdPos.y = this.y;
       this.gameOver = true;
       mgr.showScene(deathScene);
       return;

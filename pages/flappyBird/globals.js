@@ -17,11 +17,8 @@ var birdPos = {
   y: 0
 };
 
-var pipesPos = [
-  {x: 0, y: 0, height: 0},
-  {x: 0, y: 0, height: 0},
-  {x: 0, y: 0, height: 0}
-];
+// global pipesManager
+var pipesManager;
 
 var score = 0;
 var highScore = 0;

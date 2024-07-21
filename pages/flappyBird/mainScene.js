@@ -3,18 +3,10 @@ function mainScene() {
   var pipes;
   this.setup = function () {
     bird = new Bird();
-    pipes = [(new Pipe()), (new Pipe()), (new Pipe())];
-    var pipeStartX = 0;
-    for (var i = 0; i < pipes.length; i++) {
-      pipes[i].x = pipeStartX + 350;
-      pipeStartX += 200;
-    }
+    pipesManager = new PipesManager();
     lastTime = (new Date()).getTime();
   }
   this.draw = function () {
-    var lastPipeX;
-    var isOutOfBounds;
-
     fpm = frameRate() / 1000; // frames per milliseconds
     nowTime = (new Date()).getTime(); // milliseconds
     dt = nowTime - lastTime;
@@ -33,30 +25,11 @@ function mainScene() {
 
     backgroundSprite.drawP5Image(0, 0, 300, 400);
 
+    pipesManager.draw(pipesSprites);
     bird.draw(playerSprite);
-    for (var i = 0; i < pipes.length - 1; i++) {
-      pipes[i].draw(pipesSprites);
-    }
-    lastPipeX = pipes[pipes.length - 1].draw(pipesSprites);
 
-    bird.update(dt, pipes)
-    isOutOfBounds = pipes[0].update(dt, bird, pipes);
-    for (var i = 1; i < pipes.length; i++) {
-      pipes[i].update(dt, bird, pipes);
-    }
-
-    if (isOutOfBounds) {
-      var temp = pipes[0];
-      for (var i = 1; i < pipes.length; i++) {
-        pipes[i - 1] = pipes[i];
-      }
-      pipes[pipes.length - 1] = temp;
-
-      // modify the last pipe
-      pipes[pipes.length - 1].x = lastPipeX + 200;
-      pipes[pipes.length - 1].height = Math.floor(Math.random() * (200 - 50 + 1) + 50);
-      pipes[pipes.length - 1].scored = false;
-    }
+    pipesManager.update(dt, bird);
+    bird.update(dt, pipesManager)
 
     if (speedUp === 10) {
       speedUp = 0;

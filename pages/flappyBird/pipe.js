@@ -25,25 +25,16 @@ function Pipe() {
       0, 0, 32, lowerPipeHeight * 80 / 200);
     return this.x;
   }
-  this.update = function (dt, bird, pipes) {
-    if (bird.gameOver) { return; }
+  this.collided = function (bird) {
     var isUpperCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.y, this.width, this.height);
     var isLowerCollided = collideRectRect(bird.x + bird.hitbox.x, bird.y + bird.hitbox.y, bird.hitbox.width, bird.hitbox.height, this.x, this.height + this.hole, this.width, 400 - this.height - this.hole);
     if (isUpperCollided || isLowerCollided) {
-      sfx_hit.play();
-      bird.dy = flap;
-      birdPos.x = bird.x;
-      birdPos.y = bird.y;
-      for(var i=0; i<3; i++) {
-        pipesPos[i].x = pipes[i].x;
-        pipesPos[i].y = pipes[i].y;
-        pipesPos[i].height = pipes[i].height;
-        // console.log(pipesPos[i].y);
-      }
-      bird.gameOver = true;
-      mgr.showScene(deathScene);
-      return;
+      return true;
     }
+    return false;
+  },
+  this.update = function (dt, bird) {
+    if (bird.gameOver) { return; }
     if (bird.x >= this.x && !this.scored) {
       score++;
       speedUp++;
