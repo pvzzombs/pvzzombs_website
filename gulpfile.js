@@ -92,7 +92,7 @@ function buildFonts() {
 }
 
 function buildSounds() {
-  return gulp.src(["**/*.mp3", "**/*.wav", ...ignorePaths],
+  return gulp.src(["**/*.mp3", "**/*.wav", "**/*.ogg", ...ignorePaths],
     { encoding: false }
   )
   .pipe(logger())

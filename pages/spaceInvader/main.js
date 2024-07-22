@@ -1,6 +1,7 @@
 //basically load all sprites using objects
 var imagesLength = 5;
 var currentImageLoadedLength = 0;
+
 var back = {
   img: "img/galaxy.jpeg",
   spriteHandle: null,
@@ -47,11 +48,18 @@ var bomb = {
   width: 16,
   height: 16
 }
+
 var score = 0;
 var temp = 2;
 var wait = 0;
 var dt, now, last, fpm;
 var shouldDisplay = false;
+
+// sounds
+// var shootSoundsArray;
+var shootSounds;
+// var enemyShootSoundsArray;
+var enemyShootSounds;
 
 function loadingText() {
   var loadingTextElement = document.getElementById("loadingText");
@@ -90,6 +98,20 @@ function preload() {
   enemy.spriteHandle.loadP5Image(loadingText, loadingError);
   bullet.spriteHandle.loadP5Image(loadingText, loadingError);
   bomb.spriteHandle.loadP5Image(loadingText, loadingError);
+
+  // shootSoundsArray = [];
+  shootSounds = [];
+  enemyShootSounds = [];
+  for (var i = 0; i < 5; i++) {
+    // shootSoundsArray.push("sfx/laserRetro_00" + i + ".ogg");
+    shootSounds.push(new Howl({
+      src: ["sfx/laserRetro_00" + i + ".ogg"]
+    }));
+    enemyShootSounds.push(new Howl({
+      src: ["sfx/impactMetal_00" + i + ".ogg"]
+    }));
+  }
+  // for (var i = 0; )
 }
 
 p5.disableFriendlyErrors = true;
@@ -155,6 +177,7 @@ function mainGame() {
 
   if (hitEnemy) {
     // image(bullet.loaded, bullet.x, enemy.y+enemy.height - 10);
+    shootSounds[floor(random(0, 5))].play();
     bullet.x = player.x + 8;
     bullet.y = 345 - player.height;
     if (enemy.life > 0) {
@@ -168,6 +191,7 @@ function mainGame() {
     }
   }
   if (hitPlayer) {
+    enemyShootSounds[floor(random(0, 5))].play();
     bomb.x = enemy.x + 8;
     bomb.y = 15 + enemy.height;
     if (player.life > 0) {
@@ -216,9 +240,9 @@ function touchStarted() {
 }
 
 function keyPressed() {
-  if (keyCode === LEFT_ARROW) {
+  if (keyCode === LEFT_ARROW || key === "A" || key === "a") {
     if (player.x > 0) player.x -= 30
-  } else if (keyCode === RIGHT_ARROW) {
+  } else if (keyCode === RIGHT_ARROW || key === "D" || key === "d") {
     if ((back.width - player.width) > player.x) player.x += 30
   }
   // return false;
