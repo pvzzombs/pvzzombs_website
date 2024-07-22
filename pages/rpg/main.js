@@ -94,7 +94,7 @@ function mainGame() {
 
   // draw
   worldLoader.draw(0, 0);
-  player.draw(0, 0);
+  // player.draw(0, 0);
 }
 
 function mousePressed() {

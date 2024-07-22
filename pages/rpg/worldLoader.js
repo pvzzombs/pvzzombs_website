@@ -33,8 +33,25 @@ WorldLoader.prototype = {
                 64, 16, 16, 16);
             break;
           }
+        }
+      }
+    }
+
+    player.draw(dx, dy);
+
+    for (var row = 0; row < this.heightTilesCount; row++) {
+      for (var col = 0; col < this.widthTilesCount; col++) {
+        for (var l = 0; l < layers.length; l++) {
+          var index = row * this.widthTilesCount + col;
+          var x = col * this.tileSize + dx;
+          var y = row * this.tileSize + dy;
+          var tileType = layers[l].data[index];
           // draw player here
           switch (tileType) {
+            case 17:
+              tileMapSprite.drawP5Image(x, y, this.tileSize, this.tileSize,
+                64, 16, 16, 16);
+            break;
             case 5:
               tileMapSprite.drawP5Image(x, y, this.tileSize, this.tileSize,
                 64, 0, 16, 16);
