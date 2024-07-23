@@ -9,6 +9,7 @@ var worldHeight = 320;
 // entities
 var player;
 var worldLoader;
+var collider;
 
 // for events
 var currentKey = " ";
@@ -58,8 +59,10 @@ function setup() {
   cv.parent("canvas");
   noSmooth();
   randomSeed(100);
+  collider = new Collider();
   worldLoader = new WorldLoader();
   player = new Player();
+  worldLoader.setup();
 }
 
 function draw() {
@@ -89,12 +92,18 @@ function mainGame() {
       break;
     }
   }
-  player.x += player.vx;
-  player.y += player.vy;
+  collider.update();
+  player.update();
 
+  var cx = (worldWidth / 2) - (player.x + player.width / 2);
+  var cy = (worldHeight / 2) - (player.y + player.height / 2);
   // draw
-  worldLoader.draw(0, 0);
+  worldLoader.draw(cx, cy);
   // player.draw(0, 0);
+  // stroke(0);
+  // strokeWeight(2);
+  // line(worldWidth/2, 0, worldWidth/2, worldHeight);
+  // line(0, worldHeight/2, worldWidth, worldHeight/2);
 }
 
 function mousePressed() {
