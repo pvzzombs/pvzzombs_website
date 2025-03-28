@@ -25,10 +25,189 @@ canvas.height = canvasWrapper.clientWidth;
 canvasContext = canvas.getContext("2d");
 canvasWidth = canvas.width;
 canvasHeight = canvas.height;
+
+var isDragging = false;
+var oldX, oldY;
+var newX, newY;
+var adjX = 0, adjY = 0;
+var pinchInitial, pinchCurrent;
+var tempZooms = zooms;
+var tempPanX = panX, tempPanY = panY;
+
 //when canvas is clicked, call drawOnClick function
-canvas.onclick = function (e) {
-  drawOnClick(e);
+// canvas.onclick = function (e) {
+//   drawOnClick(e);
+// }
+
+canvas.onmousedown = function (e) {
+  e.preventDefault();
+  rect = canvas.getBoundingClientRect();
+  isDragging = true;
+  oldX = e.clientX - rect.left;
+  oldY = e.clientY - rect.top;
+  tempZooms = zooms;
+  tempPanX = panX;
+  tempPanY = panY;
+  abortRun();
 }
+
+canvas.onmousemove = function (e) {
+  e.preventDefault();
+  if (!isDragging) { return; }
+  rect = canvas.getBoundingClientRect();
+  newX = e.clientX - rect.left;
+  newY = e.clientY - rect.top;
+
+  var p1x = panX + oldX / zooms;
+  var p1y = panY + flipImaginaryAxis * (oldY / zooms);
+
+  var p2x = panX + newX / zooms;
+  var p2y = panY + flipImaginaryAxis * (newY / zooms);
+
+  adjX = p2x - p1x;
+  adjY = p2y - p1y;
+
+  mandelbrotLargePixel(tempZooms, tempPanX - adjX, tempPanY - adjY);
+}
+
+canvas.onmouseup = function (e) {
+  e.preventDefault();
+  isDragging = false;
+  panX = tempPanX;
+  panY = tempPanY;
+  panX -= adjX;
+  panY -= adjY;
+  zooms = tempZooms;
+  pan = (panX + 2 / zooms) - (panX - 1 / zooms);
+  adjX = 0;
+  adjY = 0;
+
+  drawOnTouch(e);
+}
+
+canvas.onmouseleave = function (e) {
+  e.preventDefault();
+  if (isDragging) {
+    isDragging = false;
+    panX = tempPanX;
+    panY = tempPanY;
+    panX -= adjX;
+    panY -= adjY;
+    zooms = tempZooms;
+    pan = (panX + 2 / zooms) - (panX - 1 / zooms);
+    adjX = 0;
+    adjY = 0;
+    drawOnTouch(e);
+  }
+}
+
+canvas.onwheel = function (e) {
+  abortRun();
+  e.preventDefault();
+  const scrollValue = e.deltaY;
+  // console.log(scrollValue)
+  var mx = panX + (canvasWidth / 2) / zooms;
+  var my = panY + flipImaginaryAxis * ((canvasHeight / 2) / zooms);
+  if (scrollValue > 0) {
+    // zoom out
+    zooms /= 1.1;
+  } else if (scrollValue < 0) {
+    // zoom in
+    zooms *= 1.1;
+  }
+  panX = mx - (canvasWidth / 2) / zooms;
+  panY = my - flipImaginaryAxis * ((canvasHeight / 2) / zooms);
+  mandelbrotLargePixel(zooms, panX, panY);
+  drawOnTouch(e);
+}
+
+function getDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+canvas.ontouchstart = function (e) {
+  e.preventDefault();
+  rect = canvas.getBoundingClientRect()
+  if (e.touches.length === 1) {
+    isDragging = true;
+    const touch = e.touches[0];
+    oldX = touch.clientX - rect.left;
+    oldY = touch.clientY - rect.top;
+  } else if (e.touches.length === 2) {
+    pinchInitial = getDistance(e.touches);
+  }
+  tempZooms = zooms;
+  tempPanX = panX;
+  tempPanY = panY;
+  abortRun();
+}
+
+canvas.ontouchmove = function (e) {
+  e.preventDefault();
+  rect = canvas.getBoundingClientRect()
+  
+  if (e.touches.length === 2) {
+    var pinchCurrent = getDistance(e.touches);
+    var mx = tempPanX + (canvasWidth / 2) / tempZooms;
+    var my = tempPanY + flipImaginaryAxis * ((canvasHeight / 2) / tempZooms);
+    // if (pinchCurrent > pinchInitial) {
+    //   tempZooms *= 1.1;
+    // } else {
+    //   tempZooms /= 1.1;
+    // }
+    tempZooms *= pinchCurrent / pinchInitial;
+    tempPanX = mx - (canvasWidth / 2) / tempZooms;
+    tempPanY = my - flipImaginaryAxis * ((canvasHeight / 2) / tempZooms);
+  } else if (e.touches.length === 1) {
+    if (!isDragging) { return; }
+    const touch = e.touches[0];
+    newX = touch.clientX - rect.left;
+    newY = touch.clientY - rect.top;
+
+    var p1x = panX + oldX / zooms;
+    var p1y = panY + flipImaginaryAxis * (oldY / zooms);
+
+    var p2x = panX + newX / zooms;
+    var p2y = panY + flipImaginaryAxis * (newY / zooms);
+
+    
+    adjX = p2x - p1x;
+    adjY = p2y - p1y;
+    }
+  // alert();
+  mandelbrotLargePixel(tempZooms, tempPanX - adjX, tempPanY - adjY);
+}
+
+canvas.ontouchend = function (e) {
+  e.preventDefault();
+  isDragging = false;
+  panX = tempPanX;
+  panY = tempPanY;
+  panX -= adjX;
+  panY -= adjY;
+  zooms = tempZooms;
+  pan = (panX + 2 / zooms) - (panX - 1 / zooms);
+  adjX = 0;
+  adjY = 0;
+
+  drawOnTouch(e);
+}
+
+//changes the mandelbrot set based on mouse clicks
+function drawOnTouch(e) {
+
+  document.getElementById("xa").value = panX;
+  document.getElementById("ya").value = panY;
+  document.getElementById("za").value = zooms;
+  pallete.setNumberRange(0, maxI);
+
+  show();
+  abortRun();
+  startRun();
+}
+
 //changes the mandelbrot set based on mouse clicks
 function drawOnClick(e) {
   rect = canvas.getBoundingClientRect()
@@ -85,6 +264,7 @@ function startRun() {
   function mandelbrotCallFactory(i) {
     return function () {
       mandelbrot(zooms, panX, panY, pixelSizes[i], i);
+      // console.log(panX, panY);
     }
   }
   for (var i = 0; i < pixelSizes.length; i++) {
@@ -159,6 +339,20 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
       }
     }
     drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
+  }
+}
+
+function mandelbrotLargePixel(zm, panX, panY) {
+  //px - Canvas x
+  //py - canvas y
+  //x - real x
+  //y - imaginary y
+  const largePixelSize = 20;
+  var px, py, x, y;
+  px = 0;
+  while (px < canvasWidth) {
+    mdbl(px, py, x, y, zm, panX, panY, largePixelSize, coloringMethod);
+    px += largePixelSize;
   }
 }
 
@@ -237,6 +431,7 @@ function work() {
   document.getElementById("za").value = zooms;
   show();
   abortRun();
+  mandelbrotLargePixel(zooms, panX, panY);
   startRun();
 }
 //reset coordinates
