@@ -1,17 +1,22 @@
 //Create the canvas, then collect the height and width
 var canvasWidth, canvasHeight, canvasContext, canvas, rect;
-//zoomon click
-var zoomOnClick = true;
 //flag to tell whether to use setInterval or not
 var useInterval = true;
 //flip imaginary axis (-1 means true, 1 is default)
 var flipImaginaryAxis = 1;
 //Sizes of pixel
 var pixelSizes = [8, 5, 1];
+//Largest pixel size
+var largePixelSize = 15;
 //Use to store setTimeout IDs for calling mandelbrot();
 var mandelbrotCalls = new Array(pixelSizes.length);
 //Store setInterval IDs
 var drawColumnIDs = new Array(pixelSizes.length);
+
+var isLoaded = false;
+
+var thread = null;
+
 //to prevent error during loading, make sure that
 //the canvas is loaded first before calling any methods
 canvas = document.getElementById("paper");
@@ -41,6 +46,7 @@ var tempPanX = panX, tempPanY = panY;
 
 canvas.onmousedown = function (e) {
   e.preventDefault();
+  if (!isLoaded) { return; }
   rect = canvas.getBoundingClientRect();
   isDragging = true;
   oldX = e.clientX - rect.left;
@@ -53,6 +59,7 @@ canvas.onmousedown = function (e) {
 
 canvas.onmousemove = function (e) {
   e.preventDefault();
+  if (!isLoaded) { return; }
   if (!isDragging) { return; }
   rect = canvas.getBoundingClientRect();
   newX = e.clientX - rect.left;
@@ -72,6 +79,7 @@ canvas.onmousemove = function (e) {
 
 canvas.onmouseup = function (e) {
   e.preventDefault();
+  if (!isLoaded) { return; }
   isDragging = false;
   panX = tempPanX;
   panY = tempPanY;
@@ -87,6 +95,7 @@ canvas.onmouseup = function (e) {
 
 canvas.onmouseleave = function (e) {
   e.preventDefault();
+  if (!isLoaded) { return; }
   if (isDragging) {
     isDragging = false;
     panX = tempPanX;
@@ -104,6 +113,7 @@ canvas.onmouseleave = function (e) {
 canvas.onwheel = function (e) {
   abortRun();
   e.preventDefault();
+  if (!isLoaded) { return; }
   const scrollValue = e.deltaY;
   // console.log(scrollValue)
   var mx = panX + (canvasWidth / 2) / zooms;
@@ -129,6 +139,7 @@ function getDistance(touches) {
 
 canvas.ontouchstart = function (e) {
   e.preventDefault();
+  if (!isLoaded) { return; }
   rect = canvas.getBoundingClientRect()
   if (e.touches.length === 1) {
     isDragging = true;
@@ -146,6 +157,7 @@ canvas.ontouchstart = function (e) {
 
 canvas.ontouchmove = function (e) {
   e.preventDefault();
+  if (!isLoaded) { return; }
   rect = canvas.getBoundingClientRect()
   
   if (e.touches.length === 2) {
@@ -157,7 +169,7 @@ canvas.ontouchmove = function (e) {
     // } else {
     //   tempZooms /= 1.1;
     // }
-    tempZooms *= pinchCurrent / pinchInitial;
+    tempZooms *= (pinchCurrent / pinchInitial);
     tempPanX = mx - (canvasWidth / 2) / tempZooms;
     tempPanY = my - flipImaginaryAxis * ((canvasHeight / 2) / tempZooms);
   } else if (e.touches.length === 1) {
@@ -182,6 +194,7 @@ canvas.ontouchmove = function (e) {
 
 canvas.ontouchend = function (e) {
   e.preventDefault();
+  if (!isLoaded) { return; }
   isDragging = false;
   panX = tempPanX;
   panY = tempPanY;
@@ -208,42 +221,6 @@ function drawOnTouch(e) {
   startRun();
 }
 
-//changes the mandelbrot set based on mouse clicks
-function drawOnClick(e) {
-  rect = canvas.getBoundingClientRect()
-  var mouseX = (e.clientX - rect.left);
-  var mouseY = (e.clientY - rect.top);
-  if (zoomOnClick) {
-    var mx = panX + mouseX / zooms;
-    var my = panY + flipImaginaryAxis * (mouseY / zooms);
-    zooms *= zf;
-    panX = mx - ((e.clientX - rect.left) / zooms);
-    panY = my - flipImaginaryAxis * ((e.clientY - rect.top) / zooms);
-  } else {
-    var mx = panX + mouseX / zooms;
-    var my = panY + flipImaginaryAxis * (mouseY / zooms);
-    zooms /= zf;
-    panX = mx - ((e.clientX - rect.left) / zooms);
-    panY = my - flipImaginaryAxis * ((e.clientY - rect.top) / zooms);
-  }
-  pan = (panX + 2 / zooms) - (panX - 1 / zooms);
-  document.getElementById("xa").value = panX;
-  document.getElementById("ya").value = panY;
-  document.getElementById("za").value = zooms;
-  pallete.setNumberRange(0, maxI);
-
-  show();
-  abortRun();
-  startRun();
-}
-//when + was clicked above the canvas
-function plus() {
-  zoomOnClick = true;
-}
-//same here
-function minus() {
-  zoomOnClick = false;
-}
 //aborts startRun
 function abortRun() {
   for (var i = 0; i < mandelbrotCalls.length; i++) {
@@ -320,11 +297,16 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   var px, py, x, y;
   px = 0;
   if (useInterval) {
+    // var p = performance.now();
     drawColumnIDs[arrayIndex] = setInterval(function () {
       if (px < canvasWidth) {
         mdbl(px, py, x, y, zm, panX, panY, scale, coloringMethod);
         px += scale;
+        // if (scale === 1) {
+        //   document.getElementById("progress").innerText = (px / canvasWidth * 100);
+        // }
       } else {
+        // console.log(performance.now() - p);
         clearInterval(drawColumnIDs[arrayIndex]);
       }
     });
@@ -347,7 +329,6 @@ function mandelbrotLargePixel(zm, panX, panY) {
   //py - canvas y
   //x - real x
   //y - imaginary y
-  const largePixelSize = 20;
   var px, py, x, y;
   px = 0;
   while (px < canvasWidth) {
@@ -413,6 +394,7 @@ function interpolation(iteration) {
 }
 //reset
 function work() {
+  if (!isLoaded) { return; }
   flipImaginaryAxis = 1;
   pan = 0.1;
   zooms = canvasWidth / 4;
@@ -436,6 +418,7 @@ function work() {
 }
 //reset coordinates
 function resetCoordinates() {
+  if (!isLoaded) { return; }
   pan = 0.1;
   zooms = canvasWidth / 4;
   panX = -2.5;
@@ -449,15 +432,18 @@ function resetCoordinates() {
 }
 //flip imaginary axis
 function flipImagAxis() {
+  if (!isLoaded) { return; }
   flipImaginaryAxis = flipImaginaryAxis == 1 ? -1 : 1;
   panY = panY * -1;
   document.getElementById("ya").value = panY;
   show();
   abortRun();
+  mandelbrotLargePixel(zooms, panX, panY);
   startRun();
 }
 //left to right scroll adjustment
 function xScroll(n) {
+  if (!isLoaded) { return; }
   var temp = n ? parseFloat(document.getElementById("xa").value) + pan : parseFloat(document.getElementById("xa").value) - pan;
   document.getElementById("xa").value = temp;
   panX = temp;
@@ -467,6 +453,7 @@ function xScroll(n) {
 }
 //top to bottom scroll adjustment
 function yScroll(n) {
+  if (!isLoaded) { return; }
   var temp = n ? parseFloat(document.getElementById("ya").value) + pan : parseFloat(document.getElementById("ya").value) - pan;
   document.getElementById("ya").value = temp;
   panY = temp;
@@ -476,6 +463,7 @@ function yScroll(n) {
 }
 //draw again
 function drawAgain() {
+  if (!isLoaded) { return; }
   panX = parseFloat(document.getElementById("xa").value);
   panY = parseFloat(document.getElementById("ya").value);
   zooms = parseFloat(document.getElementById("za").value);
@@ -485,6 +473,7 @@ function drawAgain() {
 }
 //the change zoom function
 function zoom() {
+  if (!isLoaded) { return; }
   zooms = document.getElementById("za").value;
   mx = ((panX + (canvasWidth - 1) / zooms) - panX) / 2;
   panX -= mx;
@@ -496,6 +485,7 @@ function zoom() {
 }
 //zoom in function
 function zoomIn() {
+  if (!isLoaded) { return; }
   zooms = zooms + zf;
   pan = (panX + 2 / zooms) - (panX - 1 / zooms);
   document.getElementById("za").value = zooms;
@@ -506,6 +496,7 @@ function zoomIn() {
 }
 //zoom out function
 function zoomOut() {
+  if (!isLoaded) { return; }
   zooms = zooms - zf;
   pan = (panX + 2 / zooms) - (panX - 1 / zooms)
   document.getElementById("za").value = zooms;
@@ -516,12 +507,14 @@ function zoomOut() {
 }
 //adjust zoomfactor
 function zoomFactor() {
+  if (!isLoaded) { return; }
   var temp = document.getElementById("zf").value;
   zf = parseFloat(temp);
   show();
 }
 //adjust maxI
 function changeMaxI() {
+  if (!isLoaded) { return; }
   var temp = document.getElementById("mi").value;
   maxI = parseInt(temp);
   pallete.setNumberRange(0, maxI);
@@ -531,6 +524,7 @@ function changeMaxI() {
 }
 //changes coloringType
 function changeColoringType(obj) {
+  if (!isLoaded) { return; }
   var temp = obj.value;
   coloringType = temp;
   show();
@@ -539,6 +533,7 @@ function changeColoringType(obj) {
 }
 //adjust pallete
 function changePallete() {
+  if (!isLoaded) { return; }
   var temp = (document.getElementById("plt").value).split(" ");
   if (temp.length < 3) {
     alert(" Please enter more colors ");
@@ -551,6 +546,7 @@ function changePallete() {
 }
 //updateCoords
 function changeCoords() {
+  if (!isLoaded) { return; }
   var temp = (document.getElementById("crd").value).split(" ");
   if (temp.length < 4) {
     alert(" Please enter complete details");
@@ -574,12 +570,50 @@ function changeCoords() {
   startRun();
 }
 //to be done
-function fullResize() {}
+function fullResize() {
+
+}
 //resize canvas
 function resize() {
   canvasWidth = canvas.width = parseInt(prompt("Please enter canvas width in pixels", 200)) || 200;
   canvasHeight = canvas.height = parseInt(prompt("Please enter canvas height in pixels", 200)) || 200;
   work();
+}
+function iterationsTimesTwo() {
+  if (!isLoaded) { return; }
+  maxI *= 2;
+  show();
+  abortRun();
+  startRun();
+}
+function iterationsDividedByTwo() {
+  if (!isLoaded) { return; }
+  maxI /= 2;
+  show();
+  abortRun();
+  startRun();
+}
+function changeBigPixelSize() {
+  if (!isLoaded) { return; }
+  Swal.fire({
+    title: "Info",
+    input: "text",
+    text: "Change big pixel size",
+    inputValue: 20,
+    inputPlaceholder: "20"
+  }).then(function(result) {
+    var value = parseInt(result.value);
+    if (Number.isNaN(value)) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Invalid number!"
+      });
+      return;
+    } else {
+      largePixelSize = value;
+    }
+  });
 }
 //show details
 function show() {
@@ -618,4 +652,17 @@ function about() {
   });
 }
 
-work();
+function startMandelbrot() {
+  thread = new Worker("getOptimalPixel.js");
+  thread.onmessage = function (e) {
+    console.log("Time is ", e.data.ms);
+    console.log("Pixel is ", e.data.pixelSize);
+    isLoaded = true;
+    largePixelSize = e.data.pixelSize;
+    work();
+    document.getElementById("loadingText").innerText = "";
+  }
+}
+
+startMandelbrot();
+// work();
