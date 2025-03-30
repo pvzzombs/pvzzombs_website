@@ -14,6 +14,10 @@ var mandelbrotCalls = new Array(pixelSizes.length);
 //Store setInterval IDs
 var drawColumnIDs = new Array(pixelSizes.length);
 
+var bufferArray = new Array(pixelSizes.length);
+
+var bufferLargePixel;
+
 var isLoaded = false;
 
 var thread = null;
@@ -31,7 +35,11 @@ const app = new PIXI.Application({
 canvasWidth = canvasWrapper.clientWidth;
 canvasHeight = canvasWidth;
 
-var buffer = new PIXI.Graphics();
+bufferLargePixel = new PIXI.Graphics();
+
+for (var j = 0; j < pixelSizes.length; j++) {
+  bufferArray[j] = new PIXI.Graphics();
+}
 
 // console.log(app);
 
@@ -98,6 +106,7 @@ app.view.onmouseup = function (e) {
   adjX = 0;
   adjY = 0;
 
+  // mandelbrotLargePixel(zooms, panX, panY);
   drawOnTouch(e);
 }
 
@@ -114,6 +123,7 @@ app.view.onmouseleave = function (e) {
     pan = (panX + 2 / zooms) - (panX - 1 / zooms);
     adjX = 0;
     adjY = 0;
+    // mandelbrotLargePixel(zooms, panX, panY);
     drawOnTouch(e);
   }
 }
@@ -213,6 +223,7 @@ app.view.ontouchend = function (e) {
   adjX = 0;
   adjY = 0;
 
+  // mandelbrotLargePixel(zooms, panX, panY);
   drawOnTouch(e);
 }
 
@@ -244,9 +255,13 @@ function abortRun() {
       cancelAnimationFrame(drawColumnIDs[i]);
     }
   }
+  for (var j = 0; j < pixelSizes.length; j++) {
+    bufferArray[j].clear();
+  }
 }
 //starts calling mandelbrot
 function startRun() {
+  mandelbrotLargePixel(zooms, panX, panY);
   function mandelbrotCallFactory(i) {
     return function () {
       mandelbrot(zooms, panX, panY, pixelSizes[i], i);
@@ -277,7 +292,7 @@ pallete.setNumberRange(0, maxI);
 //pallete for smoothColoring
 var _pallete = ["#000764", "#206bcb", "#edffff", "#ffaa00", "#000200"];
 // mandelbrot helper function
-function mdbl(px, zm, panX, panY, scale, func) {
+function mdbl(px, zm, panX, panY, scale, func, arrayIndex) {
   var py;
   for (py = 0; py < canvasHeight; py += scale) {
     //zoom factors
@@ -294,7 +309,14 @@ function mdbl(px, zm, panX, panY, scale, func) {
       i = i + 1
     }
     //coloring
-    func(px, py, x, y, i, scale);
+    func(px, py, x, y, i, scale, arrayIndex);
+  }
+}
+
+function drawBuffers() {
+  // app.stage.addChild(bufferLargePixel);
+  for (var j = 0; j < pixelSizes.length; j++) {
+    app.stage.addChild(bufferArray[j]);
   }
 }
 
@@ -310,26 +332,28 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
     // var p = performance.now();
     drawColumnIDs[arrayIndex] = setInterval(function () {
       if (px < canvasWidth) {
-        mdbl(px, zm, panX, panY, scale, coloringMethod);
+        mdbl(px, zm, panX, panY, scale, coloringMethod, arrayIndex);
         px += scale;
         // if (scale === 1) {
         //   document.getElementById("progress").innerText = (px / canvasWidth * 100);
         // }
-        app.stage.addChild(buffer);
+        drawBuffers();
       } else {
         // console.log(performance.now() - p);
         clearInterval(drawColumnIDs[arrayIndex]);
+        // bufferLargePixel.clear();
       }
     });
   } else {
     function drawStep() {
       if (px < canvasWidth) {
-        mdbl(px, zm, panX, panY, scale, coloringMethod);
+        mdbl(px, zm, panX, panY, scale, coloringMethod, arrayIndex);
         px += scale;
         drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
-        app.stage.addChild(buffer);
+        drawBuffers();
       } else {
         cancelAnimationFrame(drawColumnIDs[arrayIndex]);
+        // bufferLargePixel.clear();
       }
     }
     drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
@@ -341,11 +365,12 @@ function mandelbrotLargePixel(zm, panX, panY) {
   //py - canvas y
   //x - real x
   //y - imaginary y
+  bufferLargePixel.clear();
   var px;
   px = 0;
   while (px < canvasWidth) {
-    mdbl(px, zm, panX, panY, largePixelSize, coloringMethod);
-    app.stage.addChild(buffer);
+    mdbl(px, zm, panX, panY, largePixelSize, coloringMethod, null);
+    app.stage.addChild(bufferLargePixel);
     px += largePixelSize;
   }
 }
@@ -354,7 +379,13 @@ function mandelbrotLargePixel(zm, panX, panY) {
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-function coloringMethod(px, py, x, y, i, scale) {
+function coloringMethod(px, py, x, y, i, scale, arrayIndex) {
+  var buffer = null;
+  if (arrayIndex === null) {
+    buffer = bufferLargePixel;
+  } else {
+    buffer = bufferArray[arrayIndex];
+  }
   if ("smoothColoring" === coloringType) {
     if (i < maxI) {
       var log_zn = Math.log(x * x + y * y) / 2
@@ -436,7 +467,7 @@ function work() {
   document.getElementById("za").value = zooms;
   show();
   abortRun();
-  mandelbrotLargePixel(zooms, panX, panY);
+  // mandelbrotLargePixel(zooms, panX, panY);
   startRun();
 }
 //reset coordinates
@@ -451,6 +482,7 @@ function resetCoordinates() {
   document.getElementById("za").value = zooms;
   show();
   abortRun();
+  // mandelbrotLargePixel(zooms, panX, panY);
   startRun();
 }
 //flip imaginary axis
@@ -461,7 +493,7 @@ function flipImagAxis() {
   document.getElementById("ya").value = panY;
   show();
   abortRun();
-  mandelbrotLargePixel(zooms, panX, panY);
+  // mandelbrotLargePixel(zooms, panX, panY);
   startRun();
 }
 //left to right scroll adjustment
@@ -590,6 +622,7 @@ function changeCoords() {
   document.getElementById("zf").value = zf;
   show();
   abortRun();
+  // mandelbrotLargePixel(zooms, panX, panY);
   startRun();
 }
 //to be done
