@@ -1,5 +1,6 @@
+/* global PIXI, Swal, Rainbow */
 //Create the canvas, then collect the height and width
-var canvasWidth, canvasHeight, canvasContext, canvas, rect;
+var canvasWidth = 400, canvasHeight = 400, canvas, rect;
 //flag to tell whether to use setInterval or not
 var useInterval = true;
 //flip imaginary axis (-1 means true, 1 is default)
@@ -19,17 +20,24 @@ var thread = null;
 
 //to prevent error during loading, make sure that
 //the canvas is loaded first before calling any methods
-canvas = document.getElementById("paper");
-
+// canvas = document.getElementById("paper");
 var canvasWrapper = document.getElementById("canvasWrapper");
-canvas.width = canvasWrapper.clientWidth;
-//This is not set to clientHeight so that
-//the canvas is square
-canvas.height = canvasWrapper.clientWidth;
 
-canvasContext = canvas.getContext("2d");
-canvasWidth = canvas.width;
-canvasHeight = canvas.height;
+const app = new PIXI.Application({
+  width: canvasWrapper.clientWidth,
+  height: canvasWrapper.clientWidth
+});
+
+canvasWidth = canvasWrapper.clientWidth;
+canvasHeight = canvasWidth;
+
+var buffer = new PIXI.Graphics();
+
+// console.log(app);
+
+canvasWrapper.appendChild(app.view);
+
+app.stage.interactive = true;
 
 var isDragging = false;
 var oldX, oldY;
@@ -44,10 +52,10 @@ var tempPanX = panX, tempPanY = panY;
 //   drawOnClick(e);
 // }
 
-canvas.onmousedown = function (e) {
+app.view.onmousedown = function (e) {
   e.preventDefault();
   if (!isLoaded) { return; }
-  rect = canvas.getBoundingClientRect();
+  rect = app.view.getBoundingClientRect();
   isDragging = true;
   oldX = e.clientX - rect.left;
   oldY = e.clientY - rect.top;
@@ -57,11 +65,11 @@ canvas.onmousedown = function (e) {
   abortRun();
 }
 
-canvas.onmousemove = function (e) {
+app.view.onmousemove = function (e) {
   e.preventDefault();
   if (!isLoaded) { return; }
   if (!isDragging) { return; }
-  rect = canvas.getBoundingClientRect();
+  rect = app.view.getBoundingClientRect();
   newX = e.clientX - rect.left;
   newY = e.clientY - rect.top;
 
@@ -77,7 +85,7 @@ canvas.onmousemove = function (e) {
   mandelbrotLargePixel(tempZooms, tempPanX - adjX, tempPanY - adjY);
 }
 
-canvas.onmouseup = function (e) {
+app.view.onmouseup = function (e) {
   e.preventDefault();
   if (!isLoaded) { return; }
   isDragging = false;
@@ -93,7 +101,7 @@ canvas.onmouseup = function (e) {
   drawOnTouch(e);
 }
 
-canvas.onmouseleave = function (e) {
+app.view.onmouseleave = function (e) {
   e.preventDefault();
   if (!isLoaded) { return; }
   if (isDragging) {
@@ -110,7 +118,7 @@ canvas.onmouseleave = function (e) {
   }
 }
 
-canvas.onwheel = function (e) {
+app.view.onwheel = function (e) {
   abortRun();
   e.preventDefault();
   if (!isLoaded) { return; }
@@ -137,10 +145,10 @@ function getDistance(touches) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-canvas.ontouchstart = function (e) {
+app.view.ontouchstart = function (e) {
   e.preventDefault();
   if (!isLoaded) { return; }
-  rect = canvas.getBoundingClientRect()
+  rect = app.view.getBoundingClientRect()
   if (e.touches.length === 1) {
     isDragging = true;
     const touch = e.touches[0];
@@ -155,10 +163,10 @@ canvas.ontouchstart = function (e) {
   abortRun();
 }
 
-canvas.ontouchmove = function (e) {
+app.view.ontouchmove = function (e) {
   e.preventDefault();
   if (!isLoaded) { return; }
-  rect = canvas.getBoundingClientRect()
+  rect = app.view.getBoundingClientRect()
   
   if (e.touches.length === 2) {
     var pinchCurrent = getDistance(e.touches);
@@ -192,7 +200,7 @@ canvas.ontouchmove = function (e) {
   mandelbrotLargePixel(tempZooms, tempPanX - adjX, tempPanY - adjY);
 }
 
-canvas.ontouchend = function (e) {
+app.view.ontouchend = function (e) {
   e.preventDefault();
   if (!isLoaded) { return; }
   isDragging = false;
@@ -261,7 +269,7 @@ function startRun() {
 //create pallete to color mandelbrot by
 //using rainbowvis.js
 var pan, zooms, panX, panY, zf, maxI = 50,
-  ticks, coloringType;
+  coloringType;
 //pallete for escapeTime
 var pallete = new Rainbow();
 pallete.setSpectrum("#000764", "#206bcb", "#edffff", "#ffaa00", "#000200");
@@ -307,6 +315,7 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
         // if (scale === 1) {
         //   document.getElementById("progress").innerText = (px / canvasWidth * 100);
         // }
+        app.stage.addChild(buffer);
       } else {
         // console.log(performance.now() - p);
         clearInterval(drawColumnIDs[arrayIndex]);
@@ -318,6 +327,7 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
         mdbl(px, zm, panX, panY, scale, coloringMethod);
         px += scale;
         drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
+        app.stage.addChild(buffer);
       } else {
         cancelAnimationFrame(drawColumnIDs[arrayIndex]);
       }
@@ -335,6 +345,7 @@ function mandelbrotLargePixel(zm, panX, panY) {
   px = 0;
   while (px < canvasWidth) {
     mdbl(px, zm, panX, panY, largePixelSize, coloringMethod);
+    app.stage.addChild(buffer);
     px += largePixelSize;
   }
 }
@@ -349,16 +360,20 @@ function coloringMethod(px, py, x, y, i, scale) {
       var log_zn = Math.log(x * x + y * y) / 2
       var nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
       i = i + 1 - nu;
-      canvasContext.fillStyle = color(i / maxI * (_pallete.length - 1));
-      canvasContext.fillRect(px, py, scale, scale);
+      buffer.beginFill(color(i / maxI * (_pallete.length - 1)))
+      buffer.drawRect(px, py, scale, scale)
+      buffer.endFill();
     } else {
-      canvasContext.fillStyle = "black";
-      canvasContext.fillRect(px, py, scale, scale);
+      buffer.beginFill("#000000")
+      buffer.drawRect(px, py, scale, scale)
+      buffer.endFill();
     }
   } else {
-    canvasContext.fillStyle = color(i);
-    canvasContext.fillRect(px, py, scale, scale);
+    buffer.beginFill(color(i))
+    buffer.drawRect(px, py, scale, scale)
+    buffer.endFill();
   }
+  // console.log(1);
 }
 
 function color(num) {
