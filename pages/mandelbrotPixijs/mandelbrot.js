@@ -37,8 +37,11 @@ canvasHeight = canvasWidth;
 
 bufferLargePixel = new PIXI.Graphics();
 
+app.stage.addChild(bufferLargePixel);
+
 for (var j = 0; j < pixelSizes.length; j++) {
   bufferArray[j] = new PIXI.Graphics();
+  app.stage.addChild(bufferArray[j]);
 }
 
 // console.log(app);
@@ -138,10 +141,10 @@ app.view.onwheel = function (e) {
   var my = panY + flipImaginaryAxis * ((canvasHeight / 2) / zooms);
   if (scrollValue > 0) {
     // zoom out
-    zooms /= 1.1;
+    zooms /= zf;
   } else if (scrollValue < 0) {
     // zoom in
-    zooms *= 1.1;
+    zooms *= zf;
   }
   panX = mx - (canvasWidth / 2) / zooms;
   panY = my - flipImaginaryAxis * ((canvasHeight / 2) / zooms);
@@ -313,13 +316,6 @@ function mdbl(px, zm, panX, panY, scale, func, arrayIndex) {
   }
 }
 
-function drawBuffers() {
-  // app.stage.addChild(bufferLargePixel);
-  for (var j = 0; j < pixelSizes.length; j++) {
-    app.stage.addChild(bufferArray[j]);
-  }
-}
-
 function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   // scale = scale || 1;
   //px - Canvas x
@@ -337,7 +333,6 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
         // if (scale === 1) {
         //   document.getElementById("progress").innerText = (px / canvasWidth * 100);
         // }
-        drawBuffers();
       } else {
         // console.log(performance.now() - p);
         clearInterval(drawColumnIDs[arrayIndex]);
@@ -350,7 +345,6 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
         mdbl(px, zm, panX, panY, scale, coloringMethod, arrayIndex);
         px += scale;
         drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
-        drawBuffers();
       } else {
         cancelAnimationFrame(drawColumnIDs[arrayIndex]);
         // bufferLargePixel.clear();
@@ -370,7 +364,6 @@ function mandelbrotLargePixel(zm, panX, panY) {
   px = 0;
   while (px < canvasWidth) {
     mdbl(px, zm, panX, panY, largePixelSize, coloringMethod, null);
-    app.stage.addChild(bufferLargePixel);
     px += largePixelSize;
   }
 }
@@ -454,7 +447,7 @@ function work() {
   zooms = canvasWidth / 4;
   panX = -2.5;
   panY = -2.0 * flipImaginaryAxis;
-  zf = 1.5;
+  zf = 1.1;
   maxI = 50;
   pallete.setSpectrum("#000764", "#206bcb", "#edffff", "#ffaa00", "#000200");
   pallete.setNumberRange(0, maxI);
@@ -522,18 +515,6 @@ function drawAgain() {
   panX = parseFloat(document.getElementById("xa").value);
   panY = parseFloat(document.getElementById("ya").value);
   zooms = parseFloat(document.getElementById("za").value);
-  show();
-  abortRun();
-  startRun();
-}
-//the change zoom function
-function zoom() {
-  if (!isLoaded) { return; }
-  zooms = document.getElementById("za").value;
-  var mx = ((panX + (canvasWidth - 1) / zooms) - panX) / 2;
-  panX -= mx;
-  var my = ((panY + (canvasHeight - 1) / zooms) - panY) / 2;
-  panY -= mx;
   show();
   abortRun();
   startRun();
