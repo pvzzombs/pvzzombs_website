@@ -12,26 +12,6 @@
   <!-- <script src="../js/eruda.js"></script>
       <script>eruda.init();</script> -->
   <style type="text/css">
-    /* #trigger, #xp, #yp, #xz, #xm, #ym, #yz, #zfb{
-      height: 50px;
-      }
-      #xa, #ya, #za, #zf, #mi{
-      height: 50px;
-      width: 70px;
-      }
-      #dtls{
-      border: 1px solid black;
-      width: 100%;
-      }
-      #clrt, #lrg{
-      border: 1px solid black;
-      height: 50px;
-      }
-      #plt, #crd{
-      border: 1px solid black;
-      width: 100%;
-      height: 50px;
-      }*/
     #canvasWrapper {
       max-width: 400px;
       margin: 0px auto;
@@ -73,65 +53,62 @@
       <!-- <span id="progress">0</span>% -->
     </div>
     <br />
-    <input type="button" value="x2" class="tw-d-btn" onclick="iterationsTimesTwo()" />
-    <input type="button" value="/2" class="tw-d-btn" onclick="iterationsDividedByTwo()" />
-    <input type="button" value="Change big pixel size" class="tw-d-btn" onclick="changeBigPixelSize()" />
+    <input type="button" id="timesTwo" value="x2" class="tw-d-btn" />
+    <input type="button" id="divideTwo" value="/2" class="tw-d-btn" />
+    <input type="button" id="bigPixel" value="Change big pixel size" class="tw-d-btn" />
 
     <br />
     <br />
-    <input type="button" id="trigger" value="Full" class="tw-d-btn" onclick="fullResize()" />
-    <input type="button" id="trigger" value="RESET" class="tw-d-btn" onclick="work()" />
-    <input type="button" id="trigger" value="Re-draw" class="tw-d-btn" onclick="drawAgain()" />
-    <input type="button" id="trigger" value="Resize" class="tw-d-btn" onclick="resize()" />
-    <input type="button" id="trigger" value=" ? " class="tw-d-btn" onclick="about()" />
+    <input type="button" id="trigger1" value="Full" class="tw-d-btn" />
+    <input type="button" id="trigger2" value="RESET" class="tw-d-btn" />
+    <input type="button" id="trigger3" value="Re-draw" class="tw-d-btn" />
+    <input type="button" id="trigger4" value="Resize" class="tw-d-btn" />
+    <input type="button" id="trigger5" value=" ? " class="tw-d-btn" />
     <br />
     <br />
-    <input type="checkbox" name="axis" id="flipImaginaryAxis" value="flipImaginaryAxis" class="tw-d-checkbox"
-      onclick="flipImagAxis()" checked />
+    <input type="checkbox" name="axis" id="flipImaginaryAxis" value="flipImaginaryAxis" class="tw-d-checkbox" checked />
     <label for="flipImaginaryAxis">Flip Imaginary Axis</label>
     <br />
     <br />
-    <input type="button" id="trigger" value="Reset coordinates" class="tw-d-btn" onclick="resetCoordinates()" />
+    <input type="button" id="trigger6" value="Reset coordinates" class="tw-d-btn" />
     <br />
     <br />
     left: <input type="text" id="xa" value="-2.5" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
-    <input type="button" id="xp" value="+" class="tw-d-btn" onclick="xScroll(1)" />
-    <input type="button" id="xm" value="-" class="tw-d-btn" onclick="xScroll(0)" />
+    <input type="button" id="xp" value="+" class="tw-d-btn" />
+    <input type="button" id="xm" value="-" class="tw-d-btn" />
     <br />
     <br />
     top: <input type="text" id="ya" value="-2" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
-    <input type="button" id="yp" value="+" class="tw-d-btn" onclick="yScroll(1)" />
-    <input type="button" id="ym" value="-" class="tw-d-btn" onclick="yScroll(0)" />
+    <input type="button" id="yp" value="+" class="tw-d-btn" />
+    <input type="button" id="ym" value="-" class="tw-d-btn" />
     <br />
     <br />
     zoom: <input type="text" id="za" value="100" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
-    <input type="button" id="xz" value="+" class="tw-d-btn" onclick="zoomIn()" />
-    <input type="button" id="yz" value="-" class="tw-d-btn" onclick="zoomOut()" />
+    <input type="button" id="xz" value="+" class="tw-d-btn" />
+    <input type="button" id="yz" value="-" class="tw-d-btn" />
     <br />
     <!-- input type="button" id="lrg" value="Change" onclick="zoom()"/ -->
     <br />
     <br />
     zoom-factor: <input type="text" id="zf" value="1.5" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
-    <input type="button" id="zfb" value="Change" class="tw-d-btn" onclick="zoomFactor()" />
+    <input type="button" id="zfb" value="Change" class="tw-d-btn" />
     <br />
     <br />
     iteration: <input type="text" id="mi" value="50" class="tw-d-input tw-d-input-bordered tw-max-w-xs" />
-    <input type="button" id="trigger" value="Change" class="tw-d-btn" onclick="changeMaxI()" />
+    <input type="button" id="trigger7" value="Change" class="tw-d-btn" />
     <br />
     <br />
     <h3>Pallete (use space as delimiter):</h3>
     <textarea id="plt" class="tw-d-textarea tw-d-textarea-bordered tw-d-textarea-md tw-w-full tw-max-w-xs"
       width="150">red orange yellow black</textarea>
-    <input type="button" id="lrg" value="Change pallete" class="tw-d-btn" onclick="changePallete()" />
+    <input type="button" id="lrg" value="Change pallete" class="tw-d-btn" />
     <br />
     <br />
     <h3>Coloring type:</h3>
-    <input type="radio" name="coloringType" id="smoothColoring" value="smoothColoring" class="tw-d-radio"
-      onclick="changeColoringType(this)" checked />
+    <input type="radio" name="coloringType" id="smoothColoring" value="smoothColoring" class="tw-d-radio" checked />
     <label for="smoothColoring">Smooth Coloring</label>
     <br />
-    <input type="radio" name="coloringType" id="escapeTime" value="escapeTime" class="tw-d-radio"
-      onclick="changeColoringType(this)" />
+    <input type="radio" name="coloringType" id="escapeTime" value="escapeTime" class="tw-d-radio" />
     <label for="escapeTime">Escape Time</label>
     <br />
     <br />
@@ -139,7 +116,7 @@
     <pre><code>panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</code></pre>
     <textarea id="crd" class="tw-d-textarea tw-d-textarea-bordered tw-d-textarea-md tw-w-full tw-max-w-xs"
       width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
-    <input type="button" id="lrg" value="Update Coords" class="tw-d-btn" onclick="changeCoords()" />
+    <input type="button" id="updt" value="Update Coords" class="tw-d-btn" />
     <br />
     <h3> Advance Details: </h3>
     <div id="dtls" class="tw-d-card tw-bg-base-100 tw-shadow-xl ">
