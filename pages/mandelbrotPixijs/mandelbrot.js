@@ -52,11 +52,11 @@
       app.stage.addChild(bufferArray[j]);
     }
   } else {
-    particleContainerLargePixel = new PIXI.ParticleContainer((canvasWidth / largePixelSize) * (canvasHeight / largePixelSize));
+    particleContainerLargePixel = new PIXI.ParticleContainer(Math.ceil(canvasWidth / largePixelSize) * Math.ceil(canvasHeight / largePixelSize));
     app.stage.addChild(particleContainerLargePixel);
 
     for (j = 0; j < pixelSizes.length; j++) {
-      particleContainerArray[j] = new PIXI.ParticleContainer((canvasWidth / pixelSizes[j]) * (canvasHeight / pixelSizes[j]));
+      particleContainerArray[j] = new PIXI.ParticleContainer(Math.ceil(canvasWidth / pixelSizes[j]) * Math.ceil(canvasHeight / pixelSizes[j]));
       app.stage.addChild(particleContainerArray[j]);
     }
   }
@@ -319,7 +319,7 @@
         // console.log("Particle array ", j, " has ", particleContainerArray[j].children.length, " children.");
         app.stage.removeChild(particleContainerArray[j]);
         particleContainerArray[j].destroy({ children: true });
-        particleContainerArray[j] = new PIXI.ParticleContainer((canvasWidth / pixelSizes[j]) * (canvasHeight / pixelSizes[j]));
+        particleContainerArray[j] = new PIXI.ParticleContainer(Math.ceil(canvasWidth / pixelSizes[j]) * Math.ceil(canvasHeight / pixelSizes[j]));
         app.stage.addChild(particleContainerArray[j]);
       }
       reorderParticleContainers();
@@ -426,7 +426,7 @@
     } else {
       app.stage.removeChild(particleContainerLargePixel);
       particleContainerLargePixel.destroy({ children: true });
-      particleContainerLargePixel = new PIXI.ParticleContainer((canvasWidth / largePixelSize) * (canvasHeight / largePixelSize));
+      particleContainerLargePixel = new PIXI.ParticleContainer(Math.ceil(canvasWidth / largePixelSize) * Math.ceil(canvasHeight / largePixelSize));
       app.stage.addChild(particleContainerLargePixel);
       reorderParticleContainers();
     }
