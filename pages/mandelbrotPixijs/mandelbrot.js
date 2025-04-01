@@ -1,4 +1,4 @@
-(function () {
+(async function () {
   /* global PIXI, Swal, Rainbow */
   //Create the canvas, then collect the height and width
   var canvasWidth = 400,
@@ -18,13 +18,16 @@
   var drawColumnIDs = new Array(pixelSizes.length);
 
   var bufferArray = new Array(pixelSizes.length);
-
   var bufferLargePixel;
+
+  var particleContainerArray = new Array(pixelSizes.length);
+  var particleContainerLargePixel;
 
   var isLoaded = false;
 
   var thread = null;
 
+  var useBuffer = false;
   //to prevent error during loading, make sure that
   //the canvas is loaded first before calling any methods
   // canvas = document.getElementById("paper");
@@ -34,24 +37,30 @@
     width: canvasWrapper.clientWidth,
     height: canvasWrapper.clientWidth,
   });
+  app.stage.interactive = true;
+  canvasWrapper.appendChild(app.view);
 
   canvasWidth = canvasWrapper.clientWidth;
   canvasHeight = canvasWidth;
+  var j;
+  if (useBuffer) {
+    bufferLargePixel = new PIXI.Graphics();
+    app.stage.addChild(bufferLargePixel);
+  
+    for (j = 0; j < pixelSizes.length; j++) {
+      bufferArray[j] = new PIXI.Graphics();
+      app.stage.addChild(bufferArray[j]);
+    }
+  } else {
+    particleContainerLargePixel = new PIXI.ParticleContainer((canvasWidth / largePixelSize) * (canvasHeight / largePixelSize));
+    app.stage.addChild(particleContainerLargePixel);
 
-  bufferLargePixel = new PIXI.Graphics();
-
-  app.stage.addChild(bufferLargePixel);
-
-  for (var j = 0; j < pixelSizes.length; j++) {
-    bufferArray[j] = new PIXI.Graphics();
-    app.stage.addChild(bufferArray[j]);
+    for (j = 0; j < pixelSizes.length; j++) {
+      particleContainerArray[j] = new PIXI.ParticleContainer((canvasWidth / pixelSizes[j]) * (canvasHeight / pixelSizes[j]));
+      app.stage.addChild(particleContainerArray[j]);
+    }
   }
 
-  // console.log(app);
-
-  canvasWrapper.appendChild(app.view);
-
-  app.stage.interactive = true;
 
   var isDragging = false;
   var oldX, oldY;
@@ -300,8 +309,20 @@
         cancelAnimationFrame(drawColumnIDs[i]);
       }
     }
-    for (var j = 0; j < pixelSizes.length; j++) {
-      bufferArray[j].clear();
+    var j;
+    if (useBuffer) {
+      for (j = 0; j < pixelSizes.length; j++) {
+        bufferArray[j].clear();
+      }
+    } else {
+      for (j = 0; j < pixelSizes.length; j++) {
+        // console.log("Particle array ", j, " has ", particleContainerArray[j].children.length, " children.");
+        app.stage.removeChild(particleContainerArray[j]);
+        particleContainerArray[j].destroy({ children: true });
+        particleContainerArray[j] = new PIXI.ParticleContainer((canvasWidth / pixelSizes[j]) * (canvasHeight / pixelSizes[j]));
+        app.stage.addChild(particleContainerArray[j]);
+      }
+      reorderParticleContainers();
     }
   }
   //starts calling mandelbrot
@@ -316,6 +337,19 @@
     for (var i = 0; i < pixelSizes.length; i++) {
       mandelbrotCalls[i] = setTimeout(mandelbrotCallFactory(i));
       //console.log(i);
+    }
+  }
+
+  function reorderParticleContainers() {
+    // remove first
+    app.stage.removeChild(particleContainerLargePixel);
+    for (j = 0; j < pixelSizes.length; j++) {
+      app.stage.removeChild(particleContainerArray[j]);
+    }
+    // add again
+    app.stage.addChild(particleContainerLargePixel);
+    for (j = 0; j < pixelSizes.length; j++) {
+      app.stage.addChild(particleContainerArray[j]);
     }
   }
 
@@ -387,7 +421,15 @@
     //py - canvas y
     //x - real x
     //y - imaginary y
-    bufferLargePixel.clear();
+    if (useBuffer) {
+      bufferLargePixel.clear();
+    } else {
+      app.stage.removeChild(particleContainerLargePixel);
+      particleContainerLargePixel.destroy({ children: true });
+      particleContainerLargePixel = new PIXI.ParticleContainer((canvasWidth / largePixelSize) * (canvasHeight / largePixelSize));
+      app.stage.addChild(particleContainerLargePixel);
+      reorderParticleContainers();
+    }
     var px;
     px = 0;
     while (px < canvasWidth) {
@@ -400,32 +442,94 @@
   // ------------------------------------------------------------
   // ------------------------------------------------------------
 
-  function coloringMethod(px, py, x, y, i, scale, arrayIndex) {
-    var buffer = null;
-    if (arrayIndex === null) {
-      buffer = bufferLargePixel;
+  function extractColorToNumber(str) {
+    if (str.startsWith("#")) {
+      return parseInt(str.substr(1, 6), 16);
+    } else if (str.startsWith("rgb")) {
+      //  r g b (  )
+      var num = 0;
+      var exp = 2;
+      var tempNum = "";
+      for (j = 4; j < str.length; j++) {
+        if (str[j] >= '0' && str[j] <= '9') {
+          tempNum += str[j];
+        } else {
+          num += parseInt(tempNum) * (256 ** exp);
+          tempNum = "";
+          exp = exp - 1;
+        }
+      }
+      return num;
     } else {
-      buffer = bufferArray[arrayIndex];
+      return 0;
     }
+  }
+
+  function coloringMethod(px, py, x, y, i, scale, arrayIndex) {
+    // console.log(true);
+    var buffer = null;
+    var particleContainer = null;
+    if (useBuffer) {
+      if (arrayIndex === null) {
+        buffer = bufferLargePixel;
+      } else {
+        buffer = bufferArray[arrayIndex];
+      }
+    } else {
+      if (arrayIndex === null) {
+        particleContainer = particleContainerLargePixel;
+      } else {
+        particleContainer = particleContainerArray[arrayIndex];
+      }
+    }
+    var r;
     if ("smoothColoring" === coloringType) {
       if (i < maxI) {
         var log_zn = Math.log(x * x + y * y) / 2;
         var nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
         i = i + 1 - nu;
-        buffer.beginFill(color((i / maxI) * (_pallete.length - 1)));
+        if (useBuffer) {
+          buffer.beginFill(color((i / maxI) * (_pallete.length - 1)));
+          buffer.drawRect(px, py, scale, scale);
+          buffer.endFill();
+        } else {
+          r = new PIXI.Sprite(PIXI.Texture.WHITE);
+          r.tint = extractColorToNumber(color((i / maxI) * (_pallete.length - 1)));
+          r.width = scale;
+          r.height = scale;
+          r.position.set(px, py);
+          particleContainer.addChild(r);
+        }
+      } else {
+        if (useBuffer) {
+          buffer.beginFill("#000000");
+          buffer.drawRect(px, py, scale, scale);
+          buffer.endFill();
+        } else {
+          r = new PIXI.Sprite(PIXI.Texture.WHITE);
+          r.tint = 0;
+          r.width = scale;
+          r.height = scale;
+          r.position.set(px, py);
+          particleContainer.addChild(r);
+        }
+      }
+    } else {
+      if (useBuffer) {
+        buffer.beginFill(color(i));
         buffer.drawRect(px, py, scale, scale);
         buffer.endFill();
       } else {
-        buffer.beginFill("#000000");
-        buffer.drawRect(px, py, scale, scale);
-        buffer.endFill();
+        r = new PIXI.Sprite(PIXI.Texture.WHITE);
+        r.tint = extractColorToNumber(color(i));
+        r.width = scale;
+        r.height = scale;
+        r.position.set(px, py);
+        particleContainer.addChild(r);
       }
-    } else {
-      buffer.beginFill(color(i));
-      buffer.drawRect(px, py, scale, scale);
-      buffer.endFill();
     }
     // console.log(1);
+    // app.render();
   }
 
   function color(num) {
