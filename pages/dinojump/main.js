@@ -14,7 +14,7 @@ function preload() {
   for (var i = 0; i < dinoSpritesCount; i++) {
     dinoSprites.push(loadImage("img/Velociraptor/" + i + ".png"));
   }
-  cactusSprite = loadImage("img/cactus.png");
+  cactusSprite = loadImage("img/cactus2.png");
 }
 
 function setup() {
@@ -38,6 +38,12 @@ var playerWidth = 100;
 var vel = 0;
 var g = 0.5;
 
+var score = 0;
+var highScore = 0;
+
+var currentScene = "main";
+var shouldReset = false;
+
 function drawDino() {
   image(dinoSprites[Math.floor(dinoCurrentSprite)], 10, playerY + 10, playerWidth, playerHeight, 0, 0, 500, 500);
   dinoCurrentSprite += dinoSpriteSpeed * dt;
@@ -47,6 +53,36 @@ function drawDino() {
 }
 
 function draw() {
+  switch(currentScene) {
+    case "main": 
+      main();
+    break;
+    case "retry":
+      shouldReset = true;
+      retry();
+    break;
+  }
+}
+
+function retry() {
+  if (shouldReset) {
+    curr = Date.now();
+    dt = (curr - prev) * mfps / 1000;
+    prev = Date.now();
+    rects = [];
+    lastX = 400 - 200;
+    vel = 0;
+    highScore = Math.max(score, highScore);
+    score = 0;
+    shouldReset = false;
+  }
+  background(220);
+  textSize(20);
+  text("Press any key or click to restart", 0, 20);
+  text("Highscore: " + Math.floor(highScore), 0, 40);
+}
+
+function main() {
   curr = Date.now();
   dt = (curr - prev) * mfps / 1000;
   prev = Date.now();
@@ -94,29 +130,58 @@ function draw() {
   for (var i=0; i<rects.length; i++) {
     if(collideRectRect(45, playerY + 20, playerWidth - 60, playerHeight - 20, rects[i].x + 5, 300 - h, w - 10, h)) {
       console.log("Game Over");
-      noLoop();
+      // noLoop();
+      currentScene = "retry";
     }
   }
   
   // fill("green");
   // rect(45, playerY + 20, playerWidth - 60, playerHeight - 20);
   drawDino();
+  score += 0.2 * dt;
+  textSize(20);
+  text("Score: " + Math.floor(score), 0, 20);
 }
 
 function keyPressed() {
-  if (key === " " && playerY >= 300 - playerHeight) {
-    vel = -10;
-    // console.log(vel);
-    playerY += vel * dt;
+  switch(currentScene) {
+    case "main":
+      if (key === " " && playerY >= 300 - playerHeight) {
+        vel = -10;
+        // console.log(vel);
+        playerY += vel * dt;
+      }
+    break;
+    case "retry":
+      currentScene = "main";
+    break;
   }
 }
 
 function touchStarted() {
-  vel = -10;
-  playerY += vel * dt;
+  switch(currentScene) {
+    case "main": 
+      if (playerY >= 300 - playerHeight) {
+        vel = -10;
+        playerY += vel * dt;
+      }
+    break;
+    case "retry":
+      currentScene = "main";
+    break;
+  }
 }
 
 function mousePressed() {
-  vel = -10;
-  playerY += vel * dt;
+  switch(currentScene) {
+    case "main":
+      if (playerY >= 300 - playerHeight) {
+        vel = -10;
+        playerY += vel * dt;
+      }
+    break;
+    case "retry":
+      currentScene = "main";
+    break;
+  }
 }
