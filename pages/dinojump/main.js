@@ -5,7 +5,7 @@ var dt;
 var dinoSprites = [];
 var dinoCurrentSprite = 0;
 var dinoSpritesCount = 3;
-var dinoSpriteSpeed = 0.2;
+var dinoSpriteSpeed = 12 / mfps;
 
 var cactusSprite = null;
 
@@ -32,9 +32,9 @@ var lastX = 400 - 200;
 
 var m = 0.01;
 
-var playerY = 300 - h;
 var playerHeight = 100;
 var playerWidth = 100;
+var playerY = 300 - playerHeight;
 var vel = 0;
 var g = 0.5;
 
@@ -65,12 +65,13 @@ function draw() {
 }
 
 function retry() {
+  curr = Date.now();
+  dt = (curr - prev) * mfps / 1000;
+  prev = Date.now();
   if (shouldReset) {
-    curr = Date.now();
-    dt = (curr - prev) * mfps / 1000;
-    prev = Date.now();
     rects = [];
     lastX = 400 - 200;
+    playerY = 300 - playerHeight;
     vel = 0;
     highScore = Math.max(score, highScore);
     score = 0;
