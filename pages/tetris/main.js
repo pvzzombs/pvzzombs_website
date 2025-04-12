@@ -112,10 +112,13 @@ function copyTetromino(mat) {
 // rotateBody(copyTetromino(tetromino.L));
 // console.log(tetromino.L);
 
-var currentTetromino = tetromino.L;
+var currentTetromino = null;
 
-var toX = tetrominoStart.L.x;
-var toY = tetrominoStart.L.y;
+var toX = -1;
+var toY = -1;
+
+var ghostX = -1;
+var ghostY = -1;
 
 var grid = [];
 
@@ -149,6 +152,22 @@ function tryMove(d) {
         if (currentTetromino[y][x] === 1 && newToX + x >= GRIDCELLWCOUNT) {
           return "wall";
         } else if (currentTetromino[y][x] === 1 && grid[toY + y][newToX + x] !== 0) {
+          return "tetromino";
+        }
+      }
+    }
+  }
+  return "";
+}
+
+function tryMoveGhost(d) {
+  if (d === "down") {
+    var newGhostY = ghostY + 1;
+    for (var y = 0; y < currentTetromino.length; y++) {
+      for (var x = 0; x < currentTetromino[0].length; x++) {
+        if (currentTetromino[y][x] === 1 && newGhostY + y >= GRIDCELLHCOUNT) {
+          return "ground";
+        } else if (currentTetromino[y][x] === 1 && grid[newGhostY + y][ghostX + x] !== 0) {
           return "tetromino";
         }
       }
@@ -200,6 +219,12 @@ function shuffle() {
   currentID++;
   if (currentID >= tetrominoes.length) {
     currentID = 0;
+    for (var i = 0; i < tetrominoes.length; i++) {
+      var targetIndex = Math.floor(Math.random() * (tetrominoes.length - 1 - i) + i);
+      var temp = tetrominoes[i];
+      tetrominoes[i] = tetrominoes[targetIndex];
+      tetrominoes[targetIndex] = temp;
+    }
   }
 }
 
@@ -216,6 +241,14 @@ function spawnTetromino() {
         return;
       }
     }
+  }
+}
+
+function spawnGhostTetromino() {
+  ghostX = toX;
+  ghostY = toY;
+  while(tryMoveGhost("down") === "") {
+    ghostY++;
   }
 }
 
@@ -273,6 +306,7 @@ function moveDown() {
     spawnTetromino();
     shuffle();
   }
+  spawnGhostTetromino();
 }
 
 function setup() {
@@ -284,9 +318,18 @@ function setup() {
       grid[i][j] = 0;
     }
   }
+
+  // shuffle tetrominoes
+  for (var i = 0; i < tetrominoes.length; i++) {
+    var targetIndex = Math.floor(Math.random() * (tetrominoes.length - 1 - i) + i);
+    var temp = tetrominoes[i];
+    tetrominoes[i] = tetrominoes[targetIndex];
+    tetrominoes[targetIndex] = temp;
+  }
   // console.log(grid);
   spawnTetromino();
   shuffle();
+  spawnGhostTetromino();
 }
 
 
@@ -304,7 +347,16 @@ function draw() {
       rect(x * side, y * side, side, side);
     }
   }
-  fill("red");
+  // draw ghost
+  for (var y = 0; y < currentTetromino.length; y++) {
+    for (var x = 0; x < currentTetromino[0].length; x++) {
+      if (currentTetromino[y][x] === 1) {
+        fill ("gray");
+        rect((ghostX + x) * side, (ghostY + y) * side, side, side);
+      }
+    }
+  }
+  // draw current
   for (var y = 0; y < currentTetromino.length; y++) {
     for (var x = 0; x < currentTetromino[0].length; x++) {
       if (currentTetromino[y][x] === 1) {
@@ -314,7 +366,7 @@ function draw() {
     }
   }
   ++frameCounter;
-  if (frameCounter >= 20) {
+  if (frameCounter >= 30) {
     moveDown();
     frameCounter = 0;
   }
@@ -332,16 +384,23 @@ function keyPressed() {
     var decide = tryMove("left");
     if (decide === "") {
       toX -= 1;
+      spawnGhostTetromino();
     }
   } else if (key === "d" || key === 'D') {
     var decide = tryMove("right");
     if (decide === "") {
       toX += 1;
+      spawnGhostTetromino();
     }
   } else if (key === 'W' || key === 'w') {
     var decide = tryRotate();
     if (decide === "") {
       rotateBody(currentTetromino);
+      spawnGhostTetromino();
+    }
+  } else if (key === " ") {
+    while(tryMove("down") === "") {
+      toY += 1;
     }
   }
 }
