@@ -1,4 +1,4 @@
-const side = 10;
+const side = 15;
 
 
 const GRIDCELLWCOUNT = 10;
@@ -6,6 +6,9 @@ const GRIDCELLHCOUNT = 20;
 
 const GRIDCELLW = GRIDCELLWCOUNT * side;
 const GRIDCELLH = GRIDCELLHCOUNT * side;
+
+const W = 300;
+const H = 400;
 
 var tetromino = {
   I: [
@@ -127,6 +130,7 @@ function tryMove(d) {
     var newToY = toY + 1;
     for (var y = 0; y < currentTetromino.length; y++) {
       for (var x = 0; x < currentTetromino[0].length; x++) {
+        if (newToY + y < 0) { continue; }
         if (currentTetromino[y][x] === 1 && newToY + y >= GRIDCELLHCOUNT) {
           return "ground";
         } else if (currentTetromino[y][x] === 1 && grid[newToY + y][toX + x] !== 0) {
@@ -138,6 +142,7 @@ function tryMove(d) {
     var newToX = toX - 1;
     for (var y = 0; y < currentTetromino.length; y++) {
       for (var x = 0; x < currentTetromino[0].length; x++) {
+        if (toY + y < 0) { continue; }
         if (currentTetromino[y][x] === 1 && newToX + x < 0) {
           return "wall";
         } else if (currentTetromino[y][x] === 1 && grid[toY + y][newToX + x] !== 0) {
@@ -149,6 +154,7 @@ function tryMove(d) {
     var newToX = toX + 1;
     for (var y = 0; y < currentTetromino.length; y++) {
       for (var x = 0; x < currentTetromino[0].length; x++) {
+        if (toY + y < 0) { continue; }
         if (currentTetromino[y][x] === 1 && newToX + x >= GRIDCELLWCOUNT) {
           return "wall";
         } else if (currentTetromino[y][x] === 1 && grid[toY + y][newToX + x] !== 0) {
@@ -229,6 +235,9 @@ function shuffle() {
 }
 
 function spawnTetromino() {
+  // currentTetromino = tetromino.I;
+  // toX = tetrominoStart.I.x;
+  // toY = tetrominoStart.I.y;
   currentTetromino = copyTetromino(tetromino[tetrominoes[currentID]]);
   toX = tetrominoStart[tetrominoes[currentID]].x;
   toY = tetrominoStart[tetrominoes[currentID]].y;
@@ -310,7 +319,7 @@ function moveDown() {
 }
 
 function setup() {
-  createCanvas(GRIDCELLW, GRIDCELLH);
+  createCanvas(W, H);
   frameRate(60);
   for (var i = 0; i < GRIDCELLHCOUNT; i++) {
     grid.push(new Array(GRIDCELLWCOUNT));
@@ -334,6 +343,7 @@ function setup() {
 
 
 var frameCounter = 0;
+var elapsedDT = 0;
 function draw() {
   background(128);
   strokeWeight(2);
@@ -365,10 +375,15 @@ function draw() {
       }
     }
   }
-  ++frameCounter;
-  if (frameCounter >= 30) {
+  // ++frameCounter;
+  // if (frameCounter >= 60) {
+  //   moveDown();
+  //   frameCounter = 0;
+  // }
+  elapsedDT += deltaTime;
+  if (elapsedDT >= 1000) {
     moveDown();
-    frameCounter = 0;
+    elapsedDT = 0;
   }
 }
 
@@ -384,23 +399,27 @@ function keyPressed() {
     var decide = tryMove("left");
     if (decide === "") {
       toX -= 1;
+      elapsedDT = 0;
       spawnGhostTetromino();
     }
   } else if (key === "d" || key === 'D') {
     var decide = tryMove("right");
     if (decide === "") {
       toX += 1;
+      elapsedDT = 0;
       spawnGhostTetromino();
     }
   } else if (key === 'W' || key === 'w') {
     var decide = tryRotate();
     if (decide === "") {
+      elapsedDT = 0;
       rotateBody(currentTetromino);
       spawnGhostTetromino();
     }
   } else if (key === " ") {
     while(tryMove("down") === "") {
-      toY += 1;
+      // toY += 1;
+      moveDown();
     }
   }
 }
