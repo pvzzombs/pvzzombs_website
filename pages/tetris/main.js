@@ -235,9 +235,9 @@ function shuffle() {
 }
 
 function spawnTetromino() {
-  // currentTetromino = tetromino.I;
-  // toX = tetrominoStart.I.x;
-  // toY = tetrominoStart.I.y;
+  // currentTetromino = tetromino.J;
+  // toX = tetrominoStart.J.x;
+  // toY = tetrominoStart.J.y;
   currentTetromino = copyTetromino(tetromino[tetrominoes[currentID]]);
   toX = tetrominoStart[tetrominoes[currentID]].x;
   toY = tetrominoStart[tetrominoes[currentID]].y;
@@ -318,6 +318,19 @@ function moveDown() {
   spawnGhostTetromino();
 }
 
+var imgLeftButton = null;
+var imgRightButton = null;
+var imgUpButton = null;
+var imgDownButton = null;
+
+function preload() {
+  imgLeftButton = loadImage("img/left.png");
+  imgRightButton = loadImage("img/right.png");
+  imgUpButton = loadImage("img/up.png");
+  imgDownButton = loadImage("img/down.png");
+  imgBoostButton = loadImage("img/arrowDown.png");
+}
+
 function setup() {
   createCanvas(W, H);
   frameRate(60);
@@ -385,6 +398,12 @@ function draw() {
     moveDown();
     elapsedDT = 0;
   }
+
+  image(imgLeftButton, 0, 340, 50, 50);
+  image(imgRightButton, 50, 340, 50, 50);
+  image(imgUpButton, 100, 340, 50, 50);
+  image(imgDownButton, 150, 340, 50, 50);
+  image(imgBoostButton, 200, 340, 50, 50);
 }
 
 function keyPressed() {
@@ -417,6 +436,52 @@ function keyPressed() {
       spawnGhostTetromino();
     }
   } else if (key === " ") {
+    elapsedDT = 0;
+    while(tryMove("down") === "") {
+      // toY += 1;
+      moveDown();
+    }
+  }
+}
+
+function touchStarted() {
+  var touch = touches[0];
+  var tx = touch.x;
+  var ty = touch.y;
+  // left
+  if(tx > 0 && tx < 0 + 50 && ty > 340 && ty < 340 + 50) {
+    var decide = tryMove("left");
+    if (decide === "") {
+      toX -= 1;
+      elapsedDT = 0;
+      spawnGhostTetromino();
+    }
+  }
+  // right
+  if(tx > 50 && tx < 50 + 50 && ty > 340 && ty < 340 + 50) {
+    var decide = tryMove("right");
+    if (decide === "") {
+      toX += 1;
+      elapsedDT = 0;
+      spawnGhostTetromino();
+    }
+  }
+  // up
+  if(tx > 100 && tx < 100 + 50 && ty > 340 && ty < 340 + 50) {
+    var decide = tryRotate();
+    if (decide === "") {
+      elapsedDT = 0;
+      rotateBody(currentTetromino);
+      spawnGhostTetromino();
+    }
+  }
+  // down
+  if(tx > 150 && tx < 150 + 50 && ty > 340 && ty < 340 + 50) {
+    moveDown();
+  }
+  // boost
+  if (tx > 200 && tx < 200 + 50 && ty > 340 && ty < 340 + 50) {
+    elapsedDT = 0;
     while(tryMove("down") === "") {
       // toY += 1;
       moveDown();
