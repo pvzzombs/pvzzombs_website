@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Two pointer technique in action</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#157878" />
+    <link rel="stylesheet" href="../../../css/normalize.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../../../css/cayman.css" />
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </head>
+
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Two pointer technique in action</h1>
+      <h2 class="project-tagline">A fascinating way of solving patterns</h2>
+      <p>Updated November 18, 2025</p>
+      <p>Created November 18, 2025</p>
+      <a href="../" class="btn">Main Menu</a>
+    </section>
+
+    <section class="main-content">
+      <div>
+        <h1 id="brief-introduction">Brief Introduction</h1>
+        <p>
+          A two pointer technique leverages variable representing a position or
+          an offset, determined by movement within a specific range, with or
+          without a data structure.
+        </p>
+        <h1 id="example-">Example?</h1>
+        <p>
+          This guide or post will show you how to solve pattern problems using
+          two pointer technique
+        </p>
+        <h2 id="example-1-">Example 1:</h2>
+        <h3 id="challenge-1-">Challenge 1:</h3>
+        <p>Make this pattern, given 3:</p>
+        <pre><code>  <span class="hljs-number">1</span>
+ <span class="hljs-number">212</span>
+<span class="hljs-number">32123</span>
+ <span class="hljs-number">212</span>
+  <span class="hljs-number">1</span>
+</code></pre>
+        <p>Given 4:</p>
+        <pre><code>   <span class="hljs-number">1</span>
+  <span class="hljs-number">212</span>
+ <span class="hljs-number">32123</span>
+<span class="hljs-number">4321234</span>
+ <span class="hljs-number">32123</span>
+  <span class="hljs-number">212</span>
+   <span class="hljs-number">2</span>
+</code></pre>
+        <p>Given 5:</p>
+        <pre><code>    <span class="hljs-number">1</span>
+   <span class="hljs-number">212</span>
+  <span class="hljs-number">32123</span>
+ <span class="hljs-number">4321234</span>
+<span class="hljs-number">543212345</span>
+ <span class="hljs-number">4321234</span>
+  <span class="hljs-number">32123</span>
+   <span class="hljs-number">212</span>
+    <span class="hljs-number">1</span>
+</code></pre>
+        <p>
+          To solve this interesting problem, let us first see how do we
+          represent this. One way is to use an array.
+        </p>
+        <pre><code class="lang-c"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> arraySize = N * <span class="hljs-number">2</span> - <span class="hljs-number">1</span>;
+<span class="hljs-keyword">int</span> arr[arraySize];
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; arraySize; i++) {
+  arr[i] = <span class="hljs-number">0</span>;
+}
+</code></pre>
+        <p>
+          Now we create the two pointers, each initialized to point in the
+          middle of the array:
+        </p>
+        <pre><code class="lang-c"><span class="hljs-keyword">int</span> lptr = N - <span class="hljs-number">1</span>; <span class="hljs-comment">// the left pointer</span>
+<span class="hljs-keyword">int</span> rptr = N - <span class="hljs-number">1</span>; <span class="hljs-comment">// the right pointer</span>
+</code></pre>
+        <p>
+          Here is the interesting part, for every row, we move the left pointer
+          to the left and the right pointer to the right, like outwards
+          movement:
+        </p>
+        <pre><code class="lang-c">lptr -= <span class="hljs-number">1</span>;
+rptr += <span class="hljs-number">1</span>;
+</code></pre>
+        <p>
+          A best way is to store the delta/increment/decrement in a variable:
+        </p>
+        <pre><code class="lang-c"><span class="hljs-attribute">int lptrd</span> = -1;
+<span class="hljs-attribute">int rptrd</span> = 1;
+</code></pre>
+        <p>Then do this:</p>
+        <pre><code class="lang-c">lptr += lptrd;
+rptr += rptrd;
+</code></pre>
+        <p>
+          Now the fun thing is that when <code>lptr</code> reaches zero and
+          <code>rptr</code> reaches <code>arraySize - 1</code> we can multiply
+          the delta by negative one, changing the movement of the pointers to be
+          inwards:
+        </p>
+        <pre><code class="lang-c">lptrd *= -<span class="hljs-number">1</span><span class="hljs-comment">;</span>
+rptrd *= -<span class="hljs-number">1</span><span class="hljs-comment">;</span>
+</code></pre>
+        <p>
+          You can also do this to the pointers (again) when
+          <code>lptr</code> and <code>rptr</code> reaches the middle of the
+          array.
+        </p>
+        <h2 id="example-2">Example 2</h2>
+        <h3 id="challenge-2-">Challenge 2:</h3>
+        <p>Make this pattern: 2 waves</p>
+        <pre><code>   <span class="hljs-bullet">*     *</span>
+  <span class="hljs-bullet">* *</span>   <span class="hljs-bullet">* *</span>
+ <span class="hljs-bullet">*   *</span> <span class="hljs-bullet">*   *</span>
+<span class="hljs-bullet">*     </span><span class="hljs-bullet">*     *</span>
+</code></pre>
+        <p>3 waves:</p>
+        <pre><code>   <span class="hljs-bullet">*     *</span>     *
+  <span class="hljs-bullet">* *</span>   <span class="hljs-bullet">* *</span>   <span class="hljs-bullet">* *</span>
+ <span class="hljs-bullet">*   *</span> <span class="hljs-bullet">*   *</span> <span class="hljs-bullet">*   *</span>
+<span class="hljs-bullet">*     </span><span class="hljs-bullet">*     *</span>     *
+</code></pre>
+        <p>
+          Can we stil use an array here with pointers? Maybe, but this time I am
+          not entirely sure how. What I am sure about is that we can still use
+          the two pointer technique here? <strong>How?</strong>
+        </p>
+        <p>Observe only the two waves above, and ignore the right slashes:</p>
+        <pre><code>   <span class="hljs-bullet">*     *</span>
+  <span class="hljs-bullet">*     *</span>  
+ <span class="hljs-bullet">*     *</span>    
+<span class="hljs-bullet">*     </span>*
+</code></pre>
+        <p>
+          Through obeservation, we see that the left side of the wave has equal
+          amount of space as it shifts to the left. Similarly to the right:
+        </p>
+        <pre><code><span class="hljs-comment">   *     *</span>
+<span class="hljs-comment">    *     *</span>
+<span class="hljs-comment">     *     *</span>
+<span class="hljs-comment">      *     *</span>
+</code></pre>
+        <p>
+          With this in mind, let the left pointer and right pointer be at the
+          peak of the wave. Now on every row, we first store the copy of the
+          position of the left and right pointer:
+        </p>
+        <pre><code class="lang-c"><span class="hljs-attribute">int blptr</span> = lptr;
+<span class="hljs-attribute">int brptr</span> = rptr;
+</code></pre>
+        <p>
+          Then as usual, move both the left and right pointer to the right, but
+          when?
+        </p>
+        <p>Lets take more a deeper look:</p>
+        <pre><code>(j)
+    (lptr)
+    (rptr)
+<span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> ...
+      *           *
+    *   *       *
+  *       *   *
+*           *
+</code></pre>
+        <p>
+          Let <code>j</code> be an iterator, if <code>j</code> meets the left
+          pointer, increment left pointer by a specific amount, what amount is
+          it is left for the reader to figure out. Similarly if
+          <code>j</code> meets the right pointer, move the right pointer by a
+          specific amount.
+        </p>
+        <h1 id="end">End</h1>
+        <p>
+          So hopefully you got a better look and a grasp on how powerful and
+          amazing two pointer technique is. Using it wisely can save you time,
+          either by making algorithm less complicated to avoiding using a
+          specific data structure.
+        </p>
+      </div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"
+          >Miles MJ Jamon (c) 2019 - <span id="yearToday"></span
+        ></span>
+        <script>
+          document.getElementById("yearToday").innerText =
+            new Date().getFullYear();
+        </script>
+        <span class="site-footer-credits"
+          >This uses the
+          <a href="https://github.com/jasonlong/cayman-theme"
+            >Cayman theme</a
+          ></span
+        >
+        <span class="site-footer-credits"
+          >and this page was generated by
+          <a href="https://pages.github.com">GitHub Pages</a>.</span
+        >
+      </footer>
+    </section>
+  </body>
+</html>

@@ -1,6 +1,11 @@
 {
   "pages": [
   {
+    "link": "pages/blog/two-pointer/",
+    "image": "pages/img/twopointer.png",
+    "text": "This guide or post will show you how to solve pattern problems using two pointer technique."
+  },
+  {
     "link": "pages/blog/flappy-bird/",
     "image": "pages/img/flappybird.jpg",
     "text": "This blog will focus on the fundamental things needed/required to build a Flappy Bird game."
