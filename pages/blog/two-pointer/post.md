@@ -42,8 +42,14 @@ To solve this interesting problem, let us first see how do we represent this. On
 const int N = 5;
 const int arraySize = N * 2 - 1;
 int arr[arraySize];
+int num = N;
+int d = -1;
 for (int i = 0; i < arraySize; i++) {
-  arr[i] = 0;
+  arr[i] = num;
+  if (num == 1) {
+    d = 1;
+  }
+  num += d;
 }
 ```
 
@@ -144,5 +150,78 @@ Lets take more a deeper look:
 Let `j` be an iterator, if `j` meets the left pointer, increment left pointer by a specific amount, what amount is it is left for the reader to figure out.
 Similarly if `j` meets the right pointer, move the right pointer by a specific amount.
 
+# Full code example/s
+```c
+#include <stdio.h>
+
+int main() {
+  const int N = 5;
+  const int arraySize = N * 2 - 1;
+  int arr[arraySize];
+  int num = N;
+  int d = -1;
+  int lptrd = -1;
+  int rptrd = 1;
+  int lptr = N - 1;
+  int rptr = N - 1;
+  for (int i = 0; i < arraySize; i++) {
+    arr[i] = num;
+    if (num == 1) {
+      d = 1;
+    }
+    num += d;
+  }
+  for (int i = 0; i < arraySize; i++) {
+    for (int j = 0; j < arraySize; j++) {
+      if (j >= lptr && j <= rptr) {
+        printf("%d", arr[j]);
+      } else {
+        printf(" ");
+      }
+      if (j < arraySize - 1) {
+        printf(" ");
+      }
+    }
+    printf("\n");
+    lptr += lptrd;
+    rptr += rptrd;
+    if (lptr == 0) {
+      lptrd *= -1;
+      rptrd *= -1;
+    }
+  }
+  return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+int main() {
+  int waves = 5;
+  int height = 4;
+  int lptr = height - 1;
+  int rptr = height - 1;
+  
+  for (int i = 0; i < height; i++) {
+    int blptr = lptr;
+    int brptr = rptr;
+    for (int j = 0; j <= (height - 1) * 2 * waves; j++) {
+      if (j == lptr) {
+        printf("*");
+        lptr += (height - 1) * 2;
+      } else if (j == rptr) {
+        printf("*");
+        rptr += (height - 1) * 2;
+      } else {
+        printf(" ");
+      }
+    }
+    printf("\n");
+    lptr = blptr - 1;
+    rptr = brptr + 1;
+  }
+}
+```
 # End
 So hopefully you got a better look and a grasp on how powerful and amazing two pointer technique is. Using it wisely can save you time, either by making algorithm less complicated to avoiding using a specific data structure.
