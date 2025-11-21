@@ -1,5 +1,10 @@
 {
   "pages": [
+    {
+    "link": "pages/blog/longestcommonsubstring/",
+    "image": "pages/img/lcs.png",
+    "text": "A new way of finding longest common substring."
+  },
   {
     "link": "pages/blog/two-pointer/",
     "image": "pages/img/twopointer.png",

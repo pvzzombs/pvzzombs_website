@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Two pointer technique in action</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#157878" />
+    <link rel="stylesheet" href="../../../css/normalize.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../../../css/cayman.css" />
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </head>
+
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Longest Common Substring Algorithm</h1>
+      <h2 class="project-tagline">
+        A new way of finding longest common substring
+      </h2>
+      <p>Updated November 21, 2025</p>
+      <p>Created November 21, 2025</p>
+      <a href="../" class="btn">Main Menu</a>
+    </section>
+
+    <section class="main-content">
+      <div>
+        <h1 id="the-algorithm">The Algorithm</h1>
+        <p>The algorithm is as follows:</p>
+        <pre><code class="lang-cpp"><span class="hljs-keyword">int</span> lcs(std::<span class="hljs-keyword">string</span> &amp;str1, std::<span class="hljs-keyword">string</span> &amp;str2){
+  <span class="hljs-keyword">int</span> high = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">int</span> p = str2.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">int</span> len = str1.<span class="hljs-built_in">size</span>() + str2.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">int</span> m;
+  <span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) {
+    m = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; str1.<span class="hljs-built_in">size</span>(); j++) {
+      <span class="hljs-keyword">int</span> cur = p + j;
+      <span class="hljs-built_in">if</span> (cur &gt;= <span class="hljs-number">0</span> &amp;&amp; cur &lt; str2.<span class="hljs-built_in">size</span>() &amp;&amp; str1[j] == str2[cur]) {
+        m++;
+        <span class="hljs-built_in">if</span> (m &gt; high) {
+          high = m;
+        }
+      } <span class="hljs-built_in">else</span> {
+        m = <span class="hljs-number">0</span>;
+      }
+    }
+    p--;
+  }
+  <span class="hljs-built_in">return</span> high;
+}
+</code></pre>
+        <h1 id="explanation">Explanation</h1>
+        <p>
+          The code above works by sliding the second string on to the first
+          string. Let <code>abc</code> and <code>bcd</code> be the first string
+          and second string respectively. To start sliding, we align the last
+          character of the second string to the first character of the first
+          string, like this:
+        </p>
+        <pre><code>  <span class="hljs-attribute">abc</span>
+bcd
+ <span class="hljs-regexp"> ^</span>
+  |
+</code></pre>
+        <p>It could go like this:</p>
+        <pre><code>  <span class="hljs-attribute">abc</span>
+   bcd
+ <span class="hljs-regexp"> ^</span>
+  |
+</code></pre>
+        <p>
+          Now here is the best part: If some of the characters match, we record
+          that in a variable called <code>m</code>, if it indeed match another
+          character, we keep incrementing it, otherwise, we reset
+          <code>m</code> back to zero. We also use <code>m</code> to record the
+          longest common susbtring length and store it into the variable
+          <code>high</code>.
+        </p>
+        <p>So what is really happening? Back to here:</p>
+        <pre><code>  <span class="hljs-attribute">abc</span>
+bcd
+ <span class="hljs-regexp"> ^</span>
+  |
+</code></pre>
+        <p>
+          The arrow represents <code>p</code>, which points to the last
+          character of the second string, if we decrement <code>p</code> by 1,
+          then:
+        </p>
+        <pre><code>  <span class="hljs-attribute">abc</span>
+ bcd
+ <span class="hljs-regexp"> ^</span>
+  |
+</code></pre>
+        <p>
+          This makes the second string slide on to the first string. You may ask
+          yourself, &quot;What happens to the characters that has no pair or
+          What happens to the character not aligned with other character?&quot;,
+          The short answer is nothing. We just ignore it. So in the above
+          diagram, you can see that last character of the first string has
+          nothing to match up with, so we just ignore it.
+        </p>
+        <p>How many times should we decrement <code>p</code>? Back to here:</p>
+        <pre><code>  <span class="hljs-attribute">abc</span>
+bcd
+ <span class="hljs-regexp"> ^</span>
+  |
+</code></pre>
+        <p>Let us prepend and append <code>abc</code> by <code>xx</code>:</p>
+        <pre><code><span class="hljs-attribute">xxabcxx</span>
+bcd
+ <span class="hljs-regexp"> ^</span>
+  |
+</code></pre>
+        <p>
+          If we keep moving the second string until the last character of the
+          second string matches the last <code>x</code> on the first string,
+          then we can get the amount of iterations to perform. If the second
+          string has <code>N</code> characters, we then prepend and append the
+          first string with <code>N - 1</code> amount of <code>x</code>. If we
+          observe carefully, you can deduce that the number of iterations to
+          perform is about <code>M + N - 1</code>, with <code>M</code> being the
+          number of characters the first string has.
+        </p>
+      </div>
+      <footer class="site-footer">
+        <span class="site-footer-owner"
+          >Miles MJ Jamon (c) 2019 - <span id="yearToday"></span
+        ></span>
+        <script>
+          document.getElementById("yearToday").innerText =
+            new Date().getFullYear();
+        </script>
+        <span class="site-footer-credits"
+          >This uses the
+          <a href="https://github.com/jasonlong/cayman-theme"
+            >Cayman theme</a
+          ></span
+        >
+        <span class="site-footer-credits"
+          >and this page was generated by
+          <a href="https://pages.github.com">GitHub Pages</a>.</span
+        >
+      </footer>
+    </section>
+  </body>
+</html>
