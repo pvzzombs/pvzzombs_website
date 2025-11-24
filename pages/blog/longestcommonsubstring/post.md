@@ -41,7 +41,7 @@ It could go like this:
   ^
   |
 ```
-Now here is the best part: If some of the characters match, we record that in a variable called `m`, if it indeed match another character, we keep incrementing it, otherwise, we reset `m` back to zero. We also use `m` to record the longest common susbtring length and store it into the variable `high`.
+Now here is the best part: If some of the characters match, we record that in a variable called `m`, if it indeed match another character, we keep incrementing it, otherwise, we reset `m` back to zero. We also use `m` to record the longest common substring length and store it into the variable `high`.
 
 So what is really happening?
 Back to here:
