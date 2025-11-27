@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Some problems</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#157878" />
+    <link rel="stylesheet" href="../../../css/normalize.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../../../css/cayman.css" />
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </head>
+
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Some problems</h1>
+      <h2 class="project-tagline">
+        Some problems
+      </h2>
+      <p>Updated November 27, 2025</p>
+      <p>Created November 27, 2025</p>
+      <a href="../" class="btn">Main Menu</a>
+    </section>
+
+    <section class="main-content">
+      <div>
+        <h1 id="problems-">Problems:</h1>
+<h2 id="5-star-restaurant">5-Star Restaurant</h2>
+<p>I&#39;m running a 5-star restaurant and I can only have the best items on my menu.
+My menu offers 6 items, each represented by a number from 1-6.
+If an item on my menu does not sell or does not sell that much compared to others,
+I must act and replace it with something that sells!</p>
+<p>Identify which dishes do not sell. If every dish sells,
+print the set of dishes that were ordered least.</p>
+<h3 id="test-cases">Test Cases</h3>
+<h4 id="test-case-1">Test Case 1</h4>
+<p>Input:</p>
+<pre><code><span class="hljs-number">156356231</span>
+</code></pre><p>Output:</p>
+<pre><code><span class="hljs-number">4</span>
+</code></pre><h4 id="test-case-2">Test Case 2</h4>
+<p>Input:</p>
+<pre><code><span class="hljs-number">1234564253</span>
+</code></pre><p>Output:</p>
+<pre><code><span class="hljs-number">1</span>
+<span class="hljs-number">6</span>
+</code></pre><h4 id="test-case-3">Test Case 3</h4>
+<p>Input:</p>
+<pre><code><span class="hljs-number">3213212</span>
+</code></pre><p>Output:</p>
+<pre><code><span class="hljs-number">4</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span>
+</code></pre><h2 id="replace_elements_with_greatest">replace_elements_with_greatest</h2>
+<p>Hey Programmer!</p>
+<p>I need a bit of help with my coding, you see,
+I&#39;m trying to create a program for a client that stores integer data provided by them into
+an array, but at the last second, they want to change the data already stored!</p>
+<p>Luckily for us, they simply want to replace every element of the array with the greatest element to its right side,
+and all of the arrays have a standard side of 10 to boot!</p>
+<p>Careful though, if the element doesn&#39;t have a greatest element to its right it becomes a zero!</p>
+<h3 id="input-output">Input/Output</h3>
+<p>Input<br>The elements of the array</p>
+<pre><code><span class="hljs-symbol">2 </span><span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">7</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">2</span> <span class="hljs-number">4</span> <span class="hljs-number">9</span> <span class="hljs-number">1</span>
+</code></pre><p>Output<br>The updated elements of the array</p>
+<pre><code><span class="hljs-symbol">9 </span><span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span>
+</code></pre><h3 id="test-cases">Test Cases</h3>
+<h4 id="test-case-1">Test Case 1</h4>
+<p>Input:</p>
+<pre><code><span class="hljs-symbol">2 </span><span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">7</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">2</span> <span class="hljs-number">4</span> <span class="hljs-number">9</span> <span class="hljs-number">1</span>
+</code></pre><p>Output:</p>
+<pre><code><span class="hljs-symbol">9 </span><span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span>
+</code></pre><h4 id="test-case-2">Test Case 2</h4>
+<p>Input:</p>
+<pre><code><span class="hljs-symbol">1 </span><span class="hljs-number">9</span> <span class="hljs-number">4</span> <span class="hljs-number">2</span> <span class="hljs-number">4</span> <span class="hljs-number">3</span> <span class="hljs-number">7</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span>
+</code></pre><p>Output:</p>
+<pre><code><span class="hljs-symbol">9 </span><span class="hljs-number">7</span> <span class="hljs-number">7</span> <span class="hljs-number">7</span> <span class="hljs-number">7</span> <span class="hljs-number">7</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">0</span>
+</code></pre><h4 id="test-case-3">Test Case 3</h4>
+<p>Input:</p>
+<pre><code><span class="hljs-symbol">7 </span><span class="hljs-number">5</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">6</span> <span class="hljs-number">8</span> <span class="hljs-number">5</span> <span class="hljs-number">7</span> <span class="hljs-number">4</span> <span class="hljs-number">6</span>
+</code></pre><p>Output:</p>
+<pre><code><span class="hljs-symbol">9 </span><span class="hljs-number">9</span> <span class="hljs-number">9</span> <span class="hljs-number">8</span> <span class="hljs-number">8</span> <span class="hljs-number">7</span> <span class="hljs-number">7</span> <span class="hljs-number">6</span> <span class="hljs-number">6</span> <span class="hljs-number">0</span>
+</code></pre><h1 id="solutions-">Solutions:</h1>
+<p>Here is my solutions:</p>
+<h2 id="5-star-restaurant">5-Star Restaurant</h2>
+<pre><code class="lang-c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+  <span class="hljs-keyword">char</span> c[<span class="hljs-number">128</span>];
+  <span class="hljs-keyword">int</span> * arr;
+  <span class="hljs-keyword">int</span> * larr;
+  <span class="hljs-keyword">int</span> * marr;
+  <span class="hljs-keyword">int</span> larrptr = <span class="hljs-number">0</span>, marrptr = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">int</span> i;
+  <span class="hljs-keyword">int</span> num;
+  <span class="hljs-keyword">int</span> min = <span class="hljs-number">9999</span>, max = <span class="hljs-number">-9999</span>;
+  arr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">6</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+  <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">6</span>; i++){
+    arr[i] = <span class="hljs-number">0</span>;
+  }
+  fgets(c, <span class="hljs-number">128</span>, <span class="hljs-built_in">stdin</span>);
+  i = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span>(c[i] != <span class="hljs-string">'\n'</span> &amp;&amp; c[i] != <span class="hljs-number">0</span>){
+    num = c[i] - <span class="hljs-string">'0'</span>;
+    <span class="hljs-keyword">if</span>(num &gt;= <span class="hljs-number">1</span> &amp;&amp; num &lt;= <span class="hljs-number">6</span>){
+      arr[num - <span class="hljs-number">1</span>]++;
+    }
+    i++;
+  }
+  larr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">6</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+  marr = <span class="hljs-built_in">malloc</span>(<span class="hljs-number">6</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+  <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">6</span>; i++){
+    <span class="hljs-keyword">if</span>(arr[i] &lt; min){
+      min = arr[i];
+      larrptr = <span class="hljs-number">0</span>;
+      larr[larrptr] = i + <span class="hljs-number">1</span>;
+      larrptr++;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(arr[i] == min){
+      larr[larrptr] = i + <span class="hljs-number">1</span>;
+      larrptr++;
+    }
+
+    <span class="hljs-keyword">if</span>(arr[i] &gt; max){
+      max = arr[i];
+      marrptr = <span class="hljs-number">0</span>;
+      marr[marrptr] = i + <span class="hljs-number">1</span>;
+      marrptr++;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(arr[i] == max){
+      marr[marrptr] = i + <span class="hljs-number">1</span>;
+      marrptr++;
+    }
+  }
+
+  <span class="hljs-keyword">if</span> (min != max){
+    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; larrptr; i++){
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, larr[i]);
+    }
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">if</span>(max == <span class="hljs-number">0</span>){
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"All are least\n"</span>);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"No least found!\n"</span>);
+    }
+  }
+
+  <span class="hljs-built_in">free</span>(arr);
+  <span class="hljs-built_in">free</span>(larr);
+  <span class="hljs-built_in">free</span>(marr);
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h2 id="replace_elements_with_greatest">replace_elements_with_greatest</h2>
+<pre><code class="lang-c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+  <span class="hljs-keyword">int</span> arr[<span class="hljs-number">10</span>];
+  <span class="hljs-keyword">int</span> i;
+  <span class="hljs-keyword">int</span> m = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++){
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;(arr[i]));
+  }
+  <span class="hljs-keyword">for</span>(i = <span class="hljs-number">9</span>; i &gt;= <span class="hljs-number">0</span>; i--){
+    <span class="hljs-keyword">int</span> t = arr[i];
+    arr[i] = m;
+    <span class="hljs-keyword">if</span>(t &gt; arr[i]){
+      m = t;
+    }
+  }
+  <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++){
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d"</span>, arr[i]);
+    <span class="hljs-keyword">if</span> (i &lt; <span class="hljs-number">9</span>) {
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">" "</span>);
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+
+      </div>
+      <footer class="site-footer">
+        <span class="site-footer-owner"
+          >Miles MJ Jamon (c) 2019 - <span id="yearToday"></span
+        ></span>
+        <script>
+          document.getElementById("yearToday").innerText =
+            new Date().getFullYear();
+        </script>
+        <span class="site-footer-credits"
+          >This uses the
+          <a href="https://github.com/jasonlong/cayman-theme"
+            >Cayman theme</a
+          ></span
+        >
+        <span class="site-footer-credits"
+          >and this page was generated by
+          <a href="https://pages.github.com">GitHub Pages</a>.</span
+        >
+      </footer>
+    </section>
+  </body>
+</html>
