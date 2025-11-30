@@ -163,6 +163,12 @@ int main()
   return 0;
 }
 ```
+### Proof
+**Loop Invariant**: `larr` contains the items with the least frequency and `marr` contains the items with the most frequency for iteration `i` in `arr[0...i-1]`.  
+**Initialization**: `larr` is empty and  `marr` is empty at the beginning of the loop which invariant holds.  
+**Maintenance**: Assume `0 <= k < n`, where `n = 6`. If `arr[k] < min`, `larr` will reset and contain `k + 1` item, or if `arr[k] == min` append `k + 1` item to `larr`. If `arr[k] > max`, `marr` will reset and contain `k + 1` item, or if `arr[k] == max` append `k + 1` item to `marr`. In this way the invariant holds true.  
+**Termination**: Assume `k = n`, where `n = 6`, then `larr` contains the items with the least frequency from the loop `0` to `k - 1` and `marr` contains the items with the most frequency from the loop `0` to `k - 1`. Thus invariant holds.  
+
 ## replace_elements_with_greatest
 ```c
 #include <stdio.h>
@@ -191,3 +197,8 @@ int main()
   return 0;
 }
 ```
+### Proof
+**Loop Invariant**: Assume `oarr[i]` contains the original element of the array; `m` is the highest element from the right side, `i + 1 ... n - 1`, ignoring the current element `oarr[i]`.  
+**Initialization**: Assume `m = 0`, since there is no element in the right, the assumption is true, then the invariant holds.  
+**Maintenance**: Let `0 <= k < n`, where `n = 10`, for iteration `k`, assuming `t` is `oarr[k]`, if `m` is `max(oarr[k+1], ..., oarr[n-1])`, then new `m` is `max(t, m)`. Thus the invariant holds.  
+**Termination**: Assume `k = 0`, then `arr[k]` is `max(oarr[k + 1], ..., oarr[n - 1])` according to the loop invariant  

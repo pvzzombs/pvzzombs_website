@@ -28,7 +28,7 @@
       <h2 class="project-tagline">
         Some problems
       </h2>
-      <p>Updated November 27, 2025</p>
+      <p>Updated November 30, 2025</p>
       <p>Created November 27, 2025</p>
       <a href="../" class="btn">Main Menu</a>
     </section>
@@ -162,6 +162,8 @@ and all of the arrays have a standard side of 10 to boot!</p>
   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
+<h3 id="proof">Proof</h3>
+<p><strong>Loop Invariant</strong>: <code>larr</code> contains the items with the least frequency and <code>marr</code> contains the items with the most frequency for iteration <code>i</code> in <code>arr[0...i-1]</code>.<br><strong>Initialization</strong>: <code>larr</code> is empty and  <code>marr</code> is empty at the beginning of the loop which invariant holds.<br><strong>Maintenance</strong>: Assume <code>0 &lt;= k &lt; n</code>, where <code>n = 6</code>. If <code>arr[k] &lt; min</code>, <code>larr</code> will reset and contain <code>k + 1</code> item, or if <code>arr[k] == min</code> append <code>k + 1</code> item to <code>larr</code>. If <code>arr[k] &gt; max</code>, <code>marr</code> will reset and contain <code>k + 1</code> item, or if <code>arr[k] == max</code> append <code>k + 1</code> item to <code>marr</code>. In this way the invariant holds true.<br><strong>Termination</strong>: Assume <code>k = n</code>, where <code>n = 6</code>, then <code>larr</code> contains the items with the least frequency from the loop <code>0</code> to <code>k - 1</code> and <code>marr</code> contains the items with the most frequency from the loop <code>0</code> to <code>k - 1</code>. Thus invariant holds.  </p>
 <h2 id="replace_elements_with_greatest">replace_elements_with_greatest</h2>
 <pre><code class="lang-c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
 
@@ -189,6 +191,8 @@ and all of the arrays have a standard side of 10 to boot!</p>
   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
+<h3 id="proof">Proof</h3>
+<p><strong>Loop Invariant</strong>: Assume <code>oarr[i]</code> contains the original element of the array; <code>m</code> is the highest element from the right side, <code>i + 1 ... n - 1</code>, ignoring the current element <code>oarr[i]</code>.<br><strong>Initialization</strong>: Assume <code>m = 0</code>, since there is no element in the right, the assumption is true, then the invariant holds.<br><strong>Maintenance</strong>: Let <code>0 &lt;= k &lt; n</code>, where <code>n = 10</code>, for iteration <code>k</code>, assuming <code>t</code> is <code>oarr[k]</code>, if <code>m</code> is <code>max(oarr[k+1], ..., oarr[n-1])</code>, then new <code>m</code> is <code>max(t, m)</code>. Thus the invariant holds.<br><strong>Termination</strong>: Assume <code>k = 0</code>, then <code>arr[k]</code> is <code>max(oarr[k + 1], ..., oarr[n - 1])</code> according to the loop invariant  </p>
 
       </div>
       <footer class="site-footer">
