@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Leetcode 121</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#157878" />
+    <link rel="stylesheet" href="../../../css/normalize.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../../../css/cayman.css" />
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </head>
+
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Leetcode 121</h1>
+      <h2 class="project-tagline">
+        Leetcode 121
+      </h2>
+      <p>Updated December 1, 2025</p>
+      <p>Created December 1, 2025</p>
+      <a href="../" class="btn">Main Menu</a>
+    </section>
+
+    <section class="main-content">
+      <div>
+        <h1 id="121-best-time-to-buy-and-sell-stock">121. Best Time to Buy and Sell Stock</h1>
+<p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the <code>ith</code> day.<br>You want to maximize your profit by choosing a <strong>single day</strong> to buy one stock and choosing a <strong>different day in the future</strong> to sell that stock.<br>Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return <code>0</code>.  </p>
+<p><strong>Example 1:</strong>  </p>
+<blockquote>
+<p><strong>Input:</strong> <code>prices = [7,1,5,3,6,4]</code><br><strong>Output:</strong> <code>5</code><br><strong>Explanation:</strong> Buy on day 2 (<code>price = 1</code>) and sell on day 5 (<code>price = 6</code>), <code>profit = 6-1 = 5</code>.<br>Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.  </p>
+</blockquote>
+<p><strong>Example 2:</strong>  </p>
+<blockquote>
+<p><strong>Input:</strong> <code>prices = [7,6,4,3,1]</code><br><strong>Output:</strong> <code>0</code><br><strong>Explanation:</strong> In this case, no transactions are done and the max <code>profit = 0</code>.  </p>
+</blockquote>
+<p><strong>Constraints:</strong>  </p>
+<ul>
+<li><code>1 &lt;= prices.length &lt;= 105</code>  </li>
+<li><code>0 &lt;= prices[i] &lt;= 104</code>  </li>
+</ul>
+<h2 id="solution">Solution</h2>
+<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">maxProfit</span><span class="hljs-params">(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt;&amp; prices)</span> </span>{
+  <span class="hljs-keyword">int</span> small = prices.at(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">int</span> best = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; prices.size(); i++) {
+    small = <span class="hljs-built_in">std</span>::min(small, prices.at(i));
+    best = <span class="hljs-built_in">std</span>::max(best, prices.at(i) - small);
+  }
+  <span class="hljs-keyword">return</span> best;
+}
+</code></pre>
+<h3 id="proof">Proof</h3>
+<h4 id="loop-invariant">Loop Invariant</h4>
+<p>For iteration <code>i</code>, <code>small</code> is the minimum from <code>0 ... i - 1</code>, and <code>best</code> is the maximum difference from <code>0 ... i - 1</code></p>
+<h4 id="inialization">Inialization</h4>
+<p>Assume <code>arr[0]</code> is the minimum. Since there is no previous element, then the assumption is true, it also holds that the <code>best = 0</code> since there is no previous best, therefore the invariant holds.</p>
+<h4 id="maintenance">Maintenance</h4>
+<p>Let <code>1 &lt;= k &lt; n</code>, where <code>n</code> is the length of the array. For iteration <code>k</code>, we have <code>small_{k - 1} = min(arr[0]...arr[k - 1])</code>; we also have <code>best_{k - 1}</code> which is <code>max(arr[0] - small_0 ... arr[k - 1] - small_{k - 1})</code>. Then <code>small_k</code> becomes <code>min(small_{k - 1}, arr[k])</code> and <code>best_k</code> is computed <code>max(best_{k - 1}, arr[k] - small_k)</code> Thus the invariant holds.</p>
+<h4 id="termination">Termination</h4>
+<p>After <code>n</code> iterations, <code>small</code> is the minimum from <code>0 ... n - 1</code> and best is the maximum difference from <code>0 ... n-1</code>.</p>
+
+      </div>
+      <footer class="site-footer">
+        <span class="site-footer-owner"
+          >Miles MJ Jamon (c) 2019 - <span id="yearToday"></span
+        ></span>
+        <script>
+          document.getElementById("yearToday").innerText =
+            new Date().getFullYear();
+        </script>
+        <span class="site-footer-credits"
+          >This uses the
+          <a href="https://github.com/jasonlong/cayman-theme"
+            >Cayman theme</a
+          ></span
+        >
+        <span class="site-footer-credits"
+          >and this page was generated by
+          <a href="https://pages.github.com">GitHub Pages</a>.</span
+        >
+      </footer>
+    </section>
+  </body>
+</html>
