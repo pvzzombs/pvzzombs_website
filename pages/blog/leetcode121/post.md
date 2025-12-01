@@ -34,9 +34,9 @@ int maxProfit(std::vector<int>& prices) {
 ### Proof
 #### Loop Invariant
 For iteration `i`, `small` is the minimum from `0 ... i - 1`, and `best` is the maximum difference from `0 ... i - 1`
-#### Inialization
+#### Initialization
 Assume `arr[0]` is the minimum. Since there is no previous element, then the assumption is true, it also holds that the `best = 0` since there is no previous best, therefore the invariant holds.
 #### Maintenance
-Let `1 <= k < n`, where `n` is the length of the array. For iteration `k`, we have `small_{k - 1} = min(arr[0]...arr[k - 1])`; we also have `best_{k - 1}` which is `max(arr[0] - small_0 ... arr[k - 1] - small_{k - 1})`. Then `small_k` becomes `min(small_{k - 1}, arr[k])` and `best_k` is computed `max(best_{k - 1}, arr[k] - small_k)` Thus the invariant holds.
+Let `1 <= k < n`, where `n` is the length of the array. For iteration `k`, we have `small_{k - 1} = min(arr[0]...arr[k - 1])`; we also have `best_{k - 1}` which is `max(arr[0] - small_0 ... arr[k - 1] - small_{k - 1})`. Then `small_k` becomes `min(small_{k - 1}, arr[k])` and `best_k` is `max(best_{k - 1}, arr[k] - small_k)` Thus the invariant holds.
 #### Termination
 After `n` iterations, `small` is the minimum from `0 ... n - 1` and best is the maximum difference from `0 ... n-1`.

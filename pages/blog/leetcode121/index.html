@@ -64,10 +64,10 @@
 <h3 id="proof">Proof</h3>
 <h4 id="loop-invariant">Loop Invariant</h4>
 <p>For iteration <code>i</code>, <code>small</code> is the minimum from <code>0 ... i - 1</code>, and <code>best</code> is the maximum difference from <code>0 ... i - 1</code></p>
-<h4 id="inialization">Inialization</h4>
+<h4 id="initialization">Initialization</h4>
 <p>Assume <code>arr[0]</code> is the minimum. Since there is no previous element, then the assumption is true, it also holds that the <code>best = 0</code> since there is no previous best, therefore the invariant holds.</p>
 <h4 id="maintenance">Maintenance</h4>
-<p>Let <code>1 &lt;= k &lt; n</code>, where <code>n</code> is the length of the array. For iteration <code>k</code>, we have <code>small_{k - 1} = min(arr[0]...arr[k - 1])</code>; we also have <code>best_{k - 1}</code> which is <code>max(arr[0] - small_0 ... arr[k - 1] - small_{k - 1})</code>. Then <code>small_k</code> becomes <code>min(small_{k - 1}, arr[k])</code> and <code>best_k</code> is computed <code>max(best_{k - 1}, arr[k] - small_k)</code> Thus the invariant holds.</p>
+<p>Let <code>1 &lt;= k &lt; n</code>, where <code>n</code> is the length of the array. For iteration <code>k</code>, we have <code>small_{k - 1} = min(arr[0]...arr[k - 1])</code>; we also have <code>best_{k - 1}</code> which is <code>max(arr[0] - small_0 ... arr[k - 1] - small_{k - 1})</code>. Then <code>small_k</code> becomes <code>min(small_{k - 1}, arr[k])</code> and <code>best_k</code> is <code>max(best_{k - 1}, arr[k] - small_k)</code> Thus the invariant holds.</p>
 <h4 id="termination">Termination</h4>
 <p>After <code>n</code> iterations, <code>small</code> is the minimum from <code>0 ... n - 1</code> and best is the maximum difference from <code>0 ... n-1</code>.</p>
 
